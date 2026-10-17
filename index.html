@@ -256,16 +256,18 @@ function addSecs(x){
   showGoal();
 }
 const starter=()=>{const m=location.hash.match(/q=([^&]*)/);try{return m?decodeURIComponent(m[1]):''}catch(e){return ''}};
-function diag(){
-  const d=el('ok'),a=document.createElement('a');
-  a.href=api;a.target='_blank';a.rel='noopener';a.textContent='تست اتصال (باید {"ok":true} ببینی)';
-  d.appendChild(a);
+async function diag(){
+  const d=el('ok');d.textContent='در حال بررسی اتصال…';
+  const r=[];
+  try{const x=await fetch(api);const j=await x.json();r.push('GET: '+(j.ok?'✓':'؟'))}catch(e){r.push('GET: ✗ ('+e.message+')')}
+  try{const x=await fetch(api,{method:'POST',body:JSON.stringify({ping:true})});const j=await x.json();r.push('POST: ✓'+(j.error?' ('+j.error+')':''))}catch(e){r.push('POST: ✗ ('+e.message+')')}
+  d.textContent=r.join('   ');
 }
 const errMsg=e=>{
   if(e&&e.message==='quota')return 'سهمیهٔ رایگان تمام شد؛ کمی بعد یا فردا دوباره امتحان کن.';
   if(e&&e.message==='forbidden')return 'کد دسترسی آدرس درست نیست.';
   if(e&&e.message==='needs_gemini')return 'تحلیل صدا فقط با کلید Gemini کار می‌کند؛ GEMINI_KEY را در Script properties بگذار.';
-  if(e instanceof TypeError){diag();return 'به Apps Script وصل نشد. روی لینک «تست اتصال» بزن؛ اگر {"ok":true} دیدی آدرس درست است، وگرنه دسترسی Anyone یا فیلتر مشکل دارد.'}
+  if(e instanceof TypeError){diag();return 'به Apps Script وصل نشد. نتیجهٔ بررسی خودکار را زیر همین پیام ببین.'}
   return 'خطا: '+(e&&e.message||e);
 };
 async function call(p){
