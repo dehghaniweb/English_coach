@@ -50,7 +50,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 </head>
 <body>
 <header>
-  <h1>سم، دوست انگلیسی‌ات</h1>
+  <h1>Sam</h1>
   <select id="level" aria-label="سطح">
     <option value="A2">A2 مقدماتی</option>
     <option value="B1">B1 متوسط</option>
@@ -61,7 +61,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 </header>
 
 <section id="start">
-  <h2>سلام! من سم‌ام</h2>
+  <h2>Hi, I'm Sam!</h2>
   <p>لازم نیست کامل حرف بزنی؛ فقط حرف بزن. من مثل یک دوست سؤال می‌پرسم، تو با صدا جواب می‌دهی و من همان لحظه غلط‌های گرامر و تلفظت را با توضیح فارسی نشان می‌دهم.</p>
   <button class="big" id="go">شروع مکالمه</button>
   <p id="note">هدف امروز: ۱۰ دقیقه حرف زدن. اگر چیزی به ذهنت نرسید، دکمهٔ 💡 کمکت می‌کند.</p>
@@ -200,7 +200,7 @@ function speak(t){stopVoice();browserSpeak(t)}
 async function play(j){
   let buf;
   const bin=atob(j.audio);
-  if(j.fmt==='mp3'){
+  if(j.fmt==='mp3'||j.fmt==='wav'){
     const u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
     buf=await AC.decodeAudioData(u8.buffer);
   }else{
@@ -215,7 +215,7 @@ async function play(j){
 }
 async function sayReply(text){
   const my=++vt;
-  say('سم دارد جواب می‌دهد…');
+  say('Sam دارد جواب می‌دهد…');
   let done=false;
   if(tts){
     try{
@@ -290,7 +290,7 @@ async function hint(){
 }
 
 async function turn(u,a){
-  busy=true;mic.disabled=true;say('سم در حال '+(a?'گوش دادن و ':'')+'فکر کردن است…');
+  busy=true;mic.disabled=true;say('Sam در حال '+(a?'گوش دادن و ':'')+'فکر کردن است…');
   let reply='';
   try{
     const j=await call({level:lv.value,start:u===null,starter:u===null?starter():'',hist:hist.slice(-12),audio:a?a.data:undefined});
