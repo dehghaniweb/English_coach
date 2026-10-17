@@ -256,7 +256,18 @@ function addSecs(x){
   showGoal();
 }
 const starter=()=>{const m=location.hash.match(/q=([^&]*)/);try{return m?decodeURIComponent(m[1]):''}catch(e){return ''}};
-const errMsg=e=>e&&e.message==='quota'?'سهمیهٔ رایگان تمام شد؛ کمی بعد یا فردا دوباره امتحان کن.':e&&e.message==='forbidden'?'کد دسترسی آدرس درست نیست؛ با دکمهٔ ⚙ دوباره وارد کن.':e&&e.message==='needs_gemini'?'تحلیل صدا فقط با کلید Gemini کار می‌کند.':e instanceof TypeError?'به Apps Script وصل نشد؛ آدرس، اینترنت یا فیلتر را چک کن.':'خطا: '+(e&&e.message||e);
+function diag(){
+  const d=el('ok'),a=document.createElement('a');
+  a.href=api;a.target='_blank';a.rel='noopener';a.textContent='تست اتصال (باید {"ok":true} ببینی)';
+  d.appendChild(a);
+}
+const errMsg=e=>{
+  if(e&&e.message==='quota')return 'سهمیهٔ رایگان تمام شد؛ کمی بعد یا فردا دوباره امتحان کن.';
+  if(e&&e.message==='forbidden')return 'کد دسترسی آدرس درست نیست.';
+  if(e&&e.message==='needs_gemini')return 'تحلیل صدا فقط با کلید Gemini کار می‌کند؛ GEMINI_KEY را در Script properties بگذار.';
+  if(e instanceof TypeError){diag();return 'به Apps Script وصل نشد. روی لینک «تست اتصال» بزن؛ اگر {"ok":true} دیدی آدرس درست است، وگرنه دسترسی Anyone یا فیلتر مشکل دارد.'}
+  return 'خطا: '+(e&&e.message||e);
+};
 async function call(p){
   p.notes=notes.slice(-12);
   const res=await fetch(api,{method:'POST',body:JSON.stringify(p)});
@@ -327,13 +338,14 @@ $('#send').onclick=()=>send(txt.value);
 txt.onkeydown=e=>{if(e.key==='Enter')send(txt.value)};
 $('#reset').onclick=()=>{if(busy)return;cancel();hist=[];log.textContent='';turn(null)};
 
-let api='';try{api=localStorage.getItem('api')||''}catch(e){}
+const API_URL='https://script.google.com/macros/s/AKfycbwtXvQgX6a1mvnl64c31b8utu2mHlqoQtKwmxynC1RFbjPuN-ORyTR_0ekq7gt4ohnD/exec';
+let api=API_URL;if(!api){try{api=localStorage.getItem('api')||''}catch(e){}}
 function setApi(){
   const v=prompt('آدرس Apps Script (که به /exec ختم می‌شود) را اینجا بچسبان:',api);
   if(v&&v.trim()){api=v.trim();try{localStorage.setItem('api',api)}catch(e){}}
   return api;
 }
-$('#cfg').onclick=setApi;
+$('#cfg').onclick=setApi;$('#cfg').hidden=!!API_URL;
 $('#hint').onclick=hint;
 $('#go').onclick=async()=>{
   if(!api&&!setApi())return;
