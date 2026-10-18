@@ -36,6 +36,15 @@ select,.ghost{background:var(--sf);border:1px solid var(--ln);border-radius:10px
 #prog{width:100%;max-width:520px;height:6px;border-radius:3px;background:var(--ln);overflow:hidden}
 #bar{height:100%;width:0;background:var(--ac);transition:width .4s}
 #goal{font-size:13px;color:var(--mu)}
+.b .fa{border-top:1px dashed var(--ln);margin-top:6px;padding-top:6px;font-weight:400;cursor:pointer}
+.fix b .fa{font-weight:400}
+.crow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:0 14px 4px}
+#ctitle{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;unicode-bidi:plaintext}
+#hist{position:fixed;inset:0;z-index:10;background:var(--bg);overflow-y:auto;padding:calc(10px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px))}
+.hhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.hrow{display:flex;align-items:center;gap:6px;background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.htitle{flex:1;text-align:start;background:none;border:0;cursor:pointer;padding:4px;font-weight:700;unicode-bidi:plaintext}
+.hmeta{display:block;font-weight:400;font-size:12px;color:var(--mu)}
 #dock{padding:8px 14px 12px;background:var(--sf);border-top:1px solid var(--ln);display:flex;flex-direction:column;align-items:center;gap:8px}
 #status{min-height:24px;font-size:14px;color:var(--mu);text-align:center;unicode-bidi:plaintext}
 #mic{width:76px;height:76px;border-radius:50%;border:0;background:var(--ac);color:var(--on);cursor:pointer;display:grid;place-items:center}
@@ -56,14 +65,17 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <option value="B1">B1 متوسط</option>
     <option value="B2">B2 بالاتر</option>
   </select>
+  <button class="ghost" id="hb" aria-label="History">🕘</button>
   <button class="ghost" id="cfg" aria-label="Setup">⚙</button>
   <button class="ghost" id="reset" hidden>از نو</button>
 </header>
+<div class="crow"><button class="ghost" id="ctitle" hidden></button><select id="focus" aria-label="موضوع"><option value="auto">موضوع: خودکار</option><option value="general">موضوع: عمومی</option><option value="mech">موضوع: مهندسی مکانیک</option></select><button class="ghost" id="chal">🎯 چالش امروز</button></div>
 
 <section id="start">
   <h2>Hi, I'm Sam!</h2>
   <p>لازم نیست کامل حرف بزنی؛ فقط حرف بزن. من مثل یک دوست سؤال می‌پرسم، تو با صدا جواب می‌دهی و من همان لحظه غلط‌های گرامر و تلفظت را با توضیح فارسی نشان می‌دهم.</p>
   <button class="big" id="go">شروع مکالمه</button>
+  <button class="ghost" id="hs" hidden>گفتگوهای قبلی</button>
   <p id="note">هدف امروز: ۱۰ دقیقه حرف زدن. اگر چیزی به ذهنت نرسید، دکمهٔ 💡 کمکت می‌کند.</p>
 </section>
 
@@ -84,6 +96,12 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   </div>
 </footer>
 
+<div id="hist" hidden>
+  <div class="hhead"><b>گفتگوهای قبلی</b><button class="ghost" id="hx" aria-label="Close">✕</button></div>
+  <div id="syncst" class="ok"></div>
+  <div id="hlist"></div>
+</div>
+
 <script>
 const $=s=>document.querySelector(s),log=$('#log'),st=$('#status'),mic=$('#mic'),txt=$('#txt'),lv=$('#level');
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -94,7 +112,61 @@ const say=t=>{st.textContent=t};
 const cancel=()=>stopVoice();
 
 function el(c,t,p){const d=document.createElement('div');d.className=c;if(t)d.textContent=t;(p||log).appendChild(d);log.scrollTop=log.scrollHeight;return d}
-function ear(p,t){const b=document.createElement('button');b.className='ear';b.textContent='🔊';b.setAttribute('aria-label','Listen');b.onclick=()=>speak(t);p.appendChild(b)}
+function ear(p,t){const b=document.createElement('button');b.className='ear';b.textContent='🔊';b.dataset.say=t;b.setAttribute('aria-label','Listen');p.appendChild(b)}
+function tr(p,t){
+  const b=document.createElement('button');b.className='ear';b.textContent='🌐';b.dataset.tr='1';b.setAttribute('aria-label','ترجمه');
+  const f=document.createElement('div');f.className='fa';f.dataset.t='1';f.textContent=t;f.hidden=true;
+  p.appendChild(b);p.appendChild(f);
+}
+
+let cur=null;
+const chats=()=>jget('chats',[]);
+function makeChat(){return{id:Date.now().toString(36),title:'گفتگوی جدید',created:Date.now(),updated:Date.now(),hist:[],html:'',level:lv.value,named:false}}
+function putChats(a){
+  a.sort((x,y)=>y.updated-x.updated);
+  while(a.length>40)a.pop();
+  for(;;){try{localStorage.setItem('chats',JSON.stringify(a));return}catch(e){if(a.length<2)return;a.pop()}}
+}
+function setTitle(){const t=$('#ctitle');t.hidden=!cur;if(cur)t.textContent=cur.title+' ✏️'}
+function saveChat(){
+  try{
+    if(!cur)return;
+    cur.hist=hist.slice(-60);cur.html=log.innerHTML;cur.level=lv.value;cur.updated=Date.now();
+    if(!cur.named){const u=hist.find(m=>m.r==='u'&&m.t);if(u)cur.title=u.t.slice(0,28)}
+    const a=chats().filter(x=>x.id!==cur.id);a.push(cur);putChats(a);setTitle();
+  }catch(e){}
+}
+function showHist(){renderHist();syncNow().then(()=>{if(!$('#hist').hidden)renderHist()})}
+function renderHist(){
+  const box=$('#hlist');box.textContent='';
+  const a=chats();
+  if(!a.length)el('ok','هنوز گفتگویی ذخیره نشده است.',box);
+  a.forEach(c=>{
+    const row=document.createElement('div');row.className='hrow';
+    const t=document.createElement('button');t.className='htitle';t.dataset.open=c.id;t.textContent=c.title;
+    const m=document.createElement('span');m.className='hmeta';
+    m.textContent=new Date(c.updated).toLocaleDateString('fa-IR')+' — '+Math.ceil((c.hist||[]).length/2)+' نوبت';
+    t.appendChild(m);
+    const r=document.createElement('button');r.className='ear';r.textContent='✏️';r.dataset.ren=c.id;r.setAttribute('aria-label','Rename');
+    const d=document.createElement('button');d.className='ear';d.textContent='🗑';d.dataset.del=c.id;d.setAttribute('aria-label','Delete');
+    row.append(t,r,d);box.appendChild(row);
+  });
+  $('#hist').hidden=false;
+}
+function openChat(c){
+  if(busy)return;
+  if(!api&&!setApi())return;
+  stopVoice();if(rc)giveUp();
+  if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+  if(!AC){initAudio();warmMic()}
+  cur=c;hist=(c.hist||[]).slice();log.innerHTML=c.html||'';
+  log.querySelectorAll('[data-play]').forEach(x=>x.remove());
+  lv.value=c.level||lv.value;
+  $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
+  $('#hist').hidden=true;setTitle();showGoal();
+  log.scrollTop=log.scrollHeight;
+  say('ادامهٔ گفتگو. هر وقت آماده‌ای حرف بزن یا 💡 را بزن.');
+}
 function fixCard(x){
   const f=el('fix'),a=document.createElement('s'),b=document.createElement('b');
   a.textContent=String(x.said);f.appendChild(a);
@@ -244,16 +316,49 @@ const ago=n=>new Date(Date.now()-n*864e5).toLocaleDateString('en-CA');
 const jget=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
 const jset=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 let notes=jget('notes',[]);
+function practiceDays(){return Object.keys(jget('daysDone',{})).length}
+function engPct(){
+  const f=$('#focus').value;
+  if(f==='general')return 0;
+  if(f==='mech')return 100;
+  const d=practiceDays();return d<14?0:d<35?30:d<70?60:85;
+}
 function showGoal(){
   const d=jget('day',{}),s=d.d===ago(0)?d.s:0,k=jget('streak',{n:0,last:''});
-  const alive=k.last===ago(0)||k.last===ago(1);
-  $('#goal').textContent='امروز '+Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0')+' از '+GOAL/60+':00'+(alive&&k.n?'  🔥 '+k.n+' روز پشت‌سرهم':'');
+  const alive=k.last===ago(0)||k.last===ago(1),e=engPct();
+  $('#goal').textContent='امروز '+Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0')+' از '+GOAL/60+':00'+(alive&&k.n?'  🔥 '+k.n+' روز':'')+'  📅 '+practiceDays()+' روز تمرین'+(e?'  ⚙️ مهندسی '+e+'٪':'');
   $('#bar').style.width=Math.min(100,s/GOAL*100)+'%';
 }
 function addSecs(x){
-  const d=jget('day',{}),s=(d.d===ago(0)?d.s:0)+x;jset('day',{d:ago(0),s});
-  if(s>=GOAL){const k=jget('streak',{n:0,last:''});if(k.last!==ago(0))jset('streak',{n:k.last===ago(1)?k.n+1:1,last:ago(0)})}
+  const d=jget('day',{}),s=(d.d===ago(0)?d.s:0)+x;jset('day',{d:ago(0),s,u:Date.now()});
+  if(s>=180){const dd=jget('daysDone',{});if(!dd[ago(0)]){dd[ago(0)]=true;jset('daysDone',dd)}}
+  if(s>=GOAL){const k=jget('streak',{n:0,last:''});if(k.last!==ago(0))jset('streak',{n:k.last===ago(1)?k.n+1:1,last:ago(0),u:Date.now()})}
   showGoal();
+}
+function keepWeak(fx){const w=jget('weak',[]);fx.forEach(x=>w.push((x.said||'')+' -> '+(x.better||'')));jset('weak',w.slice(-12))}
+function offerLevel(to,why){
+  const d=el('ok',why+'؛ سطح را به '+to+' ببرم؟'),b=document.createElement('button');
+  b.className='ghost';b.textContent='بله، '+to;b.dataset.lvl=to;
+  d.appendChild(document.createTextNode(' '));d.appendChild(b);
+}
+function trackStats(words,nf){
+  const a=jget('stats',[]);a.push({w:words,f:nf});
+  if(a.length>=10){
+    const f=a.reduce((x,y)=>x+y.f,0)/a.length,w=a.reduce((x,y)=>x+y.w,0)/a.length;
+    const L=['A2','B1','B2'],i=L.indexOf(lv.value);
+    if(f<=0.7&&w>=12&&i>=0&&i<2)offerLevel(L[i+1],'در ۱۰ نوبت اخیر تقریباً بدون غلط و با جمله‌های بلند حرف زدی');
+    else if(f>=2.4&&i>0)offerLevel(L[i-1],'در ۱۰ نوبت اخیر غلط‌ها زیاد بوده');
+    jset('stats',[]);return;
+  }
+  jset('stats',a);
+}
+function vocabCard(list){
+  const f=el('fix snd');
+  list.forEach(v=>{const b=document.createElement('b');b.textContent='📘 '+v.en+'  —  '+(v.fa||'');ear(b,String(v.en));f.appendChild(b)});
+}
+function chalCard(c){
+  const f=el('fix snd'),h=document.createElement('b');h.textContent='🎯 '+(c.title||'');f.appendChild(h);
+  (c.words||[]).forEach(w=>{const b=document.createElement('b');b.textContent=w.en+'  —  '+(w.fa||'');ear(b,String(w.en));f.appendChild(b)});
 }
 const starter=()=>{const m=location.hash.match(/q=([^&]*)/);try{return m?decodeURIComponent(m[1]):''}catch(e){return ''}};
 async function diag(){
@@ -264,18 +369,85 @@ async function diag(){
   d.textContent=r.join('   ');
 }
 const errMsg=e=>{
-  if(e&&e.message==='quota')return 'سهمیهٔ رایگان تمام شد؛ کمی بعد یا فردا دوباره امتحان کن.';
-  if(e&&e.message==='forbidden')return 'کد دسترسی آدرس درست نیست.';
-  if(e&&e.message==='needs_gemini')return 'تحلیل صدا فقط با کلید Gemini کار می‌کند؛ GEMINI_KEY را در Script properties بگذار.';
+  const m=e&&e.message;
+  if(m==='quota')return 'سهمیهٔ رایگان تمام شد؛ کمی بعد یا فردا دوباره امتحان کن.';
+  if(m==='forbidden')return 'کد دسترسی آدرس درست نیست.';
+  if(m==='needpass'||m==='badpass')return 'رمز لازم است یا اشتباه است؛ با دکمهٔ ⚙ دوباره وارد کن.';
+  if(m==='needs_gemini')return 'تحلیل صدا فقط با کلید Gemini کار می‌کند؛ GEMINI_KEY را در Script properties بگذار.';
   if(e instanceof TypeError){diag();return 'به Apps Script وصل نشد. نتیجهٔ بررسی خودکار را زیر همین پیام ببین.'}
-  return 'خطا: '+(e&&e.message||e);
+  return 'خطا: '+(m||e);
 };
-async function call(p){
-  p.notes=notes.slice(-12);
-  const res=await fetch(api,{method:'POST',body:JSON.stringify(p)});
-  let j;try{j=await res.json()}catch(x){throw new Error('پاسخ نامعتبر از Apps Script؛ گزینهٔ Who has access باید Anyone باشد.')}
-  if(j.error)throw new Error(j.error);
-  return j;
+async function call(p,quiet){
+  p.notes=notes.slice(-12);p.days=practiceDays();p.eng=engPct();
+  try{p.pass=localStorage.getItem('pass')||''}catch(e){p.pass=''}
+  for(let t=0;t<2;t++){
+    const res=await fetch(api,{method:'POST',body:JSON.stringify(p)});
+    let j;try{j=await res.json()}catch(x){throw new Error('پاسخ نامعتبر از Apps Script؛ گزینهٔ Who has access باید Anyone باشد.')}
+    if(j.error==='needpass'||j.error==='badpass'){
+      if(quiet||t)throw new Error(j.error);
+      const v=prompt(j.error==='badpass'?'رمز اشتباه بود. دوباره وارد کن:':'رمز را وارد کن (همان مقداری که در SYNC_PASS گذاشتی):');
+      if(!v||!v.trim())throw new Error(j.error);
+      try{localStorage.setItem('pass',v.trim())}catch(e){}
+      p.pass=v.trim();continue;
+    }
+    if(j.error)throw new Error(j.error);
+    return j;
+  }
+}
+function setPass(){
+  let cur0='';try{cur0=localStorage.getItem('pass')||''}catch(e){}
+  const v=prompt('رمز (همان SYNC_PASS):',cur0);
+  if(v!==null){try{localStorage.setItem('pass',v.trim())}catch(e){}syncNow()}
+}
+
+let syncing=false,syncTimer=0;
+function scheduleSync(){clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,3000)}
+async function syncNow(){
+  if(syncing||!api)return;
+  syncing=true;const t0=Date.now(),st=$('#syncst');
+  try{
+    const lastPush=jget('lastPush',0),tomb=jget('tomb',[]);
+    const out=chats().filter(c=>(c.updated||0)>lastPush).concat(tomb);
+    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),streak:jget('streak',null),day:jget('day',null)}},true);
+    const a=chats();
+    (j.chats||[]).forEach(r=>{
+      const i=a.findIndex(x=>x.id===r.id);
+      if(r.deleted){if(i>=0)a.splice(i,1);return}
+      if(i<0)a.push(r);else if((r.updated||0)>(a[i].updated||0))a[i]=r;
+    });
+    putChats(a);
+    jset('lastPush',t0);jset('tomb',[]);jset('lastSync',j.now||t0);
+    notes=Array.from(new Set(notes.concat(j.notes||[]))).slice(-20);jset('notes',notes);
+    if(j.daysDone)jset('daysDone',Object.assign({},jget('daysDone',{}),j.daysDone));
+    const ld=jget('day',null);if(j.day&&(!ld||(j.day.u||0)>(ld.u||0)))jset('day',j.day);
+    const ls=jget('streak',null);if(j.streak&&(!ls||(j.streak.u||0)>(ls.u||0)))jset('streak',j.streak);
+    showGoal();$('#hs').hidden=!chats().length;
+    st.textContent='همگام‌سازی فعال ✓';
+  }catch(e){
+    st.textContent=e.message==='no_pass_set'?'همگام‌سازی خاموش است: در Script properties مقدار SYNC_PASS را بگذار.':(e.message==='needpass'||e.message==='badpass')?'برای همگام‌سازی رمز لازم است: دکمهٔ ⚙ را بزن.':'همگام‌سازی نشد؛ بعداً دوباره تلاش می‌شود.';
+  }
+  syncing=false;
+}
+
+async function startChallenge(){
+  if(busy)return;
+  if(!api&&!setApi())return;
+  if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+  if(!AC){initAudio();warmMic()}
+  $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
+  let c=jget('chal',null);
+  if(!c||c.d!==ago(0)||c.level!==lv.value){
+    busy=true;mic.disabled=true;say('دارم چالش امروز را می‌سازم…');
+    try{
+      const j=await call({level:lv.value,challenge:true,weak:jget('weak',[]).slice(-6)});
+      c=Object.assign({d:ago(0),level:lv.value},j.challenge);jset('chal',c);
+    }catch(e){busy=false;mic.disabled=false;say(errMsg(e));return}
+    busy=false;mic.disabled=false;
+  }
+  stopVoice();if(rc)giveUp();
+  cur=makeChat();cur.title='🎯 '+(c.title||'چالش امروز');cur.named=true;hist=[];log.textContent='';
+  setTitle();showGoal();chalCard(c);
+  turn(null,null,c);
 }
 
 async function hint(){
@@ -284,21 +456,22 @@ async function hint(){
   try{
     const j=await call({level:lv.value,hint:true,hist:hist.slice(-12)});
     const f=el('fix snd');
-    (j.hints||[]).slice(0,3).forEach(h=>{const b=document.createElement('b');b.textContent='“'+h+'”';ear(b,String(h));f.appendChild(b)});
+    (j.hints||[]).slice(0,3).forEach(h=>{const en=typeof h==='string'?h:h.en,fa=typeof h==='string'?'':h.fa;const b=document.createElement('b');b.textContent='“'+en+'”';ear(b,String(en));if(fa)tr(b,fa);f.appendChild(b)});
     el('fa','یکی را بلند بگو، یا با حرف خودت جواب بده.',f);
     say('نوبت توست: دکمه را بزن');
   }catch(e){say(errMsg(e))}
   busy=false;mic.disabled=false;
 }
 
-async function turn(u,a){
+async function turn(u,a,ch){
+  if(!cur)cur=makeChat();
   busy=true;mic.disabled=true;say('Sam در حال '+(a?'گوش دادن و ':'')+'فکر کردن است…');
   let reply='';
   try{
-    const j=await call({level:lv.value,start:u===null,starter:u===null?starter():'',hist:hist.slice(-12),audio:a?a.data:undefined});
+    const j=await call({level:lv.value,start:u===null,starter:(u===null&&!ch)?starter():'',chal:ch?{task:ch.task,words:ch.words}:undefined,hist:hist.slice(-12),audio:a?a.data:undefined});
     if(a){
       a.bubble.textContent=j.heard||'(نامفهوم)';hist.push({r:'u',t:j.heard||''});addSecs(a.secs);
-      const p=document.createElement('button');p.className='ear';p.textContent='▶';p.setAttribute('aria-label','Play my voice');
+      const p=document.createElement('button');p.className='ear';p.dataset.play='1';p.textContent='▶';p.setAttribute('aria-label','Play my voice');
       p.onclick=()=>new Audio(a.url).play();a.bubble.appendChild(p);
     }
     if(u!==null){
@@ -306,14 +479,16 @@ async function turn(u,a){
       fx.forEach(fixCard);sn.forEach(soundCard);
       if(!fx.length&&!sn.length)el('ok',a?'✓ جمله و تلفظت خوب بود':'✓ جمله‌ات درست بود');
       if(j.tip)el('ok',j.tip);
+      keepWeak(fx);trackStats(((a?j.heard:u)||'').split(/\s+/).filter(Boolean).length,fx.length);
     }
     if(j.note){notes.push(String(j.note).slice(0,160));notes=notes.slice(-20);jset('notes',notes)}
     hist.push({r:'c',t:j.reply});
-    const b=el('b c',j.reply);ear(b,j.reply);
-    reply=j.reply;
+    const b=el('b c',j.reply);ear(b,j.reply);if(j.reply_fa)tr(b,j.reply_fa);
+    if(Array.isArray(j.vocab)&&j.vocab.length)vocabCard(j.vocab);
+    reply=j.reply;saveChat();scheduleSync();
   }catch(e){
     if(a)a.bubble.textContent='— ارسال نشد؛ دوباره ضبط کن —';
-    else if(u!==null){hist.pop();txt.value=u}
+    else if(u!==null&&u!==''){hist.pop();txt.value=u}
     say(errMsg(e));
   }
   busy=false;mic.disabled=false;
@@ -338,7 +513,7 @@ $('#hf').onclick=()=>{
 };
 $('#send').onclick=()=>send(txt.value);
 txt.onkeydown=e=>{if(e.key==='Enter')send(txt.value)};
-$('#reset').onclick=()=>{if(busy)return;cancel();hist=[];log.textContent='';turn(null)};
+$('#reset').onclick=()=>{if(busy)return;stopVoice();if(rc)giveUp();cur=makeChat();hist=[];log.textContent='';setTitle();turn(null)};
 
 const API_URL='https://script.google.com/macros/s/AKfycbwtXvQgX6a1mvnl64c31b8utu2mHlqoQtKwmxynC1RFbjPuN-ORyTR_0ekq7gt4ohnD/exec';
 let api=API_URL;if(!api){try{api=localStorage.getItem('api')||''}catch(e){}}
@@ -347,15 +522,51 @@ function setApi(){
   if(v&&v.trim()){api=v.trim();try{localStorage.setItem('api',api)}catch(e){}}
   return api;
 }
-$('#cfg').onclick=setApi;$('#cfg').hidden=!!API_URL;
+$('#cfg').onclick=()=>{API_URL?setPass():setApi()};$('#cfg').hidden=false;
 $('#hint').onclick=hint;
 $('#go').onclick=async()=>{
   if(!api&&!setApi())return;
   if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
   await initAudio();
   $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
-  showGoal();warmMic();turn(null);
+  cur=makeChat();hist=[];setTitle();showGoal();warmMic();turn(null);
 };
+
+log.addEventListener('click',e=>{
+  const b=e.target.closest('button'),f=e.target.closest('.fa[data-t]');
+  if(b&&b.dataset.lvl){lv.value=b.dataset.lvl;try{localStorage.setItem('lvl',b.dataset.lvl)}catch(x){}b.remove();return}
+  if(b&&b.dataset.say!==undefined){speak(b.dataset.say);return}
+  if(b&&b.dataset.tr!==undefined){const x=b.parentNode.querySelector(':scope > .fa[data-t]');if(x)x.hidden=!x.hidden;return}
+  if(f)f.hidden=true;
+});
+$('#hlist').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const id=b.dataset.open||b.dataset.ren||b.dataset.del;if(!id)return;
+  const a=chats(),c=a.find(x=>x.id===id);if(!c)return;
+  if(b.dataset.open){openChat(c);return}
+  if(b.dataset.ren){
+    const v=prompt('اسم این گفتگو:',c.title);
+    if(v&&v.trim()){c.title=v.trim().slice(0,60);c.named=true;c.updated=Date.now();scheduleSync();if(cur&&cur.id===c.id){cur.title=c.title;cur.named=true;setTitle()}putChats(a);showHist()}
+    return;
+  }
+  if(b.dataset.del&&confirm('این گفتگو حذف شود؟')){
+    putChats(a.filter(x=>x.id!==id));{const tb=jget('tomb',[]);tb.push({id,deleted:true,updated:Date.now()});jset('tomb',tb)}scheduleSync();
+    if(cur&&cur.id===id){cur=null;hist=[];log.textContent='';setTitle();say('گفتگو حذف شد. برای شروع، «از نو» را بزن.')}
+    showHist();$('#hs').hidden=!chats().length;
+  }
+});
+$('#hb').onclick=showHist;$('#hs').onclick=showHist;$('#hx').onclick=()=>{$('#hist').hidden=true};
+$('#hs').hidden=!chats().length;
+$('#ctitle').onclick=()=>{
+  if(!cur)return;
+  const v=prompt('اسم این گفتگو:',cur.title);
+  if(v&&v.trim()){cur.title=v.trim().slice(0,60);cur.named=true;saveChat()}
+};
+try{$('#focus').value=localStorage.getItem('focus')||'auto'}catch(e){}
+$('#focus').onchange=()=>{try{localStorage.setItem('focus',$('#focus').value)}catch(e){}showGoal()};
+$('#chal').onclick=startChallenge;
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')syncNow()});
+setTimeout(syncNow,1500);
 </script>
 </body>
 </html>
