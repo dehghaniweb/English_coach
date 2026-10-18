@@ -40,11 +40,15 @@ select,.ghost{background:var(--sf);border:1px solid var(--ln);border-radius:10px
 .fix b .fa{font-weight:400}
 .crow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:0 14px 4px}
 #ctitle{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;unicode-bidi:plaintext}
-#hist{position:fixed;inset:0;z-index:10;background:var(--bg);overflow-y:auto;padding:calc(10px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px))}
+#hist,#rev,#rep{position:fixed;inset:0;z-index:10;background:var(--bg);overflow-y:auto;padding:calc(10px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px))}
 .hhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .hrow{display:flex;align-items:center;gap:6px;background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:8px 10px;margin-bottom:8px}
 .htitle{flex:1;text-align:start;background:none;border:0;cursor:pointer;padding:4px;font-weight:700;unicode-bidi:plaintext}
 .hmeta{display:block;font-weight:400;font-size:12px;color:var(--mu)}
+.rcard{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:16px;text-align:center}
+.ren{font-size:30px;font-weight:700;direction:ltr;margin:18px 0}
+.rline{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:8px 12px;margin-bottom:8px}
+.row2{display:flex;gap:8px;justify-content:center;margin-top:12px}
 #dock{padding:8px 14px 12px;background:var(--sf);border-top:1px solid var(--ln);display:flex;flex-direction:column;align-items:center;gap:8px}
 #status{min-height:24px;font-size:14px;color:var(--mu);text-align:center;unicode-bidi:plaintext}
 #mic{width:76px;height:76px;border-radius:50%;border:0;background:var(--ac);color:var(--on);cursor:pointer;display:grid;place-items:center}
@@ -69,13 +73,14 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   <button class="ghost" id="cfg" aria-label="Setup">⚙</button>
   <button class="ghost" id="reset" hidden>از نو</button>
 </header>
-<div class="crow"><button class="ghost" id="ctitle" hidden></button><select id="focus" aria-label="موضوع"><option value="auto">موضوع: خودکار</option><option value="general">موضوع: عمومی</option><option value="mech">موضوع: مهندسی مکانیک</option></select><button class="ghost" id="chal">🎯 چالش امروز</button></div>
+<div class="crow"><button class="ghost" id="ctitle" hidden></button><select id="focus" aria-label="موضوع"><option value="auto">موضوع: خودکار</option><option value="general">موضوع: عمومی</option><option value="mech">موضوع: مهندسی مکانیک</option></select><button class="ghost" id="chal">🎯 چالش امروز</button><button class="ghost" id="revb">📘 مرور</button><button class="ghost" id="repb">📊 گزارش</button></div>
 
 <section id="start">
   <h2>Hi, I'm Sam!</h2>
   <p>لازم نیست کامل حرف بزنی؛ فقط حرف بزن. من مثل یک دوست سؤال می‌پرسم، تو با صدا جواب می‌دهی و من همان لحظه غلط‌های گرامر و تلفظت را با توضیح فارسی نشان می‌دهم.</p>
   <button class="big" id="go">شروع مکالمه</button>
   <button class="ghost" id="hs" hidden>گفتگوهای قبلی</button>
+  <button class="ghost" id="hc" hidden></button>
   <p id="note">هدف امروز: ۱۰ دقیقه حرف زدن. اگر چیزی به ذهنت نرسید، دکمهٔ 💡 کمکت می‌کند.</p>
 </section>
 
@@ -99,7 +104,17 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 <div id="hist" hidden>
   <div class="hhead"><b>گفتگوهای قبلی</b><button class="ghost" id="hx" aria-label="Close">✕</button></div>
   <div id="syncst" class="ok"></div>
+  <div id="wk" class="ok"></div>
   <div id="hlist"></div>
+</div>
+
+<div id="rev" hidden>
+  <div class="hhead"><b>مرور واژه‌ها</b><button class="ghost" id="rx" aria-label="Close">✕</button></div>
+  <div id="rbody"></div>
+</div>
+<div id="rep" hidden>
+  <div class="hhead"><b>گزارش هفتگی</b><button class="ghost" id="px" aria-label="Close">✕</button></div>
+  <div id="pbody"></div>
 </div>
 
 <script>
@@ -124,21 +139,21 @@ const chats=()=>jget('chats',[]);
 function makeChat(){return{id:Date.now().toString(36),title:'گفتگوی جدید',created:Date.now(),updated:Date.now(),hist:[],html:'',level:lv.value,named:false}}
 function putChats(a){
   a.sort((x,y)=>y.updated-x.updated);
-  while(a.length>40)a.pop();
+  while(a.length>120)a.pop();
   for(;;){try{localStorage.setItem('chats',JSON.stringify(a));return}catch(e){if(a.length<2)return;a.pop()}}
 }
 function setTitle(){const t=$('#ctitle');t.hidden=!cur;if(cur)t.textContent=cur.title+' ✏️'}
 function saveChat(){
   try{
     if(!cur)return;
-    cur.hist=hist.slice(-60);cur.html=log.innerHTML;cur.level=lv.value;cur.updated=Date.now();
+    cur.hist=hist.slice(-60);cur.html=log.innerHTML;cur.compact=false;cur.level=lv.value;cur.updated=Date.now();
     if(!cur.named){const u=hist.find(m=>m.r==='u'&&m.t);if(u)cur.title=u.t.slice(0,28)}
     const a=chats().filter(x=>x.id!==cur.id);a.push(cur);putChats(a);setTitle();
   }catch(e){}
 }
 function showHist(){renderHist();syncNow().then(()=>{if(!$('#hist').hidden)renderHist()})}
 function renderHist(){
-  const box=$('#hlist');box.textContent='';
+  const box=$('#hlist');box.textContent='';$('#wk').textContent='۷ روز اخیر: '+weekBars();
   const a=chats();
   if(!a.length)el('ok','هنوز گفتگویی ذخیره نشده است.',box);
   a.forEach(c=>{
@@ -159,7 +174,7 @@ function openChat(c){
   stopVoice();if(rc)giveUp();
   if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
   if(!AC){initAudio();warmMic()}
-  cur=c;hist=(c.hist||[]).slice();log.innerHTML=c.html||'';
+  cur=c;hist=(c.hist||[]).slice();if(c.html)log.innerHTML=c.html;else rebuild(c);
   log.querySelectorAll('[data-play]').forEach(x=>x.remove());
   lv.value=c.level||lv.value;
   $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
@@ -330,10 +345,111 @@ function showGoal(){
   $('#bar').style.width=Math.min(100,s/GOAL*100)+'%';
 }
 function addSecs(x){
-  const d=jget('day',{}),s=(d.d===ago(0)?d.s:0)+x;jset('day',{d:ago(0),s,u:Date.now()});
+  const d=jget('day',{}),s=(d.d===ago(0)?d.s:0)+x;jset('day',{d:ago(0),s,u:Date.now()});{const dl=jget('dayLog',{});dl[ago(0)]=s;jset('dayLog',dl)}
   if(s>=180){const dd=jget('daysDone',{});if(!dd[ago(0)]){dd[ago(0)]=true;jset('daysDone',dd)}}
   if(s>=GOAL){const k=jget('streak',{n:0,last:''});if(k.last!==ago(0))jset('streak',{n:k.last===ago(1)?k.n+1:1,last:ago(0),u:Date.now()})}
   showGoal();
+}
+function weekBars(){
+  const dl=jget('dayLog',{});let o='',t=0;
+  for(let i=6;i>=0;i--){const x=dl[ago(i)]||0;t+=x;o+='▁▂▃▄▅▆▇█'[Math.min(7,Math.floor(x/GOAL*7.99))]}
+  return o+'  ('+Math.round(t/60)+' دقیقه در ۷ روز)';
+}
+const CATS={tense:'زمان فعل',article:'حرف تعریف (a/the)',preposition:'حرف اضافه',agreement:'مطابقت فعل و فاعل',plural:'جمع بستن',wordorder:'ترتیب کلمات',wordchoice:'انتخاب واژه',other:'سایر'};
+const INT=[0,1,3,7,16,35];
+function dev(){let d=jget('dev','');if(!d){d=Math.random().toString(36).slice(2,8);jset('dev',d)}return d}
+function logTurn(words,fx,sn){
+  const all=jget('dstat',{}),day=all[ago(0)]||(all[ago(0)]={}),id=dev(),me=day[id]||(day[id]={n:0,w:0,f:0,s:0,c:{},p:{}});
+  me.n++;me.w+=words;me.f+=fx.length;me.s+=sn.length;
+  fx.forEach(x=>{const k=CATS[x.cat]?x.cat:'other';me.c[k]=(me.c[k]||0)+1});
+  sn.forEach(x=>{const k=String(x.word||'').toLowerCase();if(k)me.p[k]=(me.p[k]||0)+1});
+  me.u=Date.now();jset('dstat',all);
+}
+function rangeStat(from,to){
+  const all=jget('dstat',{}),r={n:0,w:0,f:0,s:0,c:{},p:{},days:0};
+  for(let i=from;i>=to;i--){
+    const day=all[ago(i)]||{};let any=false;
+    Object.keys(day).forEach(id=>{const m=day[id];any=true;r.n+=m.n||0;r.w+=m.w||0;r.f+=m.f||0;r.s+=m.s||0;
+      Object.keys(m.c||{}).forEach(k=>r.c[k]=(r.c[k]||0)+m.c[k]);Object.keys(m.p||{}).forEach(k=>r.p[k]=(r.p[k]||0)+m.p[k])});
+    if(any)r.days++;
+  }
+  return r;
+}
+const topK=(o,n)=>Object.keys(o).sort((a,b)=>o[b]-o[a]).slice(0,n);
+function areas(){
+  const r=rangeStat(13,0),g=topK(r.c,3).map(k=>k+' ('+r.c[k]+')').join(', '),q=topK(r.p,3).join(', ');
+  return (g?'grammar: '+g:'')+(q?(g?'; ':'')+'pronunciation: '+q:'');
+}
+function mins(from,to){const dl=jget('dayLog',{});let t=0;for(let i=from;i>=to;i--)t+=dl[ago(i)]||0;return Math.round(t/60)}
+function arrow(a,b,lowerBetter){
+  if(!b)return a?' (جدید)':'';
+  if(Math.abs(a-b)<0.05*Math.max(1,b))return ' (تقریباً ثابت)';
+  return ((a<b)===!!lowerBetter)?' (بهتر شد ✓)':' (بدتر شد)';
+}
+function showReport(){
+  const box=$('#pbody');box.textContent='';
+  const t=rangeStat(6,0),p=rangeStat(13,7),vb=Object.values(jget('vbook',{}));
+  const line=x=>{const d=document.createElement('div');d.className='rline';d.textContent=x;box.appendChild(d)};
+  if(!t.n){line('برای ۷ روز اخیر هنوز داده‌ای نیست. بعد از چند گفتگو گزارش پر می‌شود.');$('#rep').hidden=false;return}
+  const aw=t.w/t.n,awp=p.n?p.w/p.n:0,af=t.f/t.n,afp=p.n?p.f/p.n:0;
+  line('روزهای تمرین: '+t.days+' از ۷ (هفتهٔ قبل: '+p.days+')');
+  line('دقیقهٔ حرف زدن: '+mins(6,0)+' (هفتهٔ قبل: '+mins(13,7)+')');
+  line('نوبت‌های گفتگو: '+t.n+' — میانگین کلمه در هر نوبت: '+aw.toFixed(1)+arrow(aw,awp,false));
+  line('غلط در هر نوبت: '+af.toFixed(2)+arrow(af,afp,true));
+  const g=topK(t.c,3);
+  if(g.length)line('پرتکرارترین غلط‌ها: '+g.map(k=>(CATS[k]||k)+' ('+t.c[k]+' بار'+(p.c[k]?'، هفتهٔ قبل '+p.c[k]:'')+')').join('؛ '));
+  const q=topK(t.p,4);
+  if(q.length)line('مشکل‌های تلفظ: '+q.map(k=>k+' ('+t.p[k]+' بار)').join('؛ '));
+  line('دفترچهٔ واژه: '+vb.length+' واژه؛ جدید این هفته: '+vb.filter(w=>w.added&&w.added>=ago(6)).length+'؛ جاافتاده (جعبهٔ ۴ به بالا): '+vb.filter(w=>(w.box||0)>=4).length);
+  if(g.length)line('پیشنهاد: این هفته روی «'+(CATS[g[0]]||g[0])+'» تمرکز کن. چالش امروز هم از همین نقطه‌ضعف‌ها ساخته می‌شود.');
+  $('#rep').hidden=false;
+}
+
+function addVocab(list){
+  const vb=jget('vbook',{});let ch=false;
+  (list||[]).forEach(v=>{
+    const k=String(v.en||'').toLowerCase().trim();if(!k||k.length>40)return;
+    if(!vb[k]){vb[k]={en:String(v.en).trim(),fa:String(v.fa||''),box:0,next:ago(0),added:ago(0),u:Date.now()};ch=true}
+    else if(!vb[k].fa&&v.fa){vb[k].fa=String(v.fa);vb[k].u=Date.now();ch=true}
+  });
+  if(ch){jset('vbook',vb);scheduleSync()}
+  updRev();
+}
+const dueWords=()=>{const t=ago(0);return Object.values(jget('vbook',{})).filter(w=>w.fa&&(w.next||t)<=t).sort((a,b)=>(a.box||0)-(b.box||0))};
+function updRev(){$('#revb').textContent='📘 مرور ('+dueWords().length+')'}
+let rq=[];
+function openRev(){rq=dueWords().slice(0,15);$('#rev').hidden=false;nextCard()}
+function nextCard(){
+  const box=$('#rbody');box.textContent='';
+  if(!rq.length){const d=document.createElement('div');d.className='rline';d.textContent=dueWords().length?'این نوبت تمام شد؛ بقیهٔ واژه‌ها برای بعد می‌ماند.':'امروز واژه‌ای برای مرور نیست. 🎉';box.appendChild(d);return}
+  const w=rq[0],c=document.createElement('div');c.className='rcard';
+  const e=document.createElement('div');e.className='ren';e.textContent=w.en;
+  const sp=document.createElement('button');sp.className='ear';sp.textContent='🔊';sp.onclick=()=>speak(w.en);
+  const f=document.createElement('div');f.className='fa';f.textContent=w.fa;f.hidden=true;f.style.fontSize='20px';
+  const sh=document.createElement('button');sh.className='big';sh.textContent='نشان بده';
+  const row=document.createElement('div');row.className='row2';row.hidden=true;
+  const ok=document.createElement('button');ok.className='big';ok.textContent='بلد بودم ✓';ok.onclick=()=>grade(w,true);
+  const no=document.createElement('button');no.className='ghost';no.textContent='نه ✗';no.onclick=()=>grade(w,false);
+  sh.onclick=()=>{f.hidden=false;sh.hidden=true;row.hidden=false};
+  row.append(ok,no);c.append(e,sp,f,sh,row);box.appendChild(c);
+  const n=document.createElement('div');n.className='ok';n.textContent='باقی‌مانده در این نوبت: '+rq.length;box.appendChild(n);
+}
+function grade(w,ok){
+  const vb=jget('vbook',{}),x=vb[w.en.toLowerCase().trim()];
+  if(x){x.box=ok?Math.min(5,(x.box||0)+1):0;x.next=ago(-INT[x.box]);x.seen=(x.seen||0)+1;x.u=Date.now();jset('vbook',vb);scheduleSync()}
+  rq.shift();if(!ok&&!w.again){w.again=true;rq.push(w)}
+  updRev();nextCard();
+}
+function rebuild(c){
+  log.textContent='';
+  if(c.summary)el('ok','خلاصه: '+c.summary);
+  (c.hist||[]).forEach(m=>{const b=el(m.r==='c'?'b c':'b me',m.t);if(m.r==='c')ear(b,m.t)});
+  el('ok','این گفتگو قدیمی بود و فشرده شده؛ فقط خلاصه و آخرین پیام‌ها مانده است.');
+}
+function compactLocal(){
+  const a=chats(),lim=Date.now()-30*864e5;let ch=false;
+  a.forEach(c=>{if(!c.compact&&(c.updated||0)<lim&&c.html){c.html='';c.hist=(c.hist||[]).slice(-8);c.compact=true;ch=true}});
+  if(ch)putChats(a);
 }
 function keepWeak(fx){const w=jget('weak',[]);fx.forEach(x=>w.push((x.said||'')+' -> '+(x.better||'')));jset('weak',w.slice(-12))}
 function offerLevel(to,why){
@@ -371,6 +487,7 @@ async function diag(){
 const errMsg=e=>{
   const m=e&&e.message;
   if(m==='quota')return 'سهمیهٔ رایگان تمام شد؛ کمی بعد یا فردا دوباره امتحان کن.';
+  if(m==='badjson')return 'پاسخ مدل خراب بود؛ دوباره بگو.';
   if(m==='forbidden')return 'کد دسترسی آدرس درست نیست.';
   if(m==='needpass'||m==='badpass')return 'رمز لازم است یا اشتباه است؛ با دکمهٔ ⚙ دوباره وارد کن.';
   if(m==='needs_gemini')return 'تحلیل صدا فقط با کلید Gemini کار می‌کند؛ GEMINI_KEY را در Script properties بگذار.';
@@ -379,6 +496,10 @@ const errMsg=e=>{
 };
 async function call(p,quiet){
   p.notes=notes.slice(-12);p.days=practiceDays();p.eng=engPct();
+  if(!p.sync&&!p.tts&&!p.hint&&!p.challenge){
+    p.past=chats().filter(c=>c.summary&&(!cur||c.id!==cur.id)).slice(0,5).map(c=>({d:new Date(c.updated).toLocaleDateString('en-CA'),s:c.summary}));
+    p.weak=jget('weak',[]).slice(-6);p.areas=areas();
+  }
   try{p.pass=localStorage.getItem('pass')||''}catch(e){p.pass=''}
   for(let t=0;t<2;t++){
     const res=await fetch(api,{method:'POST',body:JSON.stringify(p)});
@@ -401,6 +522,8 @@ function setPass(){
 }
 
 let syncing=false,syncTimer=0;
+function recentStat(){const all=jget('dstat',{}),o={};for(let i=3;i>=0;i--){const k=ago(i);if(all[k])o[k]=all[k]}return o}
+function changedVocab(since){const vb=jget('vbook',{}),o={};Object.keys(vb).forEach(k=>{if((vb[k].u||0)>since)o[k]=vb[k]});return o}
 function scheduleSync(){clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,3000)}
 async function syncNow(){
   if(syncing||!api)return;
@@ -408,7 +531,7 @@ async function syncNow(){
   try{
     const lastPush=jget('lastPush',0),tomb=jget('tomb',[]);
     const out=chats().filter(c=>(c.updated||0)>lastPush).concat(tomb);
-    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),streak:jget('streak',null),day:jget('day',null)}},true);
+    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),dayLog:jget('dayLog',{}),dstat:recentStat(),vbook:changedVocab(lastPush),streak:jget('streak',null),day:jget('day',null)}},true);
     const a=chats();
     (j.chats||[]).forEach(r=>{
       const i=a.findIndex(x=>x.id===r.id);
@@ -419,9 +542,12 @@ async function syncNow(){
     jset('lastPush',t0);jset('tomb',[]);jset('lastSync',j.now||t0);
     notes=Array.from(new Set(notes.concat(j.notes||[]))).slice(-20);jset('notes',notes);
     if(j.daysDone)jset('daysDone',Object.assign({},jget('daysDone',{}),j.daysDone));
+    if(j.dstat){const m=jget('dstat',{});Object.keys(j.dstat).forEach(dt=>{m[dt]=m[dt]||{};Object.keys(j.dstat[dt]).forEach(dv=>{const r=j.dstat[dt][dv];if(!m[dt][dv]||(r.n||0)>(m[dt][dv].n||0))m[dt][dv]=r})});jset('dstat',m)}
+    if(j.vbook){const m=jget('vbook',{});Object.keys(j.vbook).forEach(k=>{if(!m[k]||(j.vbook[k].u||0)>(m[k].u||0))m[k]=j.vbook[k]});jset('vbook',m)}
+    if(j.dayLog){const dl=jget('dayLog',{});Object.keys(j.dayLog).forEach(k=>{dl[k]=Math.max(dl[k]||0,j.dayLog[k])});jset('dayLog',dl)}
     const ld=jget('day',null);if(j.day&&(!ld||(j.day.u||0)>(ld.u||0)))jset('day',j.day);
     const ls=jget('streak',null);if(j.streak&&(!ls||(j.streak.u||0)>(ls.u||0)))jset('streak',j.streak);
-    showGoal();$('#hs').hidden=!chats().length;
+    showGoal();updStart();compactLocal();updRev();
     st.textContent='همگام‌سازی فعال ✓';
   }catch(e){
     st.textContent=e.message==='no_pass_set'?'همگام‌سازی خاموش است: در Script properties مقدار SYNC_PASS را بگذار.':(e.message==='needpass'||e.message==='badpass')?'برای همگام‌سازی رمز لازم است: دکمهٔ ⚙ را بزن.':'همگام‌سازی نشد؛ بعداً دوباره تلاش می‌شود.';
@@ -439,8 +565,8 @@ async function startChallenge(){
   if(!c||c.d!==ago(0)||c.level!==lv.value){
     busy=true;mic.disabled=true;say('دارم چالش امروز را می‌سازم…');
     try{
-      const j=await call({level:lv.value,challenge:true,weak:jget('weak',[]).slice(-6)});
-      c=Object.assign({d:ago(0),level:lv.value},j.challenge);jset('chal',c);
+      const j=await call({level:lv.value,challenge:true,weak:jget('weak',[]).slice(-6),areas:areas()});
+      c=Object.assign({d:ago(0),level:lv.value},j.challenge);jset('chal',c);addVocab(c.words);
     }catch(e){busy=false;mic.disabled=false;say(errMsg(e));return}
     busy=false;mic.disabled=false;
   }
@@ -479,13 +605,13 @@ async function turn(u,a,ch){
       fx.forEach(fixCard);sn.forEach(soundCard);
       if(!fx.length&&!sn.length)el('ok',a?'✓ جمله و تلفظت خوب بود':'✓ جمله‌ات درست بود');
       if(j.tip)el('ok',j.tip);
-      keepWeak(fx);trackStats(((a?j.heard:u)||'').split(/\s+/).filter(Boolean).length,fx.length);
+      const nw=((a?j.heard:u)||'').split(/\s+/).filter(Boolean).length;keepWeak(fx);trackStats(nw,fx.length);logTurn(nw,fx,sn);
     }
     if(j.note){notes.push(String(j.note).slice(0,160));notes=notes.slice(-20);jset('notes',notes)}
     hist.push({r:'c',t:j.reply});
     const b=el('b c',j.reply);ear(b,j.reply);if(j.reply_fa)tr(b,j.reply_fa);
-    if(Array.isArray(j.vocab)&&j.vocab.length)vocabCard(j.vocab);
-    reply=j.reply;saveChat();scheduleSync();
+    if(Array.isArray(j.vocab)&&j.vocab.length){vocabCard(j.vocab);addVocab(j.vocab)}
+    reply=j.reply;if(j.summary&&cur)cur.summary=String(j.summary).slice(0,240);saveChat();scheduleSync();
   }catch(e){
     if(a)a.bubble.textContent='— ارسال نشد؛ دوباره ضبط کن —';
     else if(u!==null&&u!==''){hist.pop();txt.value=u}
@@ -552,11 +678,11 @@ $('#hlist').addEventListener('click',e=>{
   if(b.dataset.del&&confirm('این گفتگو حذف شود؟')){
     putChats(a.filter(x=>x.id!==id));{const tb=jget('tomb',[]);tb.push({id,deleted:true,updated:Date.now()});jset('tomb',tb)}scheduleSync();
     if(cur&&cur.id===id){cur=null;hist=[];log.textContent='';setTitle();say('گفتگو حذف شد. برای شروع، «از نو» را بزن.')}
-    showHist();$('#hs').hidden=!chats().length;
+    showHist();updStart();
   }
 });
 $('#hb').onclick=showHist;$('#hs').onclick=showHist;$('#hx').onclick=()=>{$('#hist').hidden=true};
-$('#hs').hidden=!chats().length;
+updStart();
 $('#ctitle').onclick=()=>{
   if(!cur)return;
   const v=prompt('اسم این گفتگو:',cur.title);
@@ -567,6 +693,15 @@ $('#focus').onchange=()=>{try{localStorage.setItem('focus',$('#focus').value)}ca
 $('#chal').onclick=startChallenge;
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')syncNow()});
 setTimeout(syncNow,1500);
+function updStart(){
+  const a=chats();$('#hs').hidden=!a.length;
+  const h=$('#hc');h.hidden=!a.length;if(a.length)h.textContent='ادامهٔ آخرین گفتگو: '+a[0].title;
+}
+$('#hc').onclick=()=>{const a=chats();if(a.length)openChat(a[0])};
+updStart();
+$('#revb').onclick=openRev;$('#rx').onclick=()=>{$('#rev').hidden=true};
+$('#repb').onclick=showReport;$('#px').onclick=()=>{$('#rep').hidden=true};
+compactLocal();updRev();
 </script>
 </body>
 </html>
