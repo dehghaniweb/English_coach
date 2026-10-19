@@ -240,7 +240,7 @@ function soundCard(x){
   el('fa',x.fa,f);
 }
 
-let AC=null,MS=null,SRC=null,PROC=null,rc=null,starting=false,hands=false,tts=true,vt=0,spk=null;
+let AC=null,MS=null,SRC=null,PROC=null,rc=null,starting=false,hands=false,tts=true,vt=0,spk=null,mr=null,mrChunks=[],mrMime='',lastSize=0;
 async function initAudio(){
   if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
   if(AC.state==='suspended')await AC.resume();
@@ -279,24 +279,46 @@ async function startRec(){
     SRC=AC.createMediaStreamSource(MS);PROC=AC.createScriptProcessor(4096,1,1);
     PROC.onaudioprocess=onChunk;SRC.connect(PROC);PROC.connect(AC.destination);
     rc={chunks:[],t:0,noise:0,voiced:0,quiet:0,spoke:false};
+    mr=null;mrChunks=[];mrMime=pickMime();
+    if(mrMime&&fmtOK()!=='wav'){
+      try{mr=new MediaRecorder(MS,{mimeType:mrMime,audioBitsPerSecond:32000});mr.ondataavailable=e=>{if(e.data&&e.data.size)mrChunks.push(e.data)};mr.start(1000)}catch(e){mr=null}
+    }
     mic.classList.add('on');
     rc.tick=setInterval(tick,300);
     rc.timer=setTimeout(finish,75000);
   }finally{starting=false}
 }
+const fmtOK=()=>jget('fmt','');
+function pickMime(){
+  if(!window.MediaRecorder)return '';
+  for(const m of ['audio/webm;codecs=opus','audio/webm','audio/mp4']){try{if(MediaRecorder.isTypeSupported(m))return m}catch(e){}}
+  return '';
+}
+function stopMr(){
+  return new Promise(res=>{
+    if(!mr||mr.state==='inactive'){res(null);return}
+    mr.onstop=()=>res(new Blob(mrChunks,{type:mrMime.split(';')[0]}));
+    try{mr.stop()}catch(e){res(null)}
+  });
+}
+function killMr(){try{if(mr&&mr.state!=='inactive'){mr.onstop=null;mr.stop()}}catch(e){}mr=null}
+const b64=blob=>new Promise(res=>{const f=new FileReader();f.onload=()=>res(f.result.split(',')[1]);f.readAsDataURL(blob)});
 function giveUp(){
   const r=rc;if(!r)return;rc=null;
-  clearTimeout(r.timer);clearInterval(r.tick);mic.classList.remove('on');release();
+  clearTimeout(r.timer);clearInterval(r.tick);mic.classList.remove('on');killMr();release();
   say('چیزی نشنیدم. هر وقت آماده بودی دکمه را بزن.');
 }
 async function finish(){
   const r=rc;if(!r)return;rc=null;
-  clearTimeout(r.timer);clearInterval(r.tick);mic.classList.remove('on');release();
-  const blob=toWav(r.chunks,AC.sampleRate);
-  if(blob.secs<0.7||blob.peak<0.02){say('صدایی نشنیدم یا خیلی کوتاه بود؛ دوباره بزن.');return}
-  const data=await new Promise(res=>{const f=new FileReader();f.onload=()=>res(f.result.split(',')[1]);f.readAsDataURL(blob)});
+  clearTimeout(r.timer);clearInterval(r.tick);mic.classList.remove('on');
+  const comp=await stopMr();
+  release();
+  const wav=toWav(r.chunks,AC.sampleRate);
+  if(wav.secs<0.7||wav.peak<0.02){say('صدایی نشنیدم یا خیلی کوتاه بود؛ دوباره بزن.');return}
+  const sendB=(comp&&comp.size>500&&fmtOK()!=='wav')?comp:wav;
+  const data=await b64(sendB);
   stopVoice();
-  turn('',{data,secs:blob.secs,bubble:el('b me','…'),url:URL.createObjectURL(blob)});
+  turn('',{data,mime:sendB===wav?'audio/wav':sendB.type,wav,secs:wav.secs,bubble:el('b me','…'),url:URL.createObjectURL(sendB)});
 }
 function toWav(chunks,rate){
   let n=0;chunks.forEach(c=>n+=c.length);
@@ -522,12 +544,23 @@ function chalCard(c){
   (c.words||[]).forEach(w=>{const b=document.createElement('b');b.textContent=w.en+'  —  '+(w.fa||'');ear(b,String(w.en));f.appendChild(b)});
 }
 const starter=()=>{const m=location.hash.match(/q=([^&]*)/);try{return m?decodeURIComponent(m[1]):''}catch(e){return ''}};
-async function diag(){
+async function post(b){
+  for(let i=0;;i++){
+    try{return await fetch(api,{method:'POST',body:b})}
+    catch(e){if(i>=1)throw e;await new Promise(r=>setTimeout(r,1200))}
+  }
+}
+async function diag(size){
   const d=el('ok');d.textContent='در حال بررسی اتصال…';
-  const r=[];
-  try{const x=await fetch(api);const j=await x.json();r.push('GET: '+(j.ok?'✓':'؟'))}catch(e){r.push('GET: ✗ ('+e.message+')')}
-  try{const x=await fetch(api,{method:'POST',body:JSON.stringify({ping:true})});const j=await x.json();r.push('POST: ✓'+(j.error?' ('+j.error+')':''))}catch(e){r.push('POST: ✗ ('+e.message+')')}
-  d.textContent=r.join('   ');
+  let g=false,p1=false,p2=null;
+  try{const x=await fetch(api);const j=await x.json();g=!!j.ok}catch(e){}
+  try{const x=await fetch(api,{method:'POST',body:JSON.stringify({ping:true})});await x.json();p1=true}catch(e){}
+  if(g&&p1&&size>50000){try{const x=await fetch(api,{method:'POST',body:JSON.stringify({ping:true,pad:'x'.repeat(size)})});await x.json();p2=true}catch(e){p2=false}}
+  let v;
+  if(!g||!p1)v='اتصال به Apps Script قطع است. اینترنت دیگری (وای‌فای یا دیتای گوشی) یا VPN را امتحان کن.';
+  else if(p2===false)v='ارسال فایل با این حجم ('+(size/1048576).toFixed(1)+' مگابایت) روی اینترنت فعلی قطع می‌شود. ضبط را کوتاه‌تر کن یا اینترنت/VPN دیگری امتحان کن.';
+  else v='اتصال سالم است و ارسال همین حجم هم کار می‌کند؛ مشکل از پردازش بود. دکمهٔ «دوباره بفرست» را بزن.';
+  d.textContent=v+'  ['+'GET: '+(g?'✓':'✗')+'  POST: '+(p1?'✓':'✗')+(p2===null?'':'  حجم بالا: '+(p2?'✓':'✗'))+']';
 }
 const errMsg=e=>{
   const m=e&&e.message;
@@ -536,7 +569,7 @@ const errMsg=e=>{
   if(m==='forbidden')return 'کد دسترسی آدرس درست نیست.';
   if(m==='needpass'||m==='badpass')return 'رمز لازم است یا اشتباه است؛ با دکمهٔ ⚙ دوباره وارد کن.';
   if(m==='needs_gemini')return 'تحلیل صدا فقط با کلید Gemini کار می‌کند؛ GEMINI_KEY را در Script properties بگذار.';
-  if(e instanceof TypeError){diag();return 'به Apps Script وصل نشد. نتیجهٔ بررسی خودکار را زیر همین پیام ببین.'}
+  if(e instanceof TypeError){diag(lastSize);return 'ارسال نشد. نتیجهٔ بررسی اتصال را زیر همین پیام ببین.'}
   return 'خطا: '+(m||e);
 };
 async function call(p,quiet){
@@ -547,7 +580,7 @@ async function call(p,quiet){
   }
   try{p.pass=localStorage.getItem('pass')||''}catch(e){p.pass=''}
   for(let t=0;t<2;t++){
-    const res=await fetch(api,{method:'POST',body:JSON.stringify(p)});
+    const bodyS=JSON.stringify(p);lastSize=bodyS.length;const res=await post(bodyS);
     let j;try{j=await res.json()}catch(x){throw new Error('پاسخ نامعتبر از Apps Script؛ گزینهٔ Who has access باید Anyone باشد.')}
     if(j.error==='needpass'||j.error==='badpass'){
       if(quiet||t)throw new Error(j.error);
@@ -639,7 +672,7 @@ async function turn(u,a,ch){
   busy=true;mic.disabled=true;say('مربی در حال '+(a?'گوش دادن و ':'')+'فکر کردن است…');
   let reply='';
   try{
-    const j=await call({level:lv.value,start:u===null,starter:(u===null&&!ch)?starter():'',chal:ch?{task:ch.task,words:ch.words}:undefined,hist:hist.slice(-12),audio:a?a.data:undefined});
+    const j=await call({level:lv.value,start:u===null,starter:(u===null&&!ch)?starter():'',chal:ch?{task:ch.task,words:ch.words}:undefined,hist:hist.slice(-12),audio:a?a.data:undefined,mime:a?a.mime:undefined,secs:a?a.secs:undefined});
     if(a){
       a.bubble.textContent=j.heard||'(نامفهوم)';hist.push({r:'u',t:j.heard||''});addSecs(a.secs);
       const p=document.createElement('button');p.className='ear';p.dataset.play='1';p.textContent='▶';p.setAttribute('aria-label','Play my voice');
@@ -658,7 +691,16 @@ async function turn(u,a,ch){
     if(Array.isArray(j.vocab)&&j.vocab.length){vocabCard(j.vocab);addVocab(j.vocab)}
     reply=j.reply;if(j.summary&&cur)cur.summary=String(j.summary).slice(0,240);saveChat();scheduleSync();
   }catch(e){
-    if(a)a.bubble.textContent='— ارسال نشد؛ دوباره ضبط کن —';
+    if(a&&!a.retried&&a.mime&&a.mime!=='audio/wav'&&/audio|mime|format|decode|support|invalid/i.test(String((e&&e.message)||''))){
+      a.retried=true;jset('fmt','wav');
+      try{a.data=await b64(a.wav);a.mime='audio/wav';busy=false;mic.disabled=false;return turn(u,a,ch)}catch(x){}
+    }
+    if(a){
+      a.bubble.textContent='— ارسال نشد —  ';
+      const rb=document.createElement('button');rb.className='ghost';rb.textContent='↻ دوباره بفرست';
+      rb.onclick=()=>{if(busy)return;rb.remove();a.bubble.textContent='…';turn('',a)};
+      a.bubble.appendChild(rb);
+    }
     else if(u!==null&&u!==''){hist.pop();txt.value=u}
     say(errMsg(e));
   }
