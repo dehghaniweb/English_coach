@@ -81,6 +81,42 @@ h1{margin:0;font-size:19px;font-weight:700;white-space:nowrap;direction:ltr}
 .row input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--ln);border-radius:999px;padding:9px 16px;direction:ltr}
 .row .ghost{border-radius:999px}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+
+.ear{width:38px;height:38px;border-radius:50%;background:var(--bg);border:1px solid var(--ln);color:var(--ac);cursor:pointer;padding:0;font-size:18px;line-height:1;display:inline-grid;place-items:center;vertical-align:middle;margin:0 3px;flex:none}
+.ear svg{width:20px;height:20px;fill:currentColor}
+.me .ear{background:rgba(255,255,255,.2);border-color:transparent;color:var(--mt)}
+.acts{display:flex;gap:6px;align-items:center}
+.b.c{font-size:15px}
+.b.me{font-size:15px}
+.b.c.g{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:start}
+.b.c.g .fa{grid-column:1/-1}
+.b.c.cur{font-size:20px;line-height:1.65;padding:14px 16px}
+.b.c.cur .fa{font-size:17px}
+#dock{padding:8px 12px 10px;gap:4px}
+#prog{max-width:560px;height:4px}
+.dmeta{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;max-width:560px}
+#goal{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#hf{font-size:12px;padding:3px 10px;flex:none}
+#status{min-height:18px;font-size:12.5px;line-height:1.35}
+#mic{width:54px;height:54px;flex:none;box-shadow:0 4px 12px rgba(60,90,40,.35)}
+#mic svg{width:26px;height:26px}
+.drow{display:flex;align-items:center;gap:8px;width:100%;max-width:560px}
+.drow input{flex:1;min-width:0;height:44px;background:var(--bg);border:1px solid var(--ln);border-radius:999px;padding:0 16px;direction:ltr}
+.ibtn.sm{width:44px;height:44px;border-radius:50%;flex:none}
+.ibtn svg{width:20px;height:20px;fill:currentColor}
+.ov{position:fixed;inset:0;z-index:20;background:rgba(20,30,15,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;background:var(--sf);border-radius:24px 24px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 28px rgba(20,30,15,.25)}
+.sheet.tall{max-height:88%;overflow-y:auto}
+.sh-t{font-weight:700;font-size:18px;margin-bottom:6px}
+.sh-p{color:var(--mu);font-size:14px;margin-bottom:8px}
+.sheet input{width:100%;height:46px;border:1px solid var(--ln);border-radius:14px;background:var(--bg);padding:0 14px;margin:6px 0 12px}
+.sh-a{display:flex;gap:8px;justify-content:flex-end}
+.sm{padding:10px 18px;font-size:16px;border-radius:14px}
+.cust{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.cust input{margin:0;flex:1}
+.ngh{font-weight:700;color:var(--mu);font-size:13px;margin:12px 2px 6px}
+.nrow{display:flex;flex-wrap:wrap;gap:8px}
+.sheet .chip{background:var(--bg)}
 </style>
 </head>
 <body>
@@ -124,6 +160,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   <h2>Let's talk!</h2>
   <p>لازم نیست کامل حرف بزنی؛ فقط حرف بزن. من سؤال می‌پرسم، تو با صدا جواب می‌دهی و من همان لحظه غلط‌های گرامر و تلفظت را با توضیح فارسی نشان می‌دهم.</p>
   <button class="big" id="go">شروع مکالمه</button>
+  <button class="ghost" id="tp">انتخاب موضوع</button>
   <button class="ghost" id="hc" hidden></button>
   <button class="ghost" id="hs" hidden>گفتگوهای قبلی</button>
   <p id="note">هدف امروز: ۱۰ دقیقه حرف زدن. اگر چیزی به ذهنت نرسید، دکمهٔ 💡 کمکت می‌کند.</p>
@@ -133,16 +170,15 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 
 <footer id="dock" hidden>
   <div id="prog"><div id="bar"></div></div>
-  <div id="goal"></div>
+  <div class="dmeta"><span id="goal"></span><button class="ghost" id="hf" aria-pressed="false">دست‌آزاد: خاموش</button></div>
   <div id="status"></div>
-  <button id="mic" aria-label="Speak">
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-  </button>
-  <button class="ghost" id="hf" aria-pressed="false">دست‌آزاد: خاموش</button>
-  <div class="row">
+  <div class="drow">
+    <button id="mic" aria-label="Speak">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+    </button>
     <input id="txt" dir="ltr" placeholder="Or type here" autocomplete="off">
-    <button class="ghost" id="hint" aria-label="Hint">💡</button>
-    <button class="ghost" id="send">ارسال</button>
+    <button class="ibtn sm" id="hint" aria-label="Hint">💡</button>
+    <button class="ibtn sm" id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
   </div>
 </footer>
 
@@ -162,6 +198,23 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   <div id="pbody"></div>
 </div>
 
+<div id="modal" class="ov" hidden>
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="sh-t" id="mtitle"></div>
+    <div class="sh-p" id="mtext"></div>
+    <input id="minput" dir="auto" autocomplete="off">
+    <div class="sh-a"><button class="ghost sm" id="mno">انصراف</button><button class="big sm" id="myes">تأیید</button></div>
+  </div>
+</div>
+<div id="newc" class="ov" hidden>
+  <div class="sheet tall">
+    <div class="hhead"><b>موضوع گفتگو</b><button class="ghost" id="nx" aria-label="Close">✕</button></div>
+    <div class="cust"><input id="ntopic" dir="auto" placeholder="موضوع دلخواه (مثلاً: my job)"><button class="big sm" id="ngo">شروع</button></div>
+    <button class="chip pri" id="nrand">🎲 تصادفی (بدون تکرار)</button>
+    <div id="ngroups"></div>
+  </div>
+</div>
+
 <script>
 const $=s=>document.querySelector(s),log=$('#log'),st=$('#status'),mic=$('#mic'),txt=$('#txt'),lv=$('#level');
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -172,11 +225,22 @@ const say=t=>{st.textContent=t};
 const cancel=()=>stopVoice();
 
 function el(c,t,p){const d=document.createElement('div');d.className=c;if(t)d.textContent=t;(p||log).appendChild(d);log.scrollTop=log.scrollHeight;return d}
-function ear(p,t){const b=document.createElement('button');b.className='ear';b.textContent='🔊';b.dataset.say=t;b.setAttribute('aria-label','Listen');p.appendChild(b)}
+const IC={
+ spk:'<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>',
+ tr:'<svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>',
+ play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'};
+function acts(p){
+  if(!p.classList||!p.classList.contains('c'))return p;
+  p.classList.add('g');
+  let a=p.querySelector(':scope > .acts');
+  if(!a){a=document.createElement('div');a.className='acts';p.appendChild(a)}
+  return a;
+}
+function ear(p,t){const b=document.createElement('button');b.className='ear';b.innerHTML=IC.spk;b.dataset.say=t;b.setAttribute('aria-label','Listen');acts(p).appendChild(b)}
 function tr(p,t){
-  const b=document.createElement('button');b.className='ear';b.textContent='🌐';b.dataset.tr='1';b.setAttribute('aria-label','ترجمه');
+  const b=document.createElement('button');b.className='ear';b.innerHTML=IC.tr;b.dataset.tr='1';b.setAttribute('aria-label','ترجمه');
   const f=document.createElement('div');f.className='fa';f.dataset.t='1';f.textContent=t;f.hidden=true;
-  p.appendChild(b);p.appendChild(f);
+  acts(p).appendChild(b);p.appendChild(f);
 }
 
 let cur=null;
@@ -584,7 +648,7 @@ async function call(p,quiet){
     let j;try{j=await res.json()}catch(x){throw new Error('پاسخ نامعتبر از Apps Script؛ گزینهٔ Who has access باید Anyone باشد.')}
     if(j.error==='needpass'||j.error==='badpass'){
       if(quiet||t)throw new Error(j.error);
-      const v=prompt(j.error==='badpass'?'رمز اشتباه بود. دوباره وارد کن:':'رمز را وارد کن (همان مقداری که در SYNC_PASS گذاشتی):');
+      const v=await openModal('رمز همگام‌سازی',j.error==='badpass'?'رمز اشتباه بود. دوباره وارد کن.':'همان رمزی که در SYNC_PASS گذاشتی را وارد کن.',true,'','ورود');
       if(!v||!v.trim())throw new Error(j.error);
       try{localStorage.setItem('pass',v.trim())}catch(e){}
       p.pass=v.trim();continue;
@@ -593,9 +657,9 @@ async function call(p,quiet){
     return j;
   }
 }
-function setPass(){
+async function setPass(){
   let cur0='';try{cur0=localStorage.getItem('pass')||''}catch(e){}
-  const v=prompt('رمز (همان SYNC_PASS):',cur0);
+  const v=await openModal('رمز همگام‌سازی','همان مقدار SYNC_PASS در Apps Script',true,cur0,'ذخیره');
   if(v!==null){try{localStorage.setItem('pass',v.trim())}catch(e){}syncNow()}
 }
 
@@ -667,15 +731,15 @@ async function hint(){
   busy=false;mic.disabled=false;
 }
 
-async function turn(u,a,ch){
+async function turn(u,a,ch,tp){
   if(!cur)cur=makeChat();
   busy=true;mic.disabled=true;say('مربی در حال '+(a?'گوش دادن و ':'')+'فکر کردن است…');
   let reply='';
   try{
-    const j=await call({level:lv.value,start:u===null,starter:(u===null&&!ch)?starter():'',chal:ch?{task:ch.task,words:ch.words}:undefined,hist:hist.slice(-12),audio:a?a.data:undefined,mime:a?a.mime:undefined,secs:a?a.secs:undefined});
+    const j=await call({level:lv.value,start:u===null,starter:(u===null&&!ch)?(tp?tp.s:starter()):'',chal:ch?{task:ch.task,words:ch.words}:undefined,hist:hist.slice(-12),audio:a?a.data:undefined,mime:a?a.mime:undefined,secs:a?a.secs:undefined});
     if(a){
       a.bubble.textContent=j.heard||'(نامفهوم)';hist.push({r:'u',t:j.heard||''});addSecs(a.secs);
-      const p=document.createElement('button');p.className='ear';p.dataset.play='1';p.textContent='▶';p.setAttribute('aria-label','Play my voice');
+      const p=document.createElement('button');p.className='ear';p.dataset.play='1';p.innerHTML=IC.play;p.setAttribute('aria-label','Play my voice');
       p.onclick=()=>new Audio(a.url).play();a.bubble.appendChild(p);
     }
     if(u!==null){
@@ -687,13 +751,14 @@ async function turn(u,a,ch){
     }
     if(j.note){notes.push(String(j.note).slice(0,160));notes=notes.slice(-20);jset('notes',notes)}
     hist.push({r:'c',t:j.reply});
-    const b=el('b c',j.reply);ear(b,j.reply);if(j.reply_fa)tr(b,j.reply_fa);
+    log.querySelectorAll('.b.c.cur').forEach(x=>x.classList.remove('cur'));
+      const b=el('b c cur',j.reply);ear(b,j.reply);if(j.reply_fa)tr(b,j.reply_fa);
     if(Array.isArray(j.vocab)&&j.vocab.length){vocabCard(j.vocab);addVocab(j.vocab)}
     reply=j.reply;if(j.summary&&cur)cur.summary=String(j.summary).slice(0,240);saveChat();scheduleSync();
   }catch(e){
     if(a&&!a.retried&&a.mime&&a.mime!=='audio/wav'&&/audio|mime|format|decode|support|invalid/i.test(String((e&&e.message)||''))){
       a.retried=true;jset('fmt','wav');
-      try{a.data=await b64(a.wav);a.mime='audio/wav';busy=false;mic.disabled=false;return turn(u,a,ch)}catch(x){}
+      try{a.data=await b64(a.wav);a.mime='audio/wav';busy=false;mic.disabled=false;return turn(u,a,ch,tp)}catch(x){}
     }
     if(a){
       a.bubble.textContent='— ارسال نشد —  ';
@@ -726,7 +791,7 @@ $('#hf').onclick=()=>{
 };
 $('#send').onclick=()=>send(txt.value);
 txt.onkeydown=e=>{if(e.key==='Enter')send(txt.value)};
-$('#reset').onclick=()=>{if(busy)return;stopVoice();if(rc)giveUp();cur=makeChat();hist=[];log.textContent='';setTitle();turn(null)};
+$('#reset').onclick=()=>{if(busy)return;openNew()};
 
 const API_URL='https://script.google.com/macros/s/AKfycbwtXvQgX6a1mvnl64c31b8utu2mHlqoQtKwmxynC1RFbjPuN-ORyTR_0ekq7gt4ohnD/exec';
 let api=API_URL;if(!api){try{api=localStorage.getItem('api')||''}catch(e){}}
@@ -737,32 +802,32 @@ function setApi(){
 }
 $('#cfg').onclick=()=>{API_URL?setPass():setApi()};$('#cfg').hidden=false;
 $('#hint').onclick=hint;
-$('#go').onclick=async()=>{
-  if(!api&&!setApi())return;
-  if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
-  await initAudio();
-  $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
-  cur=makeChat();hist=[];setTitle();showGoal();warmMic();turn(null);
+$('#go').onclick=()=>{
+  const q=starter();let tp;
+  if(q){tp={l:q.slice(0,30),s:q};try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
+  else tp=randomTopic();
+  startNew(tp);
 };
+$('#tp').onclick=openNew;
 
 log.addEventListener('click',e=>{
   const b=e.target.closest('button'),f=e.target.closest('.fa[data-t]');
   if(b&&b.dataset.lvl){lv.value=b.dataset.lvl;try{localStorage.setItem('lvl',b.dataset.lvl)}catch(x){}b.remove();return}
   if(b&&b.dataset.say!==undefined){speak(b.dataset.say);return}
-  if(b&&b.dataset.tr!==undefined){const x=b.parentNode.querySelector(':scope > .fa[data-t]');if(x)x.hidden=!x.hidden;return}
+  if(b&&b.dataset.tr!==undefined){const host=b.closest('.b')||b.parentNode,x=host.querySelector(':scope > .fa[data-t]');if(x)x.hidden=!x.hidden;return}
   if(f)f.hidden=true;
 });
-$('#hlist').addEventListener('click',e=>{
+$('#hlist').addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;
   const id=b.dataset.open||b.dataset.ren||b.dataset.del;if(!id)return;
   const a=chats(),c=a.find(x=>x.id===id);if(!c)return;
   if(b.dataset.open){openChat(c);return}
   if(b.dataset.ren){
-    const v=prompt('اسم این گفتگو:',c.title);
+    const v=await askText('اسم گفتگو',c.title);
     if(v&&v.trim()){c.title=v.trim().slice(0,60);c.named=true;c.updated=Date.now();scheduleSync();if(cur&&cur.id===c.id){cur.title=c.title;cur.named=true;setTitle()}putChats(a);showHist()}
     return;
   }
-  if(b.dataset.del&&confirm('این گفتگو حذف شود؟')){
+  if(b.dataset.del&&await askYes('حذف گفتگو','این گفتگو حذف شود؟')){
     putChats(a.filter(x=>x.id!==id));{const tb=jget('tomb',[]);tb.push({id,deleted:true,updated:Date.now()});jset('tomb',tb)}scheduleSync();
     if(cur&&cur.id===id){cur=null;hist=[];log.textContent='';setTitle();say('گفتگو حذف شد. برای شروع، «از نو» را بزن.')}
     showHist();updStart();
@@ -770,9 +835,9 @@ $('#hlist').addEventListener('click',e=>{
 });
 $('#hb').onclick=showHist;$('#hs').onclick=showHist;$('#hx').onclick=()=>{$('#hist').hidden=true};
 updStart();
-$('#ctitle').onclick=()=>{
+$('#ctitle').onclick=async()=>{
   if(!cur)return;
-  const v=prompt('اسم این گفتگو:',cur.title);
+  const v=await askText('اسم گفتگو',cur.title);
   if(v&&v.trim()){cur.title=v.trim().slice(0,60);cur.named=true;saveChat()}
 };
 try{$('#focus').value=localStorage.getItem('focus')||'auto'}catch(e){}
@@ -789,6 +854,70 @@ updStart();
 $('#revb').onclick=openRev;$('#rx').onclick=()=>{$('#rev').hidden=true};
 $('#repb').onclick=showReport;$('#px').onclick=()=>{$('#rep').hidden=true};
 compactLocal();updRev();
+
+let mRes=null;
+function openModal(title,text,withInput,val,ok){
+  return new Promise(res=>{
+    mRes=res;$('#mtitle').textContent=title;$('#mtext').textContent=text||'';$('#mtext').hidden=!text;
+    const i=$('#minput');i.hidden=!withInput;i.value=val||'';$('#myes').textContent=ok||'تأیید';
+    $('#modal').hidden=false;if(withInput)setTimeout(()=>i.focus(),60);
+  });
+}
+function closeModal(v){$('#modal').hidden=true;if(mRes){const r=mRes;mRes=null;r(v)}}
+const askText=(t,v)=>openModal(t,'',true,v,'ذخیره');
+const askYes=(t,x)=>openModal(t,x,false,'','حذف').then(v=>v!==null);
+$('#myes').onclick=()=>closeModal($('#minput').hidden?true:$('#minput').value);
+$('#mno').onclick=()=>closeModal(null);
+$('#minput').onkeydown=e=>{if(e.key==='Enter')$('#myes').onclick()};
+$('#modal').onclick=e=>{if(e.target===$('#modal'))closeModal(null)};
+
+const TOPICS=[
+ {g:'روزمره',t:[['Food & cooking','food and cooking'],['Family & friends','family and friends'],['Shopping','shopping'],['Weather & seasons','weather and seasons'],['Hobbies','hobbies and free time'],['Sports & fitness','sports and fitness'],['Music & movies','music, films and TV'],['Travel','travel and holidays'],['Transport','transport and getting around'],['Health','health and staying healthy'],['Home & neighbourhood','my home and neighbourhood'],['Pets & animals','pets and animals'],['Celebrations','birthdays and celebrations'],['Daily routine','my daily routine']]},
+ {g:'کار و تحصیل',t:[['Studying','studying and school'],['My job','my work or future job'],['Technology','technology and gadgets'],['Social media','social media and the internet'],['Money','money and spending'],['Future plans','my plans for the future'],['Learning English','learning English'],['Childhood memory','a happy childhood memory']]},
+ {g:'آیلتس',kind:'ielts',t:[['Hometown','my hometown'],['Work or study','work or study'],['Accommodation','where I live'],['Free time','free time'],['Technology & media','technology and the media'],['Environment','the environment'],['Education','education'],['Health & lifestyle','health and lifestyle'],['Travel & culture','travel and culture'],['People I admire','people I admire']]},
+ {g:'مهندسی مکانیک',kind:'mech',t:[['Engines','how engines work'],['Materials','materials such as steel and aluminium'],['Manufacturing','manufacturing and machining'],['Heat & energy','heat, temperature and energy'],['Fluids & pumps','fluids, pumps and pipes'],['CAD & design','CAD and design'],['Machines at work','machines used in a workshop or factory'],['Maintenance & safety','maintenance and safety'],['Robots & automation','robots and automation'],['Cars','how cars work']]}
+];
+const topicStarter=(g,x)=>g.kind==='ielts'?'IELTS Speaking Part 1 style practice about '+x+'. Ask one short personal question.':g.kind==='mech'?'a mechanical engineering topic: '+x+'. Explain any technical word simply and ask one easy question.':'the topic: '+x+'. Ask one easy, concrete opening question.';
+function randomTopic(){
+  const f=$('#focus').value,pool=[];
+  TOPICS.forEach(g=>g.t.forEach(x=>pool.push({l:x[0],s:topicStarter(g,x[1]),k:g.kind||'gen'})));
+  const used=jget('usedT',[]);
+  let want=f==='ielts'?'ielts':f==='mech'?'mech':f==='general'?'gen':(Math.random()*100<engPct()?'mech':'gen');
+  let p=pool.filter(x=>x.k===want&&!used.includes(x.l));
+  if(!p.length)p=pool.filter(x=>x.k===want);
+  return p[Math.floor(Math.random()*p.length)];
+}
+function markUsed(l){const u=jget('usedT',[]).filter(x=>x!==l);u.push(l);jset('usedT',u.slice(-12))}
+let micWarmed=false;
+async function startNew(tp){
+  if(busy)return;
+  if(!api&&!setApi())return;
+  stopVoice();if(rc)giveUp();
+  if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+  await initAudio();
+  $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
+  cur=makeChat();hist=[];log.textContent='';
+  if(tp&&tp.l){cur.title='💬 '+tp.l;cur.named=true;markUsed(tp.l)}
+  setTitle();showGoal();
+  if(!micWarmed){micWarmed=true;warmMic()}
+  turn(null,null,null,tp);
+}
+function openNew(){
+  const box=$('#ngroups');box.textContent='';
+  TOPICS.forEach(g=>{
+    const h=document.createElement('div');h.className='ngh';h.textContent=g.g;box.appendChild(h);
+    const row=document.createElement('div');row.className='nrow';
+    g.t.forEach(x=>{const c=document.createElement('button');c.className='chip';c.textContent=x[0];c.dataset.l=x[0];c.dataset.s=topicStarter(g,x[1]);row.appendChild(c)});
+    box.appendChild(row);
+  });
+  $('#ntopic').value='';$('#newc').hidden=false;
+}
+$('#ngroups').addEventListener('click',e=>{const c=e.target.closest('button');if(!c||!c.dataset.s)return;$('#newc').hidden=true;startNew({l:c.dataset.l,s:c.dataset.s})});
+$('#nrand').onclick=()=>{$('#newc').hidden=true;startNew(randomTopic())};
+$('#ngo').onclick=()=>{const v=$('#ntopic').value.trim();if(!v)return;$('#newc').hidden=true;startNew({l:v.slice(0,30),s:'the topic: '+v+'. Ask one easy, concrete opening question.'})};
+$('#ntopic').onkeydown=e=>{if(e.key==='Enter')$('#ngo').onclick()};
+$('#nx').onclick=()=>{$('#newc').hidden=true};
+$('#newc').onclick=e=>{if(e.target===$('#newc'))$('#newc').hidden=true};
 </script>
 </body>
 </html>
