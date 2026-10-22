@@ -117,41 +117,56 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .ngh{font-weight:700;color:var(--mu);font-size:13px;margin:12px 2px 6px}
 .nrow{display:flex;flex-wrap:wrap;gap:8px}
 .sheet .chip{background:var(--bg)}
+
+:root{--grn:#2E7D32;--red:#C62828}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--grn:#7BD389;--red:#FF8A80}}
+:root[data-theme="dark"]{--grn:#7BD389;--red:#FF8A80}
+header.top{padding:10px 14px 4px}
+.tbtn{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);box-shadow:var(--sh);font-size:14px;font-weight:700;cursor:pointer;color:var(--tx)}
+.tbtn svg{width:18px;height:18px;fill:currentColor;flex:none}
+.crow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:2px 14px 6px}
+.dmeta{align-items:flex-end}
+#goal{display:flex;flex-direction:column;font-size:13px;line-height:1.4;min-width:0;white-space:normal;overflow:visible}
+#g1{color:var(--grn);font-weight:700}
+#g2{color:var(--red);font-weight:700}
+#g2.ok{color:var(--grn)}
+.dside{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+#gd{font-size:11.5px;color:var(--mu)}
+.sheet .chip.done{background:color-mix(in srgb,var(--ac) 20%,var(--sf));border-color:var(--ac)}
+.cnt{font-style:normal;background:var(--ac);color:var(--on);border-radius:9px;min-width:18px;height:18px;font-size:11px;line-height:18px;text-align:center;padding:0 5px}
+details.ng{margin:0 0 8px}
+details.ng summary{cursor:pointer;font-weight:700;color:var(--mu);font-size:14px;padding:8px 2px;list-style:none}
+details.ng summary::-webkit-details-marker{display:none}
+details.ng .nrow{padding:2px 0 8px}
+.iebtn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:start;background:var(--bg);border:1px solid var(--ln);border-radius:14px;padding:10px 14px;margin-bottom:8px;cursor:pointer;color:var(--tx)}
+.iebtn b{font-size:15px}
+.iebtn span{font-size:13px;color:var(--mu)}
+#lis{position:fixed;inset:0;z-index:10;background:var(--glow),var(--bg);overflow-y:auto;padding:calc(10px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px))}
+.qrow{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.qrow input{width:100%;height:42px;border:1px solid var(--ln);border-radius:12px;background:var(--bg);padding:0 12px;margin-top:6px;direction:ltr}
+.qopt{display:block;width:100%;text-align:start;background:var(--bg);border:1px solid var(--ln);border-radius:12px;padding:8px 12px;margin-top:6px;cursor:pointer;direction:ltr;color:var(--tx)}
+.qopt.sel{background:color-mix(in srgb,var(--ac) 22%,var(--bg));border-color:var(--ac)}
+.good{border-color:var(--grn)}
+.bad{border-color:var(--red)}
+
+:root.kid.kid{--bg:#FFF3D0;--glow:radial-gradient(900px 480px at 100% -8%,rgba(255,255,255,.8),transparent 62%);--sf:#FFFEF8;--tx:#2B2B4A;--mu:#6B6B8A;--ac:#2F6FDB;--ac2:#5B9BFF;--on:#fff;--ln:#F1D98F;--me:#2459B8;--mt:#fff;--wn:#D9541E;--wb:#FFF0E6;--sh:0 2px 10px rgba(120,90,20,.15)}
+.kid .b.c{font-size:17px}
+.kid .b.c.cur{font-size:22px}
+.kid .b .fa{font-size:18px;color:var(--tx)}
 </style>
 </head>
 <body>
 <header class="top">
-  <div class="brand">
-    <span class="logo" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>
-    <h1>Speaking Coach</h1>
-  </div>
+  <button class="tbtn" id="hb" aria-label="History"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg><span>گفتگوهای قبلی</span></button>
   <div class="tools">
-    <button class="ibtn" id="hb" aria-label="History">🕘</button>
+    <button class="tbtn" id="ieb" aria-label="IELTS"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg><span>آیلتس</span></button>
     <button class="ibtn" id="revb" aria-label="Review">📘<i class="badge" id="revn" hidden></i></button>
     <button class="ibtn" id="repb" aria-label="Report">📊</button>
-    <button class="ibtn" id="cfg" aria-label="Setup">⚙</button>
+    <button class="ibtn" id="cfg" aria-label="Password"><svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg></button>
   </div>
 </header>
-<div class="bar2">
-  <label class="chip"><span>سطح</span>
-    <select id="level" aria-label="سطح">
-      <option value="A2">A2 مقدماتی</option>
-      <option value="B1">B1 متوسط</option>
-      <option value="B2">B2 بالاتر</option>
-    </select>
-  </label>
-  <label class="chip"><span>موضوع</span>
-    <select id="focus" aria-label="موضوع">
-      <option value="auto">خودکار</option>
-      <option value="general">عمومی</option>
-      <option value="ielts">آیلتس</option>
-      <option value="mech">مهندسی مکانیک</option>
-    </select>
-  </label>
-  <button class="chip pri" id="chal">🎯 چالش امروز</button>
-  <button class="chip" id="reset" hidden>＋ گفتگوی تازه</button>
-</div>
-<div class="crow"><button class="ghost" id="ctitle" hidden></button></div>
+<div class="crow"><button class="chip" id="reset" hidden>＋ گفتگوی تازه</button><button class="ghost" id="ctitle" hidden></button></div>
+<div hidden><select id="level"><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option></select><select id="focus"><option value="auto">auto</option><option value="mech">mech</option></select></div>
 
 <section id="start">
   <div class="hero" aria-hidden="true">
@@ -170,7 +185,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 
 <footer id="dock" hidden>
   <div id="prog"><div id="bar"></div></div>
-  <div class="dmeta"><span id="goal"></span><button class="ghost" id="hf" aria-pressed="false">دست‌آزاد: خاموش</button></div>
+  <div class="dmeta"><div id="goal"><div id="g1"></div><div id="g2"></div></div><div class="dside"><button class="ghost" id="hf" aria-pressed="false">دست‌آزاد: خاموش</button><span id="gd"></span></div></div>
   <div id="status"></div>
   <div class="drow">
     <button id="mic" aria-label="Speak">
@@ -198,6 +213,24 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   <div id="pbody"></div>
 </div>
 
+<div id="iesh" class="ov" hidden>
+  <div class="sheet tall">
+    <div class="hhead"><b>آیلتس</b><button class="ghost" id="iex" aria-label="Close">✕</button></div>
+    <div id="iel" class="ok"></div>
+    <button class="iebtn" data-ie="p1"><b>Speaking Part 1</b><span>مصاحبه: سؤال‌های کوتاه شخصی (۴ سؤال)</span></button>
+    <button class="iebtn" data-ie="p2"><b>Speaking Part 2</b><span>کارت موضوع، ۱ دقیقه آماده‌سازی، ۱ تا ۲ دقیقه صحبت</span></button>
+    <button class="iebtn" data-ie="p3"><b>Speaking Part 3</b><span>بحث و نظر دربارهٔ موضوع‌های کلی (۴ سؤال)</span></button>
+    <button class="iebtn" data-ie="full"><b>آزمون کامل Speaking</b><span>Part 1 تا 3 پشت‌سرهم و کارنامه با نمرهٔ تخمینی</span></button>
+    <button class="iebtn" data-ie="l1"><b>Listening Section 1</b><span>مکالمهٔ روزمره، تکمیل فرم</span></button>
+    <button class="iebtn" data-ie="l2"><b>Listening Section 2</b><span>سخنرانی کوتاه در موقعیت اجتماعی</span></button>
+    <button class="iebtn" data-ie="l3"><b>Listening Section 3</b><span>گفتگوی دانشجویی دربارهٔ یک تکلیف</span></button>
+    <button class="iebtn" data-ie="l4"><b>Listening Section 4</b><span>مینی‌سخنرانی علمی، تکمیل یادداشت</span></button>
+  </div>
+</div>
+<div id="lis" hidden>
+  <div class="hhead"><b id="ltitle">Listening</b><button class="ghost" id="lx" aria-label="Close">✕</button></div>
+  <div id="lbody"></div>
+</div>
 <div id="modal" class="ov" hidden>
   <div class="sheet" role="dialog" aria-modal="true">
     <div class="sh-t" id="mtitle"></div>
@@ -208,7 +241,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 </div>
 <div id="newc" class="ov" hidden>
   <div class="sheet tall">
-    <div class="hhead"><b>موضوع گفتگو</b><button class="ghost" id="nx" aria-label="Close">✕</button></div>
+    <div class="hhead"><b id="ntitle">موضوع گفتگو</b><button class="ghost" id="nx" aria-label="Close">✕</button></div>
     <div class="cust"><input id="ntopic" dir="auto" placeholder="موضوع دلخواه (مثلاً: my job)"><button class="big sm" id="ngo">شروع</button></div>
     <button class="chip pri" id="nrand">🎲 تصادفی (بدون تکرار)</button>
     <div id="ngroups"></div>
@@ -216,11 +249,13 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 </div>
 
 <script>
+const PROF=(()=>{try{return localStorage.getItem('prof')||''}catch(e){return ''}})();
+const K=k=>(PROF&&!['fmt','dev','pass','prof','api'].includes(k)?PROF+':':'')+k;
 const $=s=>document.querySelector(s),log=$('#log'),st=$('#status'),mic=$('#mic'),txt=$('#txt'),lv=$('#level');
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 let sample=null,hist=[],busy=false,rec=null,listening=false,heard='';
-try{lv.value=localStorage.getItem('lvl')||'B1'}catch(e){}
-lv.onchange=()=>{try{localStorage.setItem('lvl',lv.value)}catch(e){}};
+try{lv.value=localStorage.getItem(K('lvl'))||'B1'}catch(e){}
+lv.onchange=()=>{try{localStorage.setItem(K('lvl'),lv.value)}catch(e){}};
 const say=t=>{st.textContent=t};
 const cancel=()=>stopVoice();
 
@@ -243,13 +278,13 @@ function tr(p,t){
   acts(p).appendChild(b);p.appendChild(f);
 }
 
-let cur=null;
+let cur=null,ie=null,ieT=0;
 const chats=()=>jget('chats',[]);
-function makeChat(){return{id:Date.now().toString(36),title:'گفتگوی جدید',created:Date.now(),updated:Date.now(),hist:[],html:'',level:lv.value,named:false}}
+function makeChat(){return{id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),title:'گفتگوی جدید',created:Date.now(),updated:Date.now(),hist:[],html:'',level:lv.value,named:false}}
 function putChats(a){
   a.sort((x,y)=>y.updated-x.updated);
   while(a.length>120)a.pop();
-  for(;;){try{localStorage.setItem('chats',JSON.stringify(a));return}catch(e){if(a.length<2)return;a.pop()}}
+  for(;;){try{localStorage.setItem(K('chats'),JSON.stringify(a));return}catch(e){if(a.length<2)return;a.pop()}}
 }
 function setTitle(){const t=$('#ctitle');t.hidden=!cur;if(cur)t.textContent=cur.title+' ✏️'}
 function saveChat(){
@@ -278,7 +313,7 @@ function renderHist(){
   $('#hist').hidden=false;
 }
 function openChat(c){
-  if(busy)return;
+  if(busy)return;ie=null;
   if(!api&&!setApi())return;
   stopVoice();if(rc)giveUp();
   if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
@@ -334,7 +369,7 @@ function tick(){
   if(!rc)return;const n=Math.floor(rc.t);
   say(hands&&!rc.spoke?'دارم گوش می‌دهم… هر وقت آماده‌ای شروع کن':'در حال ضبط: '+n+' ثانیه'+(n<10?' — ادامه بده…':n<25?' — خوب است، بیشتر بگو':' — عالی، ادامه بده!')+(hands?' (وقتی ساکت شوی خودم می‌فرستم)':' (برای پایان دوباره بزن)'));
 }
-async function startRec(){
+async function startRec(max){
   if(rc||starting)return;
   starting=true;
   try{
@@ -349,7 +384,7 @@ async function startRec(){
     }
     mic.classList.add('on');
     rc.tick=setInterval(tick,300);
-    rc.timer=setTimeout(finish,75000);
+    rc.max=max||75;rc.timer=setTimeout(finish,rc.max*1000);
   }finally{starting=false}
 }
 const fmtOK=()=>jget('fmt','');
@@ -409,7 +444,7 @@ function browserSpeak(t){
     if(!window.speechSynthesis){res();return}
     speechSynthesis.cancel();
     const u=new SpeechSynthesisUtterance(t),f=pickVoice();
-    u.lang='en-US';u.rate=.95;if(f)u.voice=f;
+    u.lang='en-US';u.rate=PROF==='kid'?.85:.95;if(f)u.voice=f;
     u.onend=u.onerror=()=>res();
     speechSynthesis.speak(u);
   });
@@ -454,25 +489,22 @@ async function sayReply(text){
 function afterSpeak(){
   spk=null;
   say(hands?'نوبت توست…':'نوبت توست: دکمه را بزن و جواب بده');
-  if(hands&&!busy&&!rc)startRec().catch(()=>say('اجازهٔ میکروفون داده نشده یا میکروفون پیدا نشد.'));
+  if(hands&&!busy&&!rc&&!(ie&&ie.done))startRec().catch(()=>say('اجازهٔ میکروفون داده نشده یا میکروفون پیدا نشد.'));
 }
 
-const GOAL=600;
+const GOAL=PROF==='kid'?300:600;
 const ago=n=>new Date(Date.now()-n*864e5).toLocaleDateString('en-CA');
-const jget=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
-const jset=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const jget=(k,d)=>{try{return JSON.parse(localStorage.getItem(K(k)))||d}catch(e){return d}};
+const jset=(k,v)=>{try{localStorage.setItem(K(k),JSON.stringify(v))}catch(e){}};
 let notes=jget('notes',[]);
 function practiceDays(){return Object.keys(jget('daysDone',{})).length}
-function engPct(){
-  const f=$('#focus').value;
-  if(f==='general'||f==='ielts')return 0;
-  if(f==='mech')return 100;
-  const d=practiceDays();return d<14?0:d<35?30:d<70?60:85;
-}
+function engPct(){return $('#focus').value==='mech'?100:0}
 function showGoal(){
   const d=jget('day',{}),s=d.d===ago(0)?d.s:0,k=jget('streak',{n:0,last:''});
-  const alive=k.last===ago(0)||k.last===ago(1),e=engPct();
-  $('#goal').textContent='امروز '+Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0')+' از '+GOAL/60+':00'+(alive&&k.n?'  🔥 '+k.n+' روز':'')+'  📅 '+practiceDays()+' روز تمرین'+(e?'  ⚙️ مهندسی '+e+'٪':'');
+  const alive=k.last===ago(0)||k.last===ago(1),m2=x=>Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0');
+  $('#g1').textContent='هدف امروز: '+m2(GOAL);
+  const g2=$('#g2');g2.textContent='انجام‌شده: '+m2(s)+(s>=GOAL?' ✓':'');g2.classList.toggle('ok',s>=GOAL);
+  $('#gd').textContent=(alive&&k.n?'🔥 '+k.n+' روز  ·  ':'')+practiceDays()+' روز تمرین';
   $('#bar').style.width=Math.min(100,s/GOAL*100)+'%';
 }
 function addSecs(x){
@@ -500,7 +532,7 @@ function rangeStat(from,to){
   const all=jget('dstat',{}),r={n:0,w:0,f:0,s:0,c:{},p:{},days:0};
   for(let i=from;i>=to;i--){
     const day=all[ago(i)]||{};let any=false;
-    Object.keys(day).forEach(id=>{const m=day[id];any=true;r.n+=m.n||0;r.w+=m.w||0;r.f+=m.f||0;r.s+=m.s||0;
+    Object.keys(day).forEach(id=>{const m=day[id];any=true;r.n+=m.n||0;r.ln=(r.ln||0)+(m.ln||0);r.ls=(r.ls||0)+(m.ls||0);r.lt=(r.lt||0)+(m.lt||0);r.w+=m.w||0;r.f+=m.f||0;r.s+=m.s||0;
       Object.keys(m.c||{}).forEach(k=>r.c[k]=(r.c[k]||0)+m.c[k]);Object.keys(m.p||{}).forEach(k=>r.p[k]=(r.p[k]||0)+m.p[k])});
     if(any)r.days++;
   }
@@ -519,20 +551,24 @@ function arrow(a,b,lowerBetter){
 }
 function showReport(){
   const box=$('#pbody');box.textContent='';
-  const t=rangeStat(6,0),p=rangeStat(13,7),vb=Object.values(jget('vbook',{}));
+  const t=rangeStat(6,0),p=rangeStat(13,7),vb=Object.values(jget('vbook',{})),as=lastAssess();
   const line=x=>{const d=document.createElement('div');d.className='rline';d.textContent=x;box.appendChild(d)};
-  if(!t.n){line('برای ۷ روز اخیر هنوز داده‌ای نیست. بعد از چند گفتگو گزارش پر می‌شود.');$('#rep').hidden=false;return}
-  const aw=t.w/t.n,awp=p.n?p.w/p.n:0,af=t.f/t.n,afp=p.n?p.f/p.n:0;
+  if(!t.n&&!t.ln&&!as.length){line('برای ۷ روز اخیر هنوز داده‌ای نیست. بعد از چند گفتگو گزارش پر می‌شود.');$('#rep').hidden=false;return}
   line('روزهای تمرین: '+t.days+' از ۷ (هفتهٔ قبل: '+p.days+')');
   line('دقیقهٔ حرف زدن: '+mins(6,0)+' (هفتهٔ قبل: '+mins(13,7)+')');
-  line('نوبت‌های گفتگو: '+t.n+' — میانگین کلمه در هر نوبت: '+aw.toFixed(1)+arrow(aw,awp,false));
-  line('غلط در هر نوبت: '+af.toFixed(2)+arrow(af,afp,true));
+  if(t.n){
+    const aw=t.w/t.n,awp=p.n?p.w/p.n:0,af=t.f/t.n,afp=p.n?p.f/p.n:0;
+    line('نوبت‌های گفتگو: '+t.n+' — میانگین کلمه در هر نوبت: '+aw.toFixed(1)+arrow(aw,awp,false));
+    line('غلط در هر نوبت: '+af.toFixed(2)+arrow(af,afp,true));
+  }
+  if(t.ln)line('Listening: '+t.ln+' تمرین — میانگین '+Math.round(t.ls/t.lt*100)+'٪'+(p.ln?' (هفتهٔ قبل '+Math.round(p.ls/p.lt*100)+'٪)':''));
+  if(as.length)line('آخرین نمرهٔ تخمینی Speaking: '+as[0].assess.overall+(as[1]?' (قبلی: '+as[1].assess.overall+')':'')+' — تخمین هوش مصنوعی، حدود ±۱');
   const g=topK(t.c,3);
   if(g.length)line('پرتکرارترین غلط‌ها: '+g.map(k=>(CATS[k]||k)+' ('+t.c[k]+' بار'+(p.c[k]?'، هفتهٔ قبل '+p.c[k]:'')+')').join('؛ '));
   const q=topK(t.p,4);
   if(q.length)line('مشکل‌های تلفظ: '+q.map(k=>k+' ('+t.p[k]+' بار)').join('؛ '));
   line('دفترچهٔ واژه: '+vb.length+' واژه؛ جدید این هفته: '+vb.filter(w=>w.added&&w.added>=ago(6)).length+'؛ جاافتاده (جعبهٔ ۴ به بالا): '+vb.filter(w=>(w.box||0)>=4).length);
-  if(g.length)line('پیشنهاد: این هفته روی «'+(CATS[g[0]]||g[0])+'» تمرکز کن. چالش امروز هم از همین نقطه‌ضعف‌ها ساخته می‌شود.');
+  if(g.length)line('پیشنهاد: این هفته روی «'+(CATS[g[0]]||g[0])+'» تمرکز کن؛ مربی هم در گفتگوها سراغ همین نقطه‌ضعف‌ها می‌رود.');
   $('#rep').hidden=false;
 }
 
@@ -629,6 +665,9 @@ async function diag(size){
 const errMsg=e=>{
   const m=e&&e.message;
   if(m==='quota')return 'سهمیهٔ رایگان تمام شد؛ کمی بعد یا فردا دوباره امتحان کن.';
+  if(m==='audio_off')return 'ارسال صدا برای این پروفایل خاموش است؛ بنویس.';
+  if(m==='kid_limit')return 'امروز کافی بود! فردا دوباره بازی می‌کنیم. 🌟';
+  if(m==='not_for_kid')return 'این بخش برای این پروفایل نیست.';
   if(m==='badjson')return 'پاسخ مدل خراب بود؛ دوباره بگو.';
   if(m==='forbidden')return 'کد دسترسی آدرس درست نیست.';
   if(m==='needpass'||m==='badpass')return 'رمز لازم است یا اشتباه است؛ با دکمهٔ ⚙ دوباره وارد کن.';
@@ -654,13 +693,17 @@ async function call(p,quiet){
       p.pass=v.trim();continue;
     }
     if(j.error)throw new Error(j.error);
+    if(j.profile!==undefined){const np=j.profile==='kid'?'kid':'';if(np!==PROF){try{localStorage.setItem('prof',np)}catch(e){}location.reload();await new Promise(()=>{})}}
     return j;
   }
 }
 async function setPass(){
   let cur0='';try{cur0=localStorage.getItem('pass')||''}catch(e){}
-  const v=await openModal('رمز همگام‌سازی','همان مقدار SYNC_PASS در Apps Script',true,cur0,'ذخیره');
-  if(v!==null){try{localStorage.setItem('pass',v.trim())}catch(e){}syncNow()}
+  const v=await openModal('رمز ورود','با رمز دیگر، پروفایل دیگر باز می‌شود.',true,cur0,'ورود');
+  if(v===null)return;
+  try{localStorage.setItem('pass',v.trim())}catch(e){}
+  try{await call({who:true},true);say('رمز ذخیره شد.')}catch(e){say(errMsg(e));return}
+  syncNow();
 }
 
 let syncing=false,syncTimer=0;
@@ -673,7 +716,7 @@ async function syncNow(){
   try{
     const lastPush=jget('lastPush',0),tomb=jget('tomb',[]);
     const out=chats().filter(c=>(c.updated||0)>lastPush).concat(tomb);
-    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),dayLog:jget('dayLog',{}),dstat:recentStat(),vbook:changedVocab(lastPush),streak:jget('streak',null),day:jget('day',null)}},true);
+    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),dayLog:jget('dayLog',{}),tcount:jget('tcount',{}),dstat:recentStat(),vbook:changedVocab(lastPush),streak:jget('streak',null),day:jget('day',null)}},true);
     const a=chats();
     (j.chats||[]).forEach(r=>{
       const i=a.findIndex(x=>x.id===r.id);
@@ -684,8 +727,9 @@ async function syncNow(){
     jset('lastPush',t0);jset('tomb',[]);jset('lastSync',j.now||t0);
     notes=Array.from(new Set(notes.concat(j.notes||[]))).slice(-20);jset('notes',notes);
     if(j.daysDone)jset('daysDone',Object.assign({},jget('daysDone',{}),j.daysDone));
-    if(j.dstat){const m=jget('dstat',{});Object.keys(j.dstat).forEach(dt=>{m[dt]=m[dt]||{};Object.keys(j.dstat[dt]).forEach(dv=>{const r=j.dstat[dt][dv];if(!m[dt][dv]||(r.n||0)>(m[dt][dv].n||0))m[dt][dv]=r})});jset('dstat',m)}
+    if(j.dstat){const m=jget('dstat',{});Object.keys(j.dstat).forEach(dt=>{m[dt]=m[dt]||{};Object.keys(j.dstat[dt]).forEach(dv=>{const r=j.dstat[dt][dv];if(!m[dt][dv]||(r.u||0)>(m[dt][dv].u||0))m[dt][dv]=r})});jset('dstat',m)}
     if(j.vbook){const m=jget('vbook',{});Object.keys(j.vbook).forEach(k=>{if(!m[k]||(j.vbook[k].u||0)>(m[k].u||0))m[k]=j.vbook[k]});jset('vbook',m)}
+    if(j.tcount){const m=jget('tcount',{});Object.keys(j.tcount).forEach(k=>{m[k]=Math.max(m[k]||0,j.tcount[k])});jset('tcount',m)}
     if(j.dayLog){const dl=jget('dayLog',{});Object.keys(j.dayLog).forEach(k=>{dl[k]=Math.max(dl[k]||0,j.dayLog[k])});jset('dayLog',dl)}
     const ld=jget('day',null);if(j.day&&(!ld||(j.day.u||0)>(ld.u||0)))jset('day',j.day);
     const ls=jget('streak',null);if(j.streak&&(!ls||(j.streak.u||0)>(ls.u||0)))jset('streak',j.streak);
@@ -695,27 +739,6 @@ async function syncNow(){
     st.textContent=e.message==='no_pass_set'?'همگام‌سازی خاموش است: در Script properties مقدار SYNC_PASS را بگذار.':(e.message==='needpass'||e.message==='badpass')?'برای همگام‌سازی رمز لازم است: دکمهٔ ⚙ را بزن.':'همگام‌سازی نشد؛ بعداً دوباره تلاش می‌شود.';
   }
   syncing=false;
-}
-
-async function startChallenge(){
-  if(busy)return;
-  if(!api&&!setApi())return;
-  if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
-  if(!AC){initAudio();warmMic()}
-  $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
-  let c=jget('chal',null);
-  if(!c||c.d!==ago(0)||c.level!==lv.value){
-    busy=true;mic.disabled=true;say('دارم چالش امروز را می‌سازم…');
-    try{
-      const j=await call({level:lv.value,challenge:true,weak:jget('weak',[]).slice(-6),areas:areas()});
-      c=Object.assign({d:ago(0),level:lv.value},j.challenge);jset('chal',c);addVocab(c.words);
-    }catch(e){busy=false;mic.disabled=false;say(errMsg(e));return}
-    busy=false;mic.disabled=false;
-  }
-  stopVoice();if(rc)giveUp();
-  cur=makeChat();cur.title='🎯 '+(c.title||'چالش امروز');cur.named=true;hist=[];log.textContent='';
-  setTitle();showGoal();chalCard(c);
-  turn(null,null,c);
 }
 
 async function hint(){
@@ -736,7 +759,7 @@ async function turn(u,a,ch,tp){
   busy=true;mic.disabled=true;say('مربی در حال '+(a?'گوش دادن و ':'')+'فکر کردن است…');
   let reply='';
   try{
-    const j=await call({level:lv.value,start:u===null,starter:(u===null&&!ch)?(tp?tp.s:starter()):'',chal:ch?{task:ch.task,words:ch.words}:undefined,hist:hist.slice(-12),audio:a?a.data:undefined,mime:a?a.mime:undefined,secs:a?a.secs:undefined});
+    const j=await call({level:lv.value,start:u===null,starter:(u===null&&!ch)?(tp?tp.s:starter()):'',chal:ch?{task:ch.task,words:ch.words}:undefined,hist:hist.slice(-12),ielts:ie?{part:ie.part,n:(u===null?0:ie.n+1),topic:ie.topic,card:ie.card?ie.card.topic:undefined}:undefined,audio:a?a.data:undefined,mime:a?a.mime:undefined,secs:a?a.secs:undefined});
     if(a){
       a.bubble.textContent=j.heard||'(نامفهوم)';hist.push({r:'u',t:j.heard||''});addSecs(a.secs);
       const p=document.createElement('button');p.className='ear';p.dataset.play='1';p.innerHTML=IC.play;p.setAttribute('aria-label','Play my voice');
@@ -748,11 +771,12 @@ async function turn(u,a,ch,tp){
       if(!fx.length&&!sn.length)el('ok',a?'✓ جمله و تلفظت خوب بود':'✓ جمله‌ات درست بود');
       if(j.tip)el('ok',j.tip);
       const nw=((a?j.heard:u)||'').split(/\s+/).filter(Boolean).length;keepWeak(fx);trackStats(nw,fx.length);logTurn(nw,fx,sn);
+      if(ie){ie.answers.push({t:(a?j.heard:u)||'',w:nw,s:a?a.secs:0});fx.forEach(x=>ie.fixes.push(x));sn.forEach(x=>ie.sounds.push(x));ie.n++;if(ie.n>=(IE_LIM[ie.part]||4))ie.done=true}
     }
     if(j.note){notes.push(String(j.note).slice(0,160));notes=notes.slice(-20);jset('notes',notes)}
     hist.push({r:'c',t:j.reply});
     log.querySelectorAll('.b.c.cur').forEach(x=>x.classList.remove('cur'));
-      const b=el('b c cur',j.reply);ear(b,j.reply);if(j.reply_fa)tr(b,j.reply_fa);
+      const b=el('b c cur',j.reply);ear(b,j.reply);if(j.reply_fa){tr(b,j.reply_fa);if(PROF==='kid'){const f=b.querySelector(':scope > .fa[data-t]');if(f)f.hidden=false}}
     if(Array.isArray(j.vocab)&&j.vocab.length){vocabCard(j.vocab);addVocab(j.vocab)}
     reply=j.reply;if(j.summary&&cur)cur.summary=String(j.summary).slice(0,240);saveChat();scheduleSync();
   }catch(e){
@@ -770,7 +794,8 @@ async function turn(u,a,ch,tp){
     say(errMsg(e));
   }
   busy=false;mic.disabled=false;
-  if(reply)sayReply(reply);
+  if(reply)await sayReply(reply);
+  if(ie&&ie.done)ieAdvance();
 }
 
 function send(t){
@@ -782,7 +807,7 @@ mic.onclick=async()=>{
   if(rc){finish();return}
   if(busy)return;
   stopVoice();
-  try{await startRec()}catch(e){say('اجازهٔ میکروفون داده نشده یا میکروفون پیدا نشد.')}
+  try{await startRec(recMax())}catch(e){say('اجازهٔ میکروفون داده نشده یا میکروفون پیدا نشد.')}
 };
 $('#hf').onclick=()=>{
   hands=!hands;$('#hf').textContent='دست‌آزاد: '+(hands?'روشن':'خاموش');$('#hf').setAttribute('aria-pressed',hands);
@@ -812,7 +837,9 @@ $('#tp').onclick=openNew;
 
 log.addEventListener('click',e=>{
   const b=e.target.closest('button'),f=e.target.closest('.fa[data-t]');
-  if(b&&b.dataset.lvl){lv.value=b.dataset.lvl;try{localStorage.setItem('lvl',b.dataset.lvl)}catch(x){}b.remove();return}
+  if(b&&b.dataset.lvl){lv.value=b.dataset.lvl;try{localStorage.setItem(K('lvl'),b.dataset.lvl)}catch(x){}b.remove();return}
+  if(b&&b.dataset.ie==='prep'){iePrep();return}
+  if(b&&b.dataset.ie==='speak'){ieSpeak();return}
   if(b&&b.dataset.say!==undefined){speak(b.dataset.say);return}
   if(b&&b.dataset.tr!==undefined){const host=b.closest('.b')||b.parentNode,x=host.querySelector(':scope > .fa[data-t]');if(x)x.hidden=!x.hidden;return}
   if(f)f.hidden=true;
@@ -840,9 +867,8 @@ $('#ctitle').onclick=async()=>{
   const v=await askText('اسم گفتگو',cur.title);
   if(v&&v.trim()){cur.title=v.trim().slice(0,60);cur.named=true;saveChat()}
 };
-try{$('#focus').value=localStorage.getItem('focus')||'auto'}catch(e){}
-$('#focus').onchange=()=>{try{localStorage.setItem('focus',$('#focus').value)}catch(e){}showGoal()};
-$('#chal').onclick=startChallenge;
+try{$('#focus').value=localStorage.getItem(K('focus'))||'auto'}catch(e){}
+$('#focus').onchange=()=>{try{localStorage.setItem(K('focus'),$('#focus').value)}catch(e){}showGoal()};
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')syncNow()});
 setTimeout(syncNow,1500);
 function updStart(){
@@ -871,53 +897,297 @@ $('#mno').onclick=()=>closeModal(null);
 $('#minput').onkeydown=e=>{if(e.key==='Enter')$('#myes').onclick()};
 $('#modal').onclick=e=>{if(e.target===$('#modal'))closeModal(null)};
 
-const TOPICS=[
- {g:'روزمره',t:[['Food & cooking','food and cooking'],['Family & friends','family and friends'],['Shopping','shopping'],['Weather & seasons','weather and seasons'],['Hobbies','hobbies and free time'],['Sports & fitness','sports and fitness'],['Music & movies','music, films and TV'],['Travel','travel and holidays'],['Transport','transport and getting around'],['Health','health and staying healthy'],['Home & neighbourhood','my home and neighbourhood'],['Pets & animals','pets and animals'],['Celebrations','birthdays and celebrations'],['Daily routine','my daily routine']]},
- {g:'کار و تحصیل',t:[['Studying','studying and school'],['My job','my work or future job'],['Technology','technology and gadgets'],['Social media','social media and the internet'],['Money','money and spending'],['Future plans','my plans for the future'],['Learning English','learning English'],['Childhood memory','a happy childhood memory']]},
- {g:'آیلتس',kind:'ielts',t:[['Hometown','my hometown'],['Work or study','work or study'],['Accommodation','where I live'],['Free time','free time'],['Technology & media','technology and the media'],['Environment','the environment'],['Education','education'],['Health & lifestyle','health and lifestyle'],['Travel & culture','travel and culture'],['People I admire','people I admire']]},
- {g:'مهندسی مکانیک',kind:'mech',t:[['Engines','how engines work'],['Materials','materials such as steel and aluminium'],['Manufacturing','manufacturing and machining'],['Heat & energy','heat, temperature and energy'],['Fluids & pumps','fluids, pumps and pipes'],['CAD & design','CAD and design'],['Machines at work','machines used in a workshop or factory'],['Maintenance & safety','maintenance and safety'],['Robots & automation','robots and automation'],['Cars','how cars work']]}
+const G=(g,k,t)=>({g,k,t});
+const GEN=[
+ G('روزمره','gen',['Daily routine','Mornings','Evenings','Sleep','Habits','Time management','Weekends','Household chores','Neighbours','Birthdays','Gifts','Celebrations','Festivals','Traditions','Happiness','Childhood','Friends','Family','Pets','Memories']),
+ G('خانه و شهر','gen',['My home','Furniture','Neighbourhood','City life','Village life','Public transport','Traffic','Parks','Shopping malls','Markets','Weather','Seasons','Noise','Crowded places','Hometown','Moving house']),
+ G('غذا و سلامت','gen',['Food & cooking','Restaurants','Fast food','Healthy eating','Coffee & tea','Fitness','Sports','Doctors','Stress & relaxing','Hospitals','Vitamins & medicine','Walking & cycling']),
+ G('سفر و فرهنگ','gen',['Travel','Holidays','Airports','Hotels','Tourism','Different cultures','Languages','Museums','History','Art','Music','Films','Books','TV shows','Photography','Fashion','Clothes']),
+ G('کار و تحصیل','gen',['Studying','School memories','Teachers','Exams','University','My job','Job interviews','Teamwork','Money','Saving money','Future plans','Goals','Learning English','Online learning','New skills']),
+ G('فناوری و رسانه','gen',['Smartphones','The internet','Social media','Video games','Robots & AI','Online shopping','News','Advertising','Technology at school','Online safety']),
+ G('محیط‌زیست و جامعه','gen',['Environment','Recycling','Pollution','Climate change','Wildlife','Saving energy','Water','Volunteering','Community','Safety']),
+ G('مهندسی مکانیک','mech',['Engines','Materials','Manufacturing','Heat & energy','Fluids & pumps','CAD & design','Machines at work','Maintenance & safety','Robots & automation','Cars','Gears & bearings','Welding','3D printing','CNC machines','Heat exchangers','HVAC','Electric vehicles','Renewable energy','Turbines','Quality control','Engineering internships'])
 ];
-const topicStarter=(g,x)=>g.kind==='ielts'?'IELTS Speaking Part 1 style practice about '+x+'. Ask one short personal question.':g.kind==='mech'?'a mechanical engineering topic: '+x+'. Explain any technical word simply and ask one easy question.':'the topic: '+x+'. Ask one easy, concrete opening question.';
-function randomTopic(){
-  const f=$('#focus').value,pool=[];
-  TOPICS.forEach(g=>g.t.forEach(x=>pool.push({l:x[0],s:topicStarter(g,x[1]),k:g.kind||'gen'})));
-  const used=jget('usedT',[]);
-  let want=f==='ielts'?'ielts':f==='mech'?'mech':f==='general'?'gen':(Math.random()*100<engPct()?'mech':'gen');
-  let p=pool.filter(x=>x.k===want&&!used.includes(x.l));
-  if(!p.length)p=pool.filter(x=>x.k===want);
+const KIDG=[
+ G('حیوانات','kid',['Cat','Dog','Farm animals','Zoo animals','Sea animals','Birds','Insects','Baby animals','Wild animals']),
+ G('رنگ و عدد و شکل','kid',['Colours','Numbers 1 to 10','Numbers 11 to 20','Shapes','Big and small','Counting game']),
+ G('من و خانواده','kid',['Greetings','My family','My body','Feelings','Clothes','My friends','My birthday']),
+ G('غذا','kid',['Fruits','Vegetables','Food I like','Drinks','Breakfast','At the restaurant']),
+ G('مدرسه و خانه','kid',['School things','My classroom','My room','Toys','House and furniture','Jobs','Days of the week','Months']),
+ G('طبیعت و فضا','kid',['Weather','Seasons','Space and planets','Plants and flowers','The ocean','The forest','Mountains']),
+ G('بازی و سرگرمی','kid',['Games','Sports','Cartoons','Music','Drawing','Dancing','Stories']),
+ G('شهر و سفر','kid',['Places in town','Transport','Travel','At the park','Shopping','At the doctor'])
+];
+const TOP=PROF==='kid'?KIDG:GEN;
+const P1G=G('IELTS Part 1','p1',['Hometown','Accommodation','Work','Studies','Family','Friends','Daily routine','Free time','Hobbies','Reading','Films','Music','Weather','Food','Shopping','Transport','Mobile phones','The internet','Computers','Clothes','Birthdays','Gifts','Holidays','Mornings','Evenings','Sleep','Neighbours','Walking','Cycling','Cooking','Sports','Pets','Photos','Museums','Parks','Teachers','Colours','Handwriting','Public places','Being on time']);
+const P3G=G('IELTS Part 3','p3',['Education and schools','Technology and society','The environment and responsibility','Work and careers','Health and lifestyle','Media and advertising','Tourism and culture','Cities of the future','Family and society','Competition and cooperation','Learning languages','Money and happiness','Traditions and change','Public transport and traffic','Sports and health','Reading and the internet']);
+const P2T=['a person you admire','a place you like to visit','an object that is important to you','a memorable event','a skill you want to learn','a journey you remember','a book or film you enjoyed','a teacher who helped you','a gift you received','a time you helped someone','a hobby you enjoy','a piece of technology you use','a happy childhood memory','a place in nature','a celebration you enjoyed','a useful website or app'];
+const topicStarter=(k,x)=>k==='kid'?'play a short English game about: '+x+'. Teach two or three simple words, say each one slowly and ask the child to repeat the first word.':k==='mech'?'a mechanical engineering topic: '+x+'. Explain any technical word simply and ask one easy question.':'the topic: '+x.toLowerCase()+'. Ask one easy, concrete opening question.';
+const tc=()=>jget('tcount',{});
+function bumpTopic(k){const m=tc();m[k]=(m[k]||0)+1;jset('tcount',m);scheduleSync()}
+function randomFrom(groups,pre){
+  const m=tc(),pool=[];
+  groups.forEach(g=>g.t.forEach(x=>pool.push({l:x,s:topicStarter(g.k,x),k:g.k,c:m[pre+x]||0})));
+  const min=Math.min(...pool.map(x=>x.c)),p=pool.filter(x=>x.c===min);
   return p[Math.floor(Math.random()*p.length)];
 }
-function markUsed(l){const u=jget('usedT',[]).filter(x=>x!==l);u.push(l);jset('usedT',u.slice(-12))}
-let micWarmed=false;
+function randomTopic(){return PROF==='kid'?randomFrom(KIDG,''):randomFrom(GEN.filter(g=>g.k==='gen').concat([P1G]),'')}
+let NEW=null,micWarmed=false;
+function openTopics(title,groups,pre,cb){
+  NEW={groups,pre,cb};
+  $('#ntitle').textContent=title;
+  const m=tc(),box=$('#ngroups');box.textContent='';
+  groups.forEach((g,gi)=>{
+    const d=document.createElement('details');d.className='ng';if(gi===0||groups.length===1)d.open=true;
+    const used=g.t.filter(x=>m[pre+x]).length;
+    const sm=document.createElement('summary');sm.textContent=g.g+'  ('+used+'/'+g.t.length+')';d.appendChild(sm);
+    const row=document.createElement('div');row.className='nrow';
+    g.t.forEach(x=>{
+      const c=document.createElement('button'),n=m[pre+x]||0;c.className='chip'+(n?' done':'');c.textContent=x;c.dataset.l=x;c.dataset.k=g.k;
+      if(n){const i=document.createElement('i');i.className='cnt';i.textContent=n;c.appendChild(i)}
+      row.appendChild(c);
+    });
+    d.appendChild(row);box.appendChild(d);
+  });
+  $('#ntopic').value='';$('#newc').hidden=false;
+}
+function openNew(){openTopics('موضوع گفتگو',TOP,'',tp=>startNew(tp))}
 async function startNew(tp){
+  if(busy)return;
+  if(!api&&!setApi())return;
+  ie=null;stopVoice();if(rc)giveUp();
+  if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+  await initAudio();
+  $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
+  cur=makeChat();hist=[];log.textContent='';
+  if(tp&&tp.l){cur.title='💬 '+tp.l;cur.named=true;bumpTopic(tp.l)}
+  setTitle();showGoal();
+  if(!micWarmed){micWarmed=true;warmMic()}
+  turn(null,null,null,tp);
+}
+$('#ngroups').addEventListener('click',e=>{
+  const c=e.target.closest('button');if(!c||!c.dataset.l||!NEW)return;
+  const g=NEW.groups.find(x=>x.t.includes(c.dataset.l));$('#newc').hidden=true;
+  NEW.cb({l:c.dataset.l,s:topicStarter(g?g.k:'gen',c.dataset.l),k:g?g.k:'gen'});
+});
+$('#nrand').onclick=()=>{if(!NEW)return;$('#newc').hidden=true;NEW.cb(randomFrom(NEW.groups,NEW.pre))};
+$('#ngo').onclick=()=>{const v=$('#ntopic').value.trim();if(!v||!NEW)return;$('#newc').hidden=true;NEW.cb({l:v.slice(0,30),s:'the topic: '+v+'. Ask one easy, concrete opening question.',k:'gen'})};
+$('#ntopic').onkeydown=e=>{if(e.key==='Enter')$('#ngo').onclick()};
+$('#nx').onclick=()=>{$('#newc').hidden=true};
+$('#newc').onclick=e=>{if(e.target===$('#newc'))$('#newc').hidden=true};
+
+const IE_LIM={1:4,2:2,3:4};
+const recMax=()=>ie&&ie.part===2&&ie.card&&ie.n===0?130:75;
+const lastAssess=()=>chats().filter(c=>c.assess).sort((x,y)=>y.updated-x.updated);
+function ieOpen(){
+  const a=lastAssess();
+  $('#iel').textContent=a.length?'آخرین نمرهٔ تخمینی Speaking: '+a[0].assess.overall+' ('+(a[0].assess.d||'')+')'+(a[1]?' — قبلی: '+a[1].assess.overall:''):'هنوز آزمونی انجام نداده‌ای. نمره‌ها تخمین هوش مصنوعی‌اند.';
+  $('#iesh').hidden=false;
+}
+$('#ieb').onclick=ieOpen;
+$('#iex').onclick=()=>{$('#iesh').hidden=true};
+$('#iesh').addEventListener('click',e=>{
+  if(e.target===$('#iesh')){$('#iesh').hidden=true;return}
+  const b=e.target.closest('.iebtn');if(!b)return;
+  const k=b.dataset.ie;$('#iesh').hidden=true;
+  if(k==='p1')openTopics('Part 1 — موضوع',[P1G],'P1:',tp=>startIelts('p1',tp));
+  else if(k==='p3')openTopics('Part 3 — موضوع',[P3G],'P3:',tp=>startIelts('p3',tp));
+  else if(k==='p2')startIelts('p2',null);
+  else if(k==='full')startIelts('full',randomFrom([P1G],'P1:'));
+  else if(k&&k[0]==='l')startListening(+k[1]);
+});
+
+async function startIelts(mode,tp){
   if(busy)return;
   if(!api&&!setApi())return;
   stopVoice();if(rc)giveUp();
   if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
   await initAudio();
   $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
-  cur=makeChat();hist=[];log.textContent='';
-  if(tp&&tp.l){cur.title='💬 '+tp.l;cur.named=true;markUsed(tp.l)}
-  setTitle();showGoal();
   if(!micWarmed){micWarmed=true;warmMic()}
-  turn(null,null,null,tp);
+  const part=mode==='p2'?2:mode==='p3'?3:1;
+  ie={mode,part,n:0,topic:tp?tp.l:'',card:null,answers:[],fixes:[],sounds:[],done:false};
+  cur=makeChat();hist=[];log.textContent='';
+  cur.title='🎓 '+({p1:'Part 1',p2:'Part 2',p3:'Part 3',full:'Mock test'}[mode])+(tp?' · '+tp.l:'');cur.named=true;
+  if(tp)bumpTopic('P'+(mode==='p3'?3:1)+':'+tp.l);
+  setTitle();showGoal();
+  if(mode==='p2')return ieCard();
+  turn(null);
 }
-function openNew(){
-  const box=$('#ngroups');box.textContent='';
-  TOPICS.forEach(g=>{
-    const h=document.createElement('div');h.className='ngh';h.textContent=g.g;box.appendChild(h);
-    const row=document.createElement('div');row.className='nrow';
-    g.t.forEach(x=>{const c=document.createElement('button');c.className='chip';c.textContent=x[0];c.dataset.l=x[0];c.dataset.s=topicStarter(g,x[1]);row.appendChild(c)});
-    box.appendChild(row);
+async function ieCard(){
+  if(!ie)return;
+  busy=true;mic.disabled=true;say('دارم کارت موضوع را آماده می‌کنم…');
+  try{
+    const j=await call({level:lv.value,card:true,theme:P2T[Math.floor(Math.random()*P2T.length)]});
+    ie.card=j.card;ie.topic=j.card.theme||j.card.topic;ie.part=2;ie.n=0;ie.done=false;
+    hist.push({r:'c',t:'[Part 2 cue card] '+j.card.topic+' — '+j.card.points.join('; ')});
+    showCard(j.card);saveChat();
+    say('کارت را بخوان. وقتی آماده بودی «شروع صحبت» را بزن یا یک دقیقه آماده‌سازی بگیر.');
+  }catch(e){say(errMsg(e))}
+  busy=false;mic.disabled=false;
+}
+function showCard(c){
+  const f=el('fix snd'),h=document.createElement('b');h.textContent='🎓 Part 2';f.appendChild(h);
+  const t=document.createElement('b');t.textContent=c.topic;ear(t,c.topic);f.appendChild(t);
+  c.points.forEach(x=>{const d=document.createElement('div');d.textContent='• '+x;d.style.direction='ltr';f.appendChild(d)});
+  el('fa','یک دقیقه فرصت داری فکر کنی (روی کاغذ یادداشت کن)، بعد ۱ تا ۲ دقیقه حرف بزن.',f);
+  const row=document.createElement('div');row.className='row2';
+  const pb=document.createElement('button');pb.className='chip pri';pb.textContent='⏱ ۱ دقیقه آماده‌سازی';pb.dataset.ie='prep';
+  const sb=document.createElement('button');sb.className='chip';sb.textContent='🎙 شروع صحبت';sb.dataset.ie='speak';
+  row.append(pb,sb);f.appendChild(row);
+}
+function iePrep(){
+  if(!ie||!ie.card||rc||busy)return;
+  clearInterval(ieT);let t=60;say('آماده‌سازی: '+t+' ثانیه');
+  ieT=setInterval(()=>{t--;say('آماده‌سازی: '+t+' ثانیه — یادداشت کن'+(t<=10?' (آماده شو)':''));if(t<=0){clearInterval(ieT);ieSpeak()}},1000);
+}
+function ieSpeak(){
+  if(!ie||!ie.card||rc||busy)return;
+  clearInterval(ieT);stopVoice();
+  startRec(130).catch(()=>say('اجازهٔ میکروفون داده نشده یا میکروفون پیدا نشد.'));
+}
+async function ieAdvance(){
+  if(!ie||!ie.done)return;
+  if(ie.mode==='full'&&ie.part<3){
+    ie.part++;ie.n=0;ie.done=false;
+    if(ie.part===2)return ieCard();
+    ie.topic=(ie.card&&(ie.card.theme||ie.card.topic))||'general ideas';
+    turn(null);return;
+  }
+  return ieFinish();
+}
+async function ieFinish(){
+  const x=ie;ie=null;if(!x)return;
+  const data=x.answers.map((a,i)=>'Answer '+(i+1)+' ('+a.w+' words, '+Math.round(a.s)+' s): '+a.t).join('\n')
+    +'\n\nFlagged mistakes: '+x.fixes.slice(0,12).map(f=>f.said+' -> '+f.better+' ['+(f.cat||'')+']').join('; ')
+    +'\nFlagged pronunciation: '+x.sounds.slice(0,10).map(q=>q.word).join(', ');
+  busy=true;mic.disabled=true;say('در حال ارزیابی… چند ثانیه صبر کن');
+  try{
+    const j=await call({level:lv.value,assess:true,parts:x.mode==='full'?'1-3':String(x.part),data});
+    if(cur)cur.assess=j.assess;showAssess(j.assess);saveChat();scheduleSync();
+    say('کارنامه آماده است.');
+  }catch(e){say(errMsg(e))}
+  busy=false;mic.disabled=false;
+}
+function showAssess(a){
+  const f=el('fix snd'),h=document.createElement('b');h.textContent='🎓 Estimated band: '+a.overall;h.style.direction='ltr';f.appendChild(h);
+  [['Fluency & Coherence','fc'],['Lexical Resource','lr'],['Grammar','gra'],['Pronunciation','pr']].forEach(([n,k])=>{
+    const d=document.createElement('div');d.textContent=n+': '+a[k].band;d.style.fontWeight='700';d.style.direction='ltr';f.appendChild(d);
+    if(a[k].fa)el('fa',a[k].fa,f);
   });
-  $('#ntopic').value='';$('#newc').hidden=false;
+  if(a.strengths_fa&&a.strengths_fa.length)el('fa','نقاط قوت: '+a.strengths_fa.join('؛ '),f);
+  (a.priorities||[]).forEach(q=>{const b=document.createElement('b');b.textContent='✓ '+q.better;ear(b,q.better);f.appendChild(b);el('fa',q.said+' ← '+q.fa,f)});
+  if(a.model_answer&&a.model_answer.a){const b=document.createElement('b');b.textContent='Model: '+a.model_answer.a;ear(b,a.model_answer.a);f.appendChild(b)}
+  (a.plan_fa||[]).forEach(x=>el('fa','• '+x,f));
+  el('ok','این نمره تخمین هوش مصنوعی است و حدود ±۱ band خطا دارد؛ تلفظ فقط از روی مشکل‌های ثبت‌شده حدس زده می‌شود.');
 }
-$('#ngroups').addEventListener('click',e=>{const c=e.target.closest('button');if(!c||!c.dataset.s)return;$('#newc').hidden=true;startNew({l:c.dataset.l,s:c.dataset.s})});
-$('#nrand').onclick=()=>{$('#newc').hidden=true;startNew(randomTopic())};
-$('#ngo').onclick=()=>{const v=$('#ntopic').value.trim();if(!v)return;$('#newc').hidden=true;startNew({l:v.slice(0,30),s:'the topic: '+v+'. Ask one easy, concrete opening question.'})};
-$('#ntopic').onkeydown=e=>{if(e.key==='Enter')$('#ngo').onclick()};
-$('#nx').onclick=()=>{$('#newc').hidden=true};
-$('#newc').onclick=e=>{if(e.target===$('#newc'))$('#newc').hidden=true};
+
+let L=null;
+const vscore=x=>(/natural|neural|enhanced|premium/i.test(x.name)?4:0)+(/google|samantha|aria|jenny|ava|zoe|daniel/i.test(x.name)?2:0)+(/en[-_]US/i.test(x.lang)?1:0);
+function twoVoices(){
+  const v=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(x=>/^en/i.test(x.lang)).sort((a,b)=>vscore(b)-vscore(a));
+  const a=v[0]||null,b=v.find(x=>a&&x.name!==a.name)||a;return [a,b];
+}
+function speakLine(t,v,rate,pitch){
+  return new Promise(res=>{
+    if(!window.speechSynthesis){res();return}
+    const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=rate;u.pitch=pitch||1;if(v)u.voice=v;
+    u.onend=u.onerror=()=>res();speechSynthesis.speak(u);
+  });
+}
+function lisMsg(t){const b=$('#lbody');b.textContent='';const d=document.createElement('div');d.className='rline';d.textContent=t;b.appendChild(d)}
+function lisClose(){if(L)L.playing=false;if(window.speechSynthesis)speechSynthesis.cancel();$('#lis').hidden=true}
+async function startListening(sec){
+  stopVoice();if(rc)giveUp();
+  $('#ltitle').textContent='Listening — Section '+sec;$('#lis').hidden=false;lisMsg('در حال ساختن تمرین… (چند ثانیه)');
+  try{
+    const j=await call({level:lv.value,listen:{section:sec}});
+    L={ex:j.exercise,sec,played:false,playing:false,rate:lv.value==='A2'?0.8:lv.value==='B1'?0.92:1,ans:{},done:false};
+    renderLis();
+  }catch(e){lisMsg(errMsg(e))}
+}
+function renderLis(){
+  const box=$('#lbody');box.textContent='';
+  const mk=(c,t)=>{const d=document.createElement('div');d.className=c;if(t)d.textContent=t;box.appendChild(d);return d};
+  mk('ok','سؤال‌ها را بخوان، بعد پخش را بزن. مثل آزمون واقعی فقط یک‌بار پخش می‌شود.');
+  const sp=mk('row2');
+  [['آهسته',0.8],['عادی',1]].forEach(([n,r])=>{const b=document.createElement('button');b.className='chip'+(L.rate===r?' pri':'');b.textContent=n;b.dataset.ls=r;sp.appendChild(b)});
+  const pb=document.createElement('button');pb.className='big';pb.id='lplay';pb.dataset.lp='1';pb.style.width='100%';pb.style.margin='10px 0';box.appendChild(pb);
+  L.ex.questions.forEach((q,i)=>{
+    const r=mk('qrow'),t=document.createElement('div');t.textContent=(i+1)+'. '+q.q;t.style.direction='ltr';r.appendChild(t);
+    if(q.type==='mcq'){(q.options||[]).forEach((o,k)=>{const b=document.createElement('button');b.className='qopt';b.textContent='ABCD'[k]+'. '+o;b.dataset.i=i;b.dataset.v='ABCD'[k];r.appendChild(b)})}
+    else{const inp=document.createElement('input');inp.dataset.i=i;inp.autocomplete='off';inp.placeholder='...';r.appendChild(inp)}
+  });
+  const sb=document.createElement('button');sb.className='big';sb.dataset.sub='1';sb.style.width='100%';sb.textContent='بررسی پاسخ‌ها';box.appendChild(sb);
+  updLis();
+}
+function updLis(){
+  const p=$('#lplay');if(!p||!L)return;
+  p.disabled=L.playing||(L.played&&!L.done);
+  p.textContent=L.playing?'در حال پخش…':(L.played?(L.done?'▶ پخش دوباره':'پخش شد'):'▶ پخش');
+}
+async function playLis(){
+  if(!L||L.playing)return;
+  if(L.played&&!L.done)return;
+  stopVoice();L.playing=true;L.played=true;updLis();
+  const sp=[];L.ex.script.forEach(x=>{if(!sp.includes(x.sp))sp.push(x.sp)});
+  const vs=twoVoices(),same=vs[0]===vs[1];
+  for(const line of L.ex.script){
+    if(!L||!L.playing)break;
+    const i=sp.indexOf(line.sp);
+    await speakLine(line.t,vs[i===0?0:1],L.rate,sp.length>1&&same?(i===0?0.9:1.25):1);
+    await new Promise(r=>setTimeout(r,350));
+  }
+  if(L)L.playing=false;updLis();
+}
+const normA=x=>String(x||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\b(a|an|the)\b/g,' ').replace(/\s+/g,' ').trim();
+const okGap=(u,q)=>{const n=normA(u);return !!n&&[q.answer].concat(q.alts||[]).some(a=>normA(a)===n)};
+function logListening(sc,t){
+  const all=jget('dstat',{}),day=all[ago(0)]||(all[ago(0)]={}),id=dev(),me=day[id]||(day[id]={n:0,w:0,f:0,s:0,c:{},p:{}});
+  me.ln=(me.ln||0)+1;me.ls=(me.ls||0)+sc;me.lt=(me.lt||0)+t;me.u=Date.now();
+  jset('dstat',all);scheduleSync();
+}
+function gradeLis(){
+  if(!L||L.done)return;
+  L.done=true;L.playing=false;if(window.speechSynthesis)speechSynthesis.cancel();
+  const q=L.ex.questions;let sc=0;
+  const rows=q.map((x,i)=>{const u=L.ans[i]||'';const ok=x.type==='mcq'?String(u).toUpperCase()===String(x.answer).toUpperCase():okGap(u,x);if(ok)sc++;return{x,u,ok}});
+  logListening(sc,q.length);
+  const box=$('#lbody');box.textContent='';
+  const mk=(c,t,p)=>{const d=document.createElement('div');d.className=c;if(t)d.textContent=t;(p||box).appendChild(d);return d};
+  const h=mk('rline','نتیجه: '+sc+' از '+q.length+' ('+Math.round(sc/q.length*100)+'٪)');h.style.fontWeight='700';h.style.color=sc/q.length>=0.6?'var(--grn)':'var(--red)';
+  rows.forEach((r,i)=>{
+    const d=mk('qrow '+(r.ok?'good':'bad')),t=document.createElement('div');t.textContent=(i+1)+'. '+r.x.q;t.style.direction='ltr';d.appendChild(t);
+    const a=document.createElement('div');a.style.direction='ltr';a.style.fontWeight='700';a.style.color=r.ok?'var(--grn)':'var(--red)';
+    a.textContent=(r.ok?'✓ ':'✗ ')+(r.u||'—')+(r.ok?'':'   →   '+r.x.answer);d.appendChild(a);
+    if(r.x.ev){const ev=document.createElement('div');ev.style.direction='ltr';ev.style.color='var(--mu)';ev.textContent='“'+r.x.ev+'” ';const b=document.createElement('button');b.className='ear';b.innerHTML=IC.spk;b.dataset.say=r.x.ev;ev.appendChild(b);d.appendChild(ev)}
+    if(r.x.fa)mk('fa',r.x.fa,d);
+  });
+  const row=mk('row2');
+  [['▶ پخش دوباره','lp'],['نمایش متن','tx'],['تمرین بعدی','next']].forEach(([n,k])=>{const b=document.createElement('button');b.className=k==='next'?'big sm':'chip';b.textContent=n;b.dataset[k]='1';row.appendChild(b)});
+  const pb=document.createElement('button');pb.id='lplay';pb.hidden=true;box.appendChild(pb);
+  const tx=mk('rline');tx.id='ltx';tx.hidden=true;tx.style.direction='ltr';
+  L.ex.script.forEach(l=>{const p=document.createElement('div');p.textContent=l.sp+': '+l.t;tx.appendChild(p)});
+}
+$('#lbody').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b||!L)return;
+  if(b.dataset.lp){playLis();return}
+  if(b.dataset.ls){L.rate=+b.dataset.ls;b.parentNode.querySelectorAll('[data-ls]').forEach(x=>x.classList.toggle('pri',x===b));return}
+  if(b.dataset.v){L.ans[b.dataset.i]=b.dataset.v;b.parentNode.querySelectorAll('.qopt').forEach(x=>x.classList.toggle('sel',x===b));return}
+  if(b.dataset.sub){gradeLis();return}
+  if(b.dataset.say!==undefined){speak(b.dataset.say);return}
+  if(b.dataset.next){startListening(L.sec);return}
+  if(b.dataset.tx){const t=$('#ltx');t.hidden=!t.hidden;return}
+});
+$('#lbody').addEventListener('input',e=>{const i=e.target.dataset&&e.target.dataset.i;if(i!==undefined&&e.target.tagName==='INPUT'&&L)L.ans[i]=e.target.value});
+$('#lx').onclick=lisClose;
+if(PROF==='kid'){
+  document.documentElement.classList.add('kid');
+  $('#ieb').hidden=true;
+  const h=$('#start h2');if(h)h.textContent='Hi Arsha!';
+  const p=document.querySelector('#start p');if(p)p.textContent='سلام آرشا! با هم انگلیسی بازی می‌کنیم. من یک کلمه می‌گویم و تو تکرارش می‌کنی. اگر بلد نبودی، فارسی بگو؛ اشکالی ندارد!';
+  $('#note').textContent='هدف امروز: ۵ دقیقه بازی با انگلیسی. اگر کمک خواستی، دکمهٔ 💡 را بزن.';
+}
 </script>
 </body>
 </html>
