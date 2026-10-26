@@ -244,6 +244,13 @@ details.ng .cnt{background:var(--gc);color:#fff}
 .sheet{background:linear-gradient(90deg,#7A4DFF,#F0489A,#FFB020,#22B14C) top/100% 5px no-repeat,var(--sf)}
 .qopt.sel{background:color-mix(in srgb,var(--ac) 22%,var(--bg));border-color:var(--ac)}
 
+
+.fix.sim{transition:opacity .2s,transform .2s}
+.fix.sim.out{opacity:0;transform:scale(.96)}
+.b.c,.b.me,.b .fa,.fix b,.fix s,.fix .fa,.fix div{text-align:justify;text-justify:inter-word}
+#mic{width:64px;height:64px}
+#mic svg{width:30px;height:30px}
+#dock{gap:6px}
 /* login + account */
 .lg{position:fixed;inset:0;z-index:60;background:var(--glow),var(--bg);display:flex;align-items:center;justify-content:center;padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto}
 .lg-card{width:100%;max-width:400px;text-align:center;display:flex;flex-direction:column;gap:14px}
@@ -289,17 +296,17 @@ details.ng .cnt{background:var(--gc);color:#fff}
 <div id="log" hidden aria-live="polite"></div>
 
 <footer id="dock" hidden>
-  <div id="prog"><div id="bar"></div></div>
-  <div class="dmeta"><div id="goal"><div id="g1"></div><div id="g2"></div></div><div class="dside"><button class="ghost" id="hf" aria-pressed="false">دست‌آزاد: خاموش</button><span id="gd"></span></div></div>
-  <div class="seg" id="dseg" role="group" aria-label="سختی مربی"><button data-d="easy" aria-pressed="false">🐢 آسان</button><button data-d="normal" aria-pressed="true">🙂 معمولی</button><button data-d="hard" aria-pressed="false">🚀 چالشی</button></div>
-  <div id="status"></div>
-  <div class="drow">
-    <button id="mic" aria-label="Speak">
+  <button id="mic" aria-label="Speak">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
     </button>
-    <input id="txt" dir="ltr" placeholder="Or type here" autocomplete="off">
-    <button class="ibtn sm" id="hint" aria-label="Hint">💡</button>
+  <div id="status"></div>
+  <div id="prog"><div id="bar"></div></div>
+  <div class="dmeta"><div id="goal"><div id="g2"></div><div id="g1"></div></div><div class="dside"><button class="ghost" id="hf" aria-pressed="false">دست‌آزاد: خاموش</button><span id="gd"></span></div></div>
+  <div class="seg" id="dseg" role="group" aria-label="سختی مربی"><button data-d="easy" aria-pressed="false">🐢 آسان</button><button data-d="normal" aria-pressed="true">🙂 معمولی</button><button data-d="hard" aria-pressed="false">🚀 چالشی</button></div>
+  <div class="drow">
     <button class="ibtn sm" id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+    <button class="ibtn sm" id="hint" aria-label="Hint">💡</button>
+    <input id="txt" dir="ltr" placeholder="Or type here" autocomplete="off">
   </div>
 </footer>
 
@@ -309,7 +316,7 @@ details.ng .cnt{background:var(--gc);color:#fff}
     <h2>Speaking Coach</h2>
     <p>کی هستی؟</p>
     <div class="who">
-      <button data-who="main"><i>🧑‍🎓</i><span>من</span></button>
+      <button data-who="main"><i>🧑‍🎓</i><span>علی</span></button>
       <button data-who="kid"><i>🧒</i><span>آرشا</span></button>
     </div>
     <div id="lgpw" hidden>
@@ -653,10 +660,16 @@ function offerDiff(to,why){
 async function simplify(btn){
   if(busy)return;
   const host=btn.closest('.b'),t=btn.dataset.simple;
+  const old=host&&host.nextElementSibling;
+  if(old&&old.classList.contains('sim')&&old.dataset.src===t){
+    if(old.hidden){old.hidden=false;old.classList.remove('out');requestAnimationFrame(()=>old.classList.remove('out'))}
+    else{old.classList.add('out');setTimeout(()=>{if(old.classList.contains('out'))old.hidden=true},220)}
+    saveChat();return;
+  }
   busy=true;mic.disabled=true;say('دارم ساده‌ترش می‌کنم…');
   try{
     const j=await call({level:lv.value,simplify:t}),s=j.simple;
-    const f=document.createElement('div');f.className='fix snd sim';
+    const f=document.createElement('div');f.className='fix snd sim';f.dataset.src=t;
     const h=document.createElement('b');h.textContent='✨ '+s.en;h.style.direction='ltr';ear(h,String(s.en));
     const sb=document.createElement('button');sb.className='ear xs';sb.textContent='🐢';sb.dataset.slow=s.en;sb.setAttribute('aria-label','آهسته‌تر بخوان');h.appendChild(sb);f.appendChild(h);
     if(s.fa)el('fa',s.fa,f);
@@ -1470,7 +1483,7 @@ $('#lgok').onclick=doLogin;
 $('#lgpass').onkeydown=e=>{if(e.key==='Enter')doLogin()};
 function openAcc(){
   let n='';try{n=localStorage.getItem(K('uname'))||''}catch(e){}
-  $('#accwho').textContent=(PROF==='kid'?'🧒 ':'🧑‍🎓 ')+(n||(PROF==='kid'?'آرشا':'من'));
+  $('#accwho').textContent=(PROF==='kid'?'🧒 ':'🧑‍🎓 ')+(n||(PROF==='kid'?'آرشا':'علی'));
   $('#accinfo').textContent=practiceDays()+' روز تمرین · '+chats().length+' گفتگوی ذخیره‌شده · '+Object.keys(jget('vbook',{})).length+' واژه در دفترچه';
   $('#accsync').textContent=$('#syncst').textContent||'';
   $('#acc').hidden=false;
