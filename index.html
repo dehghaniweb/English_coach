@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#E9F2D9">
+<meta name="theme-color" content="#F4F1FF">
 <title>Speaking Coach</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap">
 <style>
@@ -153,6 +153,110 @@ details.ng .nrow{padding:2px 0 8px}
 .kid .b.c{font-size:17px}
 .kid .b.c.cur{font-size:22px}
 .kid .b .fa{font-size:18px;color:var(--tx)}
+
+/* ================= THEME v2: colorful ================= */
+:root{--bg:#F4F1FF;--glow:radial-gradient(640px 400px at 100% -6%,rgba(255,110,170,.30),transparent 62%),radial-gradient(620px 420px at -8% 10%,rgba(56,189,248,.28),transparent 60%),radial-gradient(560px 380px at 70% 108%,rgba(255,196,60,.26),transparent 62%);--sf:#FFFFFF;--tx:#25214D;--mu:#6B6894;--ac:#6B46F0;--ac2:#F0489A;--on:#fff;--wn:#D0700F;--wb:#FFF2DB;--ln:#E1DAFF;--me:#2563EB;--mt:#fff;--sh:0 3px 12px rgba(86,60,180,.15);--grn:#128A46;--red:#D9304A;
+--gp:linear-gradient(135deg,#7A4DFF,#F0489A);--gt:linear-gradient(135deg,#0AA39A,#22B14C);--go:linear-gradient(135deg,#FF9A3C,#F25A5A);--gb:linear-gradient(135deg,#2F9BF3,#6A5CF5);
+--cb:linear-gradient(135deg,#FFFFFF,#F2ECFF);--cbd:#D9CDFF;--cbs:#8B5CF6;--t-snd:#E6F4FF;--t-voc:#E4F8EE;--t-hnt:#FFE9F3;--t-cue:#EEE8FF;--t-sim:#E3F9F6;--tb1:#E2F1FF;--tb2:#FFE6F1;--tb3:#E3F7EC;--tb4:#FFF0D9;--me2:linear-gradient(135deg,#2563EB,#7C3AED)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12102B;--glow:radial-gradient(520px 340px at 100% -6%,rgba(240,72,154,.22),transparent 62%),radial-gradient(520px 360px at -8% 12%,rgba(47,155,243,.20),transparent 60%);--sf:#1E1B42;--tx:#EEEBFF;--mu:#ABA7D9;--ac:#A998FF;--ac2:#FF7DB8;--on:#14102E;--wn:#FFB45E;--wb:#33260F;--ln:#363069;--me:#5B8CFF;--mt:#fff;--sh:0 3px 12px rgba(0,0,0,.4);--grn:#6EE7A0;--red:#FF8A9A;--cb:linear-gradient(135deg,#28235C,#1F1B47);--cbd:#40398A;--cbs:#A78BFA;--t-snd:#16305A;--t-voc:#123A2E;--t-hnt:#432040;--t-cue:#2F2866;--t-sim:#103B3A;--tb1:#1B3560;--tb2:#4A2250;--tb3:#17413A;--tb4:#4A3515;--me2:linear-gradient(135deg,#3B6DF0,#8B4BE8)}}
+:root[data-theme="dark"]{--bg:#12102B;--glow:radial-gradient(520px 340px at 100% -6%,rgba(240,72,154,.22),transparent 62%),radial-gradient(520px 360px at -8% 12%,rgba(47,155,243,.20),transparent 60%);--sf:#1E1B42;--tx:#EEEBFF;--mu:#ABA7D9;--ac:#A998FF;--ac2:#FF7DB8;--on:#14102E;--wn:#FFB45E;--wb:#33260F;--ln:#363069;--me:#5B8CFF;--mt:#fff;--sh:0 3px 12px rgba(0,0,0,.4);--grn:#6EE7A0;--red:#FF8A9A;--cb:linear-gradient(135deg,#28235C,#1F1B47);--cbd:#40398A;--cbs:#A78BFA;--t-snd:#16305A;--t-voc:#123A2E;--t-hnt:#432040;--t-cue:#2F2866;--t-sim:#103B3A;--tb1:#1B3560;--tb2:#4A2250;--tb3:#17413A;--tb4:#4A3515;--me2:linear-gradient(135deg,#3B6DF0,#8B4BE8)}
+:root.kid.kid{--bg:#FFF4D6;--glow:radial-gradient(640px 400px at 100% -6%,rgba(255,138,61,.30),transparent 62%),radial-gradient(620px 420px at -8% 10%,rgba(47,155,243,.24),transparent 60%),radial-gradient(560px 380px at 70% 108%,rgba(34,177,76,.20),transparent 62%);--sf:#FFFFFF;--tx:#2B2B4A;--mu:#6B6B8A;--ac:#E8590C;--ac2:#1C7ED6;--on:#fff;--ln:#FFD9A0;--me:#1C7ED6;--wn:#D9541E;--wb:#FFF0E6;--sh:0 3px 12px rgba(160,100,20,.18);--grn:#128A46;--red:#D9304A;--gp:linear-gradient(135deg,#FF8A3D,#FF4F8B);--cb:linear-gradient(135deg,#FFFFFF,#FFF1D6);--cbd:#FFD58A;--cbs:#FF9F1C;--t-snd:#E6F4FF;--t-voc:#E4F8EE;--t-hnt:#FFE9F3;--t-cue:#EEE8FF;--t-sim:#E3F9F6;--tb1:#E2F1FF;--tb2:#FFE6F1;--tb3:#E3F7EC;--tb4:#FFF0D9;--me2:linear-gradient(135deg,#1C7ED6,#12B886)}
+
+/* header */
+.logo{background:var(--gp)}
+.tbtn,.ibtn{border-color:color-mix(in srgb,var(--tx) 14%,transparent)}
+#hb{background:var(--tb1)}#ieb{background:var(--tb2)}#revb{background:var(--tb3)}#repb{background:var(--tb4)}#cfg{background:var(--tb1)}
+.badge{background:var(--gp);color:#fff}
+.chip.pri{background:var(--gp);color:#fff;border-color:transparent}
+.big{background:var(--gp);color:#fff;box-shadow:0 6px 16px rgba(122,77,255,.35)}
+.chip{border-color:color-mix(in srgb,var(--ac) 25%,transparent)}
+
+/* start screen */
+.wave rect:nth-child(1){fill:#7A4DFF}.wave rect:nth-child(2){fill:#F0489A}.wave rect:nth-child(3){fill:#FFB020}.wave rect:nth-child(4){fill:#22B14C}.wave rect:nth-child(5){fill:#2F9BF3}
+#start h2{background:var(--gp);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#sug{display:flex;flex-direction:column;gap:8px;text-align:center}
+#sug .sgt{font-weight:700;color:var(--mu);font-size:14px}
+#sug .sgw{font-size:12.5px;color:var(--mu)}
+#sug .sgr{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+#sug .sgr .chip{font-weight:700}
+#sug .sgr .chip:nth-child(6n+1){background:var(--tb1)}#sug .sgr .chip:nth-child(6n+2){background:var(--tb2)}#sug .sgr .chip:nth-child(6n+3){background:var(--tb4)}#sug .sgr .chip:nth-child(6n+4){background:var(--tb3)}#sug .sgr .chip:nth-child(6n+5){background:var(--t-cue)}#sug .sgr .chip:nth-child(6n+6){background:var(--t-hnt)}
+
+/* chat bubbles: text uses the FULL width, icons sit in a row below */
+#log{padding:8px 12px}
+.b{max-width:94%;animation:pop .28s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.97)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.b,.fix{animation:none}}
+.b.c{background:var(--cb);border:1px solid var(--cbd);border-left:5px solid var(--cbs);border-bottom-left-radius:8px}
+.b.me{background:var(--me2);border:0;color:#fff;max-width:90%}
+.b.c.g{display:flex;flex-direction:column;align-items:stretch;gap:0}
+.b.c.g>.acts{align-self:flex-start;margin-top:8px;gap:8px;flex-wrap:wrap}
+.b.c.g>.fa{margin-top:8px}
+.ear{width:36px;height:36px;background:var(--sf);color:var(--ac);border-color:color-mix(in srgb,var(--tx) 12%,transparent)}
+.ear.xs{font-size:17px}
+.acts .ear:nth-child(1){background:var(--tb1)}.acts .ear:nth-child(2){background:var(--tb2)}.acts .ear:nth-child(3){background:var(--tb4)}.acts .ear:nth-child(4){background:var(--tb3)}
+.b.me .ear{background:rgba(255,255,255,.22);color:#fff}
+
+/* cards */
+.fix{background:var(--wb);border-left:5px solid var(--wn);box-shadow:var(--sh);animation:pop .3s ease-out}
+.fix.snd{--st:#38BDF8;background:var(--t-snd);border:1px solid color-mix(in srgb,var(--st) 35%,transparent);border-left:5px solid var(--st)}
+.fix.snd.voc{--st:#22B14C;background:var(--t-voc)}
+.fix.snd.hnt{--st:#F0489A;background:var(--t-hnt)}
+.fix.snd.cue{--st:#7A4DFF;background:var(--t-cue)}
+.fix.snd.sim{--st:#0AA39A;background:var(--t-sim);align-self:flex-start;max-width:94%}
+.ok{color:var(--mu)}
+
+/* dock */
+#dock{background:linear-gradient(90deg,#7A4DFF,#F0489A,#FFB020,#22B14C) top/100% 4px no-repeat,var(--sf);padding-top:12px;box-shadow:0 -6px 18px rgba(90,60,190,.14)}
+#prog{height:6px}
+#bar{background:linear-gradient(90deg,#22B14C,#FFB020,#F0489A,#7A4DFF)}
+#mic{background:var(--gp);color:#fff;box-shadow:0 6px 18px rgba(122,77,255,.5)}
+@keyframes p{from{box-shadow:0 0 0 0 rgba(240,72,154,.55)}to{box-shadow:0 0 0 24px transparent}}
+#hf[aria-pressed="true"]{background:var(--gt);color:#fff;border-color:transparent}
+.drow input,.row input{border-color:color-mix(in srgb,var(--ac) 30%,transparent)}
+.seg{display:flex;gap:6px;width:100%;max-width:560px}
+.seg button{flex:1;border:1px solid color-mix(in srgb,var(--tx) 14%,transparent);background:var(--bg);border-radius:999px;padding:2px 6px;font-size:12.5px;line-height:1.7;cursor:pointer;color:var(--tx);white-space:nowrap}
+.seg button[aria-pressed="true"]{color:#fff;border-color:transparent;font-weight:700;box-shadow:var(--sh)}
+.seg button[data-d="easy"][aria-pressed="true"]{background:var(--gt)}
+.seg button[data-d="normal"][aria-pressed="true"]{background:var(--gb)}
+.seg button[data-d="hard"][aria-pressed="true"]{background:var(--go)}
+
+/* history rows, reports */
+.hrow{border-inline-start:6px solid var(--rc,#7A4DFF)}
+.hrow:nth-child(6n+1){--rc:#7A4DFF}.hrow:nth-child(6n+2){--rc:#F0489A}.hrow:nth-child(6n+3){--rc:#FF9A3C}.hrow:nth-child(6n+4){--rc:#22B14C}.hrow:nth-child(6n+5){--rc:#2F9BF3}.hrow:nth-child(6n+6){--rc:#0AA39A}
+.rline{border-inline-start:6px solid var(--rc,#7A4DFF)}
+.rline:nth-child(6n+1){--rc:#7A4DFF}.rline:nth-child(6n+2){--rc:#F0489A}.rline:nth-child(6n+3){--rc:#FF9A3C}.rline:nth-child(6n+4){--rc:#22B14C}.rline:nth-child(6n+5){--rc:#2F9BF3}.rline:nth-child(6n+6){--rc:#0AA39A}
+.rcard{border:2px solid color-mix(in srgb,var(--ac) 30%,transparent);background:var(--cb)}
+.wkt{font-weight:700;font-size:14px;margin-bottom:8px}
+.wkr{display:flex;align-items:flex-end;gap:8px;direction:ltr;height:104px}
+.wkb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;font-size:12px;color:var(--mu)}
+.wkb i{display:block;width:100%;border-radius:8px 8px 3px 3px;background:var(--gb)}
+.wkb:last-child i{background:var(--go)}
+
+/* topic sheets: every group has its own colour */
+details.ng:nth-of-type(8n+1){--gc:#7A4DFF}details.ng:nth-of-type(8n+2){--gc:#F0489A}details.ng:nth-of-type(8n+3){--gc:#F08A24}details.ng:nth-of-type(8n+4){--gc:#1E9E4A}details.ng:nth-of-type(8n+5){--gc:#2F8FE8}details.ng:nth-of-type(8n+6){--gc:#0A9C93}details.ng:nth-of-type(8n+7){--gc:#C99700}details.ng:nth-of-type(8n+8){--gc:#C13BD8}
+details.ng{--gc:#7A4DFF}
+details.ng summary{color:var(--gc);font-size:15px}
+details.ng .chip{border-color:color-mix(in srgb,var(--gc) 45%,transparent);background:color-mix(in srgb,var(--gc) 10%,var(--sf))}
+details.ng .chip.done{background:color-mix(in srgb,var(--gc) 28%,var(--sf));border-color:var(--gc)}
+details.ng .cnt{background:var(--gc);color:#fff}
+.iebtn{border-inline-start:6px solid var(--ib,#7A4DFF)}
+.iebtn[data-ie="p1"]{--ib:#F0489A}.iebtn[data-ie="p2"]{--ib:#FF9A3C}.iebtn[data-ie="p3"]{--ib:#7A4DFF}.iebtn[data-ie="full"]{--ib:#22B14C}.iebtn[data-ie="l1"]{--ib:#2F9BF3}.iebtn[data-ie="l2"]{--ib:#0AA39A}.iebtn[data-ie="l3"]{--ib:#E5A400}.iebtn[data-ie="l4"]{--ib:#C13BD8}
+.sheet{background:linear-gradient(90deg,#7A4DFF,#F0489A,#FFB020,#22B14C) top/100% 5px no-repeat,var(--sf)}
+.qopt.sel{background:color-mix(in srgb,var(--ac) 22%,var(--bg));border-color:var(--ac)}
+
+/* login + account */
+.lg{position:fixed;inset:0;z-index:60;background:var(--glow),var(--bg);display:flex;align-items:center;justify-content:center;padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto}
+.lg-card{width:100%;max-width:400px;text-align:center;display:flex;flex-direction:column;gap:14px}
+.lg-logo{width:84px;height:84px;margin:0 auto;border-radius:26px;background:var(--gp);display:grid;place-items:center;font-size:42px;box-shadow:0 10px 28px rgba(122,77,255,.4)}
+.lg h2{margin:0;font-size:28px;direction:ltr;background:var(--gp);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.lg p{margin:0;color:var(--mu)}
+.who{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.who button{background:var(--sf);border:2px solid var(--ln);border-radius:22px;padding:18px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:var(--sh);color:var(--tx);font-weight:700;font-size:18px}
+.who button i{font-style:normal;font-size:46px;line-height:1}
+.who button[data-who="main"].sel{border-color:#7A4DFF;background:var(--t-cue)}
+.who button[data-who="kid"].sel{border-color:#FF9A3C;background:var(--t-hnt)}
+.lg input{width:100%;height:50px;border-radius:16px;border:2px solid var(--ln);background:var(--sf);padding:0 16px;font-size:18px;direction:ltr;text-align:center}
+#lgerr{min-height:22px;color:var(--red);font-size:14px}
 </style>
 </head>
 <body>
@@ -175,10 +279,11 @@ details.ng .nrow{padding:2px 0 8px}
   <h2>Let's talk!</h2>
   <p>لازم نیست کامل حرف بزنی؛ فقط حرف بزن. من سؤال می‌پرسم، تو با صدا جواب می‌دهی و من همان لحظه غلط‌های گرامر و تلفظت را با توضیح فارسی نشان می‌دهم.</p>
   <button class="big" id="go">شروع مکالمه</button>
+  <div id="sug" hidden></div>
   <button class="ghost" id="tp">انتخاب موضوع</button>
   <button class="ghost" id="hc" hidden></button>
   <button class="ghost" id="hs" hidden>گفتگوهای قبلی</button>
-  <p id="note">هدف امروز: ۱۰ دقیقه حرف زدن. اگر چیزی به ذهنت نرسید، دکمهٔ 💡 کمکت می‌کند.</p>
+  <p id="note">هدف امروز: ۱۰ دقیقه حرف زدن. اگر چیزی به ذهنت نرسید، دکمهٔ 💡 کمکت می‌کند. اگر مربی تند یا سخت حرف زد: 🐢 آهسته‌تر، ✨ ساده‌تر، یا حالت «آسان» پایین صفحه.</p>
 </section>
 
 <div id="log" hidden aria-live="polite"></div>
@@ -186,6 +291,7 @@ details.ng .nrow{padding:2px 0 8px}
 <footer id="dock" hidden>
   <div id="prog"><div id="bar"></div></div>
   <div class="dmeta"><div id="goal"><div id="g1"></div><div id="g2"></div></div><div class="dside"><button class="ghost" id="hf" aria-pressed="false">دست‌آزاد: خاموش</button><span id="gd"></span></div></div>
+  <div class="seg" id="dseg" role="group" aria-label="سختی مربی"><button data-d="easy" aria-pressed="false">🐢 آسان</button><button data-d="normal" aria-pressed="true">🙂 معمولی</button><button data-d="hard" aria-pressed="false">🚀 چالشی</button></div>
   <div id="status"></div>
   <div class="drow">
     <button id="mic" aria-label="Speak">
@@ -197,6 +303,32 @@ details.ng .nrow{padding:2px 0 8px}
   </div>
 </footer>
 
+<div id="login" class="lg" hidden>
+  <div class="lg-card">
+    <div class="lg-logo" aria-hidden="true">🎙</div>
+    <h2>Speaking Coach</h2>
+    <p>کی هستی؟</p>
+    <div class="who">
+      <button data-who="main"><i>🧑‍🎓</i><span>من</span></button>
+      <button data-who="kid"><i>🧒</i><span>آرشا</span></button>
+    </div>
+    <div id="lgpw" hidden>
+      <input id="lgpass" type="password" dir="ltr" placeholder="رمز" autocomplete="current-password">
+      <button class="big" id="lgok" style="width:100%;margin-top:10px">ورود</button>
+    </div>
+    <div id="lgerr" role="alert"></div>
+    <p style="font-size:12.5px">هر کاربر گفتگوها، واژه‌ها و روند تمرین جدای خودش را دارد و روی حساب شخصی ذخیره می‌شود.</p>
+  </div>
+</div>
+<div id="acc" class="ov" hidden>
+  <div class="sheet">
+    <div class="hhead"><b>حساب من</b><button class="ghost" id="accx" aria-label="Close">✕</button></div>
+    <div class="sh-t" id="accwho"></div>
+    <div class="sh-p" id="accinfo"></div>
+    <div class="sh-p" id="accsync"></div>
+    <div class="sh-a"><button class="ghost sm" id="accsy">همگام‌سازی حالا</button><button class="ghost sm" id="acclo" style="color:var(--red)">خروج / تعویض کاربر</button></div>
+  </div>
+</div>
 <div id="hist" hidden>
   <div class="hhead"><b>گفتگوهای قبلی</b><button class="ghost" id="hx" aria-label="Close">✕</button></div>
   <div id="syncst" class="ok"></div>
@@ -250,12 +382,13 @@ details.ng .nrow{padding:2px 0 8px}
 
 <script>
 const PROF=(()=>{try{return localStorage.getItem('prof')||''}catch(e){return ''}})();
+const LOGGED=(()=>{try{return localStorage.getItem('logged')==='1'||!!localStorage.getItem('pass')}catch(e){return false}})();
 const K=k=>(PROF&&!['fmt','dev','pass','prof','api'].includes(k)?PROF+':':'')+k;
 const $=s=>document.querySelector(s),log=$('#log'),st=$('#status'),mic=$('#mic'),txt=$('#txt'),lv=$('#level');
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 let sample=null,hist=[],busy=false,rec=null,listening=false,heard='';
 try{lv.value=localStorage.getItem(K('lvl'))||'B1'}catch(e){}
-lv.onchange=()=>{try{localStorage.setItem(K('lvl'),lv.value)}catch(e){}};
+lv.onchange=()=>{try{localStorage.setItem(K('lvl'),lv.value)}catch(e){}touchPrefs()};
 const say=t=>{st.textContent=t};
 const cancel=()=>stopVoice();
 
@@ -278,6 +411,11 @@ function tr(p,t){
   acts(p).appendChild(b);p.appendChild(f);
 }
 
+function extras(p,t){
+  const a=acts(p);
+  const s=document.createElement('button');s.className='ear xs';s.textContent='🐢';s.dataset.slow=t;s.title='آهسته بخوان';s.setAttribute('aria-label','آهسته‌تر بخوان');a.appendChild(s);
+  if(PROF!=='kid'){const m=document.createElement('button');m.className='ear xs';m.textContent='✨';m.dataset.simple=t;m.title='ساده‌ترش کن';m.setAttribute('aria-label','ساده‌ترش کن');a.appendChild(m)}
+}
 let cur=null,ie=null,ieT=0;
 const chats=()=>jget('chats',[]);
 function makeChat(){return{id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),title:'گفتگوی جدید',created:Date.now(),updated:Date.now(),hist:[],html:'',level:lv.value,named:false}}
@@ -439,17 +577,17 @@ function pickVoice(){
   const sc=x=>(/natural|neural|enhanced|premium/i.test(x.name)?4:0)+(/google|samantha|aria|jenny|ava|zoe|daniel/i.test(x.name)?2:0)+(/en[-_]US/i.test(x.lang)?1:0);
   return v.sort((a,b)=>sc(b)-sc(a))[0];
 }
-function browserSpeak(t){
+function browserSpeak(t,r){
   return new Promise(res=>{
     if(!window.speechSynthesis){res();return}
     speechSynthesis.cancel();
     const u=new SpeechSynthesisUtterance(t),f=pickVoice();
-    u.lang='en-US';u.rate=PROF==='kid'?.85:.95;if(f)u.voice=f;
+    u.lang='en-US';u.rate=r||(PROF==='kid'?.85:.95);if(f)u.voice=f;
     u.onend=u.onerror=()=>res();
     speechSynthesis.speak(u);
   });
 }
-function speak(t){stopVoice();browserSpeak(t)}
+function speak(t,slow){stopVoice();browserSpeak(t,slow?.62:0)}
 async function play(j){
   let buf;
   const bin=atob(j.audio);
@@ -473,7 +611,7 @@ async function sayReply(text){
   if(tts){
     try{
       await initAudio();
-      const j=await call({tts:text});
+      const j=await call({tts:text,slow:diff==='easy'});
       if(my!==vt)return;
       if(j.audio)done=await play(j);
     }catch(e){
@@ -482,7 +620,7 @@ async function sayReply(text){
     }
   }
   if(my!==vt)return;
-  if(!done)await browserSpeak(text);
+  if(!done)await browserSpeak(text,diff==='easy'?.78:0);
   if(my!==vt)return;
   afterSpeak();
 }
@@ -497,6 +635,40 @@ const ago=n=>new Date(Date.now()-n*864e5).toLocaleDateString('en-CA');
 const jget=(k,d)=>{try{return JSON.parse(localStorage.getItem(K(k)))||d}catch(e){return d}};
 const jset=(k,v)=>{try{localStorage.setItem(K(k),JSON.stringify(v))}catch(e){}};
 let notes=jget('notes',[]);
+let diff=jget('diff','normal');
+if(!['easy','normal','hard'].includes(diff))diff='normal';
+const DMSG={easy:'🐢 حالت آسان: مربی آهسته‌تر، با جمله‌های کوتاه و کلمه‌های ساده حرف می‌زند.',normal:'🙂 حالت معمولی.',hard:'🚀 حالت چالشی: مربی روان‌تر و با واژه‌های متنوع‌تر حرف می‌زند.'};
+function applyDiffUI(){document.querySelectorAll('#dseg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.d===diff))}
+function touchPrefs(){jset('prefsU',Date.now());scheduleSync()}
+function setDiff(d,msg){diff=d;jset('diff',d);applyDiffUI();touchPrefs();if(msg)say(msg)}
+let helps=[],offeredEasy=0;
+function noteHelp(){
+  const n=Date.now();helps=helps.filter(t=>n-t<12*60000);helps.push(n);
+  if(helps.length>=3&&diff!=='easy'&&n-offeredEasy>30*60000&&PROF!=='kid'){offeredEasy=n;offerDiff('easy','چند بار کمک خواستی')}
+}
+function offerDiff(to,why){
+  const d=el('ok',why+'؛ حالت «'+({easy:'آسان',hard:'چالشی',normal:'معمولی'}[to])+'» را فعال کنم؟'),b=document.createElement('button');
+  b.className='ghost';b.textContent='بله';b.dataset.dff=to;d.appendChild(document.createTextNode(' '));d.appendChild(b);
+}
+async function simplify(btn){
+  if(busy)return;
+  const host=btn.closest('.b'),t=btn.dataset.simple;
+  busy=true;mic.disabled=true;say('دارم ساده‌ترش می‌کنم…');
+  try{
+    const j=await call({level:lv.value,simplify:t}),s=j.simple;
+    const f=document.createElement('div');f.className='fix snd sim';
+    const h=document.createElement('b');h.textContent='✨ '+s.en;h.style.direction='ltr';ear(h,String(s.en));
+    const sb=document.createElement('button');sb.className='ear xs';sb.textContent='🐢';sb.dataset.slow=s.en;sb.setAttribute('aria-label','آهسته‌تر بخوان');h.appendChild(sb);f.appendChild(h);
+    if(s.fa)el('fa',s.fa,f);
+    (s.words||[]).forEach(w=>{const b=document.createElement('b');b.textContent='📘 '+w.en+'  —  '+(w.fa||'');ear(b,String(w.en));f.appendChild(b)});
+    if(host)host.after(f);else log.appendChild(f);
+    log.scrollTop=log.scrollHeight;
+    speak(s.en,true);
+    say('نوبت توست: دکمه را بزن و جواب بده');
+    saveChat();
+  }catch(e){say(errMsg(e))}
+  busy=false;mic.disabled=false;
+}
 function practiceDays(){return Object.keys(jget('daysDone',{})).length}
 function engPct(){return $('#focus').value==='mech'?100:0}
 function showGoal(){
@@ -510,7 +682,7 @@ function showGoal(){
 function addSecs(x){
   const d=jget('day',{}),s=(d.d===ago(0)?d.s:0)+x;jset('day',{d:ago(0),s,u:Date.now()});{const dl=jget('dayLog',{});dl[ago(0)]=s;jset('dayLog',dl)}
   if(s>=180){const dd=jget('daysDone',{});if(!dd[ago(0)]){dd[ago(0)]=true;jset('daysDone',dd)}}
-  if(s>=GOAL){const k=jget('streak',{n:0,last:''});if(k.last!==ago(0))jset('streak',{n:k.last===ago(1)?k.n+1:1,last:ago(0),u:Date.now()})}
+  if(s>=GOAL){const k=jget('streak',{n:0,last:''});if(k.last!==ago(0)){const nn=k.last===ago(1)?k.n+1:1;jset('streak',{n:nn,last:ago(0),u:Date.now(),best:Math.max(k.best||0,nn)})}}
   showGoal();
 }
 function weekBars(){
@@ -553,6 +725,7 @@ function showReport(){
   const box=$('#pbody');box.textContent='';
   const t=rangeStat(6,0),p=rangeStat(13,7),vb=Object.values(jget('vbook',{})),as=lastAssess();
   const line=x=>{const d=document.createElement('div');d.className='rline';d.textContent=x;box.appendChild(d)};
+  trend(box,line);
   if(!t.n&&!t.ln&&!as.length){line('برای ۷ روز اخیر هنوز داده‌ای نیست. بعد از چند گفتگو گزارش پر می‌شود.');$('#rep').hidden=false;return}
   line('روزهای تمرین: '+t.days+' از ۷ (هفتهٔ قبل: '+p.days+')');
   line('دقیقهٔ حرف زدن: '+mins(6,0)+' (هفتهٔ قبل: '+mins(13,7)+')');
@@ -572,6 +745,19 @@ function showReport(){
   $('#rep').hidden=false;
 }
 
+function trend(box,line){
+  const dl=jget('dayLog',{}),keys=Object.keys(dl);
+  if(!keys.length)return;
+  let tot=0;keys.forEach(k=>tot+=dl[k]||0);
+  const k=jget('streak',{n:0,last:'',best:0}),alive=k.last===ago(0)||k.last===ago(1);
+  line('در کل: '+practiceDays()+' روز تمرین، '+Math.round(tot/60)+' دقیقه حرف زدن'+(alive&&k.n?' — 🔥 '+k.n+' روز پشت‌سرهم':'')+(k.best>1?' (رکورد: '+k.best+')':''));
+  const wk=[];for(let w=7;w>=0;w--)wk.push(mins(w*7+6,w*7));
+  const mx=Math.max(1,...wk),c=document.createElement('div');c.className='rline';
+  const ttl=document.createElement('div');ttl.className='wkt';ttl.textContent='روند ۸ هفتهٔ اخیر (دقیقهٔ حرف زدن در هفته؛ آخرین ستون = این هفته)';c.appendChild(ttl);
+  const row=document.createElement('div');row.className='wkr';
+  wk.forEach(v=>{const col=document.createElement('div');col.className='wkb';const bar=document.createElement('i');bar.style.height=Math.max(4,Math.round(v/mx*70))+'px';const lb=document.createElement('span');lb.textContent=v;col.append(bar,lb);row.appendChild(col)});
+  c.appendChild(row);box.appendChild(c);
+}
 function addVocab(list){
   const vb=jget('vbook',{});let ch=false;
   (list||[]).forEach(v=>{
@@ -610,7 +796,7 @@ function grade(w,ok){
 function rebuild(c){
   log.textContent='';
   if(c.summary)el('ok','خلاصه: '+c.summary);
-  (c.hist||[]).forEach(m=>{const b=el(m.r==='c'?'b c':'b me',m.t);if(m.r==='c')ear(b,m.t)});
+  (c.hist||[]).forEach(m=>{const b=el(m.r==='c'?'b c':'b me',m.t);if(m.r==='c'){ear(b,m.t);extras(b,m.t)}});
   el('ok','این گفتگو قدیمی بود و فشرده شده؛ فقط خلاصه و آخرین پیام‌ها مانده است.');
 }
 function compactLocal(){
@@ -618,7 +804,7 @@ function compactLocal(){
   a.forEach(c=>{if(!c.compact&&(c.updated||0)<lim&&c.html){c.html='';c.hist=(c.hist||[]).slice(-8);c.compact=true;ch=true}});
   if(ch)putChats(a);
 }
-function keepWeak(fx){const w=jget('weak',[]);fx.forEach(x=>w.push((x.said||'')+' -> '+(x.better||'')));jset('weak',w.slice(-12))}
+function keepWeak(fx){const w=jget('weak',[]);fx.forEach(x=>w.push((x.said||'')+' -> '+(x.better||'')));jset('weak',w.slice(-12));if(fx.length)jset('weakU',Date.now())}
 function offerLevel(to,why){
   const d=el('ok',why+'؛ سطح را به '+to+' ببرم؟'),b=document.createElement('button');
   b.className='ghost';b.textContent='بله، '+to;b.dataset.lvl=to;
@@ -631,16 +817,18 @@ function trackStats(words,nf){
     const L=['A2','B1','B2'],i=L.indexOf(lv.value);
     if(f<=0.7&&w>=12&&i>=0&&i<2)offerLevel(L[i+1],'در ۱۰ نوبت اخیر تقریباً بدون غلط و با جمله‌های بلند حرف زدی');
     else if(f>=2.4&&i>0)offerLevel(L[i-1],'در ۱۰ نوبت اخیر غلط‌ها زیاد بوده');
+    else if(f<=0.7&&w>=12&&i===2&&diff!=='hard'&&PROF!=='kid')offerDiff('hard','خیلی روان و تقریباً بدون غلط حرف می‌زنی');
+    else if(f>=2.4&&i===0&&diff!=='easy'&&PROF!=='kid')offerDiff('easy','در ۱۰ نوبت اخیر غلط‌ها زیاد بوده');
     jset('stats',[]);return;
   }
   jset('stats',a);
 }
 function vocabCard(list){
-  const f=el('fix snd');
+  const f=el('fix snd voc');
   list.forEach(v=>{const b=document.createElement('b');b.textContent='📘 '+v.en+'  —  '+(v.fa||'');ear(b,String(v.en));f.appendChild(b)});
 }
 function chalCard(c){
-  const f=el('fix snd'),h=document.createElement('b');h.textContent='🎯 '+(c.title||'');f.appendChild(h);
+  const f=el('fix snd cue'),h=document.createElement('b');h.textContent='🎯 '+(c.title||'');f.appendChild(h);
   (c.words||[]).forEach(w=>{const b=document.createElement('b');b.textContent=w.en+'  —  '+(w.fa||'');ear(b,String(w.en));f.appendChild(b)});
 }
 const starter=()=>{const m=location.hash.match(/q=([^&]*)/);try{return m?decodeURIComponent(m[1]):''}catch(e){return ''}};
@@ -670,13 +858,13 @@ const errMsg=e=>{
   if(m==='not_for_kid')return 'این بخش برای این پروفایل نیست.';
   if(m==='badjson')return 'پاسخ مدل خراب بود؛ دوباره بگو.';
   if(m==='forbidden')return 'کد دسترسی آدرس درست نیست.';
-  if(m==='needpass'||m==='badpass')return 'رمز لازم است یا اشتباه است؛ با دکمهٔ ⚙ دوباره وارد کن.';
+  if(m==='needpass'||m==='badpass')return 'رمز لازم است یا اشتباه است؛ از آیکون حساب (بالا) خارج شو و دوباره وارد شو.';
   if(m==='needs_gemini')return 'تحلیل صدا فقط با کلید Gemini کار می‌کند؛ GEMINI_KEY را در Script properties بگذار.';
   if(e instanceof TypeError){diag(lastSize);return 'ارسال نشد. نتیجهٔ بررسی اتصال را زیر همین پیام ببین.'}
   return 'خطا: '+(m||e);
 };
 async function call(p,quiet){
-  p.notes=notes.slice(-12);p.days=practiceDays();p.eng=engPct();p.topic=$('#focus').value==='ielts'?'ielts':'';
+  p.notes=notes.slice(-12);p.days=practiceDays();p.eng=engPct();p.topic=$('#focus').value==='ielts'?'ielts':'';p.diff=PROF==='kid'?'normal':diff;
   if(!p.sync&&!p.tts&&!p.hint&&!p.challenge){
     p.past=chats().filter(c=>c.summary&&(!cur||c.id!==cur.id)).slice(0,5).map(c=>({d:new Date(c.updated).toLocaleDateString('en-CA'),s:c.summary}));
     p.weak=jget('weak',[]).slice(-6);p.areas=areas();
@@ -711,12 +899,12 @@ function recentStat(){const all=jget('dstat',{}),o={};for(let i=3;i>=0;i--){cons
 function changedVocab(since){const vb=jget('vbook',{}),o={};Object.keys(vb).forEach(k=>{if((vb[k].u||0)>since)o[k]=vb[k]});return o}
 function scheduleSync(){clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,3000)}
 async function syncNow(){
-  if(syncing||!api)return;
+  if(syncing||!api||!LOGGED)return;
   syncing=true;const t0=Date.now(),st=$('#syncst');
   try{
     const lastPush=jget('lastPush',0),tomb=jget('tomb',[]);
     const out=chats().filter(c=>(c.updated||0)>lastPush).concat(tomb);
-    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),dayLog:jget('dayLog',{}),tcount:jget('tcount',{}),dstat:recentStat(),vbook:changedVocab(lastPush),streak:jget('streak',null),day:jget('day',null)}},true);
+    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),dayLog:jget('dayLog',{}),tcount:jget('tcount',{}),dstat:recentStat(),vbook:changedVocab(lastPush),streak:jget('streak',null),day:jget('day',null),prefs:{diff,lvl:lv.value,u:jget('prefsU',0)},weak:{list:jget('weak',[]),u:jget('weakU',0)}}},true);
     const a=chats();
     (j.chats||[]).forEach(r=>{
       const i=a.findIndex(x=>x.id===r.id);
@@ -733,20 +921,28 @@ async function syncNow(){
     if(j.dayLog){const dl=jget('dayLog',{});Object.keys(j.dayLog).forEach(k=>{dl[k]=Math.max(dl[k]||0,j.dayLog[k])});jset('dayLog',dl)}
     const ld=jget('day',null);if(j.day&&(!ld||(j.day.u||0)>(ld.u||0)))jset('day',j.day);
     const ls=jget('streak',null);if(j.streak&&(!ls||(j.streak.u||0)>(ls.u||0)))jset('streak',j.streak);
-    showGoal();updStart();compactLocal();updRev();
+    if(j.prefs&&(j.prefs.u||0)>jget('prefsU',0)){
+      if(['easy','normal','hard'].includes(j.prefs.diff)){diff=j.prefs.diff;jset('diff',diff);applyDiffUI()}
+      if(['A2','B1','B2'].includes(j.prefs.lvl)){lv.value=j.prefs.lvl;try{localStorage.setItem(K('lvl'),j.prefs.lvl)}catch(e){}}
+      jset('prefsU',j.prefs.u);
+    }
+    if(j.weak&&Array.isArray(j.weak.list)&&(j.weak.u||0)>jget('weakU',0)){jset('weak',j.weak.list);jset('weakU',j.weak.u)}
+    showGoal();updStart();compactLocal();updRev();try{renderSug()}catch(x){}
     st.textContent='همگام‌سازی فعال ✓';
   }catch(e){
-    st.textContent=e.message==='no_pass_set'?'همگام‌سازی خاموش است: در Script properties مقدار SYNC_PASS را بگذار.':(e.message==='needpass'||e.message==='badpass')?'برای همگام‌سازی رمز لازم است: دکمهٔ ⚙ را بزن.':'همگام‌سازی نشد؛ بعداً دوباره تلاش می‌شود.';
+    if(e.message==='needpass'||e.message==='badpass'){st.textContent='برای همگام‌سازی باید دوباره وارد شوی.';showLogin('رمز لازم است یا عوض شده؛ دوباره وارد شو.')}
+    else st.textContent=e.message==='no_pass_set'?'همگام‌سازی خاموش است: در Script properties مقدار SYNC_PASS را بگذار.':'همگام‌سازی نشد؛ بعداً دوباره تلاش می‌شود.';
   }
   syncing=false;
 }
 
 async function hint(){
   if(busy||!hist.length)return;
+  noteHelp();
   busy=true;mic.disabled=true;say('دارم چند جملهٔ کمکی پیدا می‌کنم…');
   try{
     const j=await call({level:lv.value,hint:true,hist:hist.slice(-12)});
-    const f=el('fix snd');
+    const f=el('fix snd hnt');
     (j.hints||[]).slice(0,3).forEach(h=>{const en=typeof h==='string'?h:h.en,fa=typeof h==='string'?'':h.fa;const b=document.createElement('b');b.textContent='“'+en+'”';ear(b,String(en));if(fa)tr(b,fa);f.appendChild(b)});
     el('fa','یکی را بلند بگو، یا با حرف خودت جواب بده.',f);
     say('نوبت توست: دکمه را بزن');
@@ -776,7 +972,7 @@ async function turn(u,a,ch,tp){
     if(j.note){notes.push(String(j.note).slice(0,160));notes=notes.slice(-20);jset('notes',notes)}
     hist.push({r:'c',t:j.reply});
     log.querySelectorAll('.b.c.cur').forEach(x=>x.classList.remove('cur'));
-      const b=el('b c cur',j.reply);ear(b,j.reply);if(j.reply_fa){tr(b,j.reply_fa);if(PROF==='kid'){const f=b.querySelector(':scope > .fa[data-t]');if(f)f.hidden=false}}
+      const b=el('b c cur',j.reply);ear(b,j.reply);if(j.reply_fa){tr(b,j.reply_fa);if(PROF==='kid'){const f=b.querySelector(':scope > .fa[data-t]');if(f)f.hidden=false}}extras(b,j.reply);
     if(Array.isArray(j.vocab)&&j.vocab.length){vocabCard(j.vocab);addVocab(j.vocab)}
     reply=j.reply;if(j.summary&&cur)cur.summary=String(j.summary).slice(0,240);saveChat();scheduleSync();
   }catch(e){
@@ -825,7 +1021,7 @@ function setApi(){
   if(v&&v.trim()){api=v.trim();try{localStorage.setItem('api',api)}catch(e){}}
   return api;
 }
-$('#cfg').onclick=()=>{API_URL?setPass():setApi()};$('#cfg').hidden=false;
+$('#cfg').textContent=PROF==='kid'?'🧒':'🧑‍🎓';$('#cfg').setAttribute('aria-label','حساب');$('#cfg').onclick=()=>{API_URL?openAcc():setApi()};$('#cfg').hidden=false;
 $('#hint').onclick=hint;
 $('#go').onclick=()=>{
   const q=starter();let tp;
@@ -837,7 +1033,10 @@ $('#tp').onclick=openNew;
 
 log.addEventListener('click',e=>{
   const b=e.target.closest('button'),f=e.target.closest('.fa[data-t]');
-  if(b&&b.dataset.lvl){lv.value=b.dataset.lvl;try{localStorage.setItem(K('lvl'),b.dataset.lvl)}catch(x){}b.remove();return}
+  if(b&&b.dataset.lvl){lv.value=b.dataset.lvl;try{localStorage.setItem(K('lvl'),b.dataset.lvl)}catch(x){}touchPrefs();b.remove();return}
+  if(b&&b.dataset.dff){setDiff(b.dataset.dff,DMSG[b.dataset.dff]);b.remove();return}
+  if(b&&b.dataset.slow!==undefined){noteHelp();speak(b.dataset.slow,true);return}
+  if(b&&b.dataset.simple!==undefined){noteHelp();simplify(b);return}
   if(b&&b.dataset.ie==='prep'){iePrep();return}
   if(b&&b.dataset.ie==='speak'){ieSpeak();return}
   if(b&&b.dataset.say!==undefined){speak(b.dataset.say);return}
@@ -919,9 +1118,40 @@ const KIDG=[
  G('شهر و سفر','kid',['Places in town','Transport','Travel','At the park','Shopping','At the doctor'])
 ];
 const TOP=PROF==='kid'?KIDG:GEN;
-const P1G=G('IELTS Part 1','p1',['Hometown','Accommodation','Work','Studies','Family','Friends','Daily routine','Free time','Hobbies','Reading','Films','Music','Weather','Food','Shopping','Transport','Mobile phones','The internet','Computers','Clothes','Birthdays','Gifts','Holidays','Mornings','Evenings','Sleep','Neighbours','Walking','Cycling','Cooking','Sports','Pets','Photos','Museums','Parks','Teachers','Colours','Handwriting','Public places','Being on time']);
-const P3G=G('IELTS Part 3','p3',['Education and schools','Technology and society','The environment and responsibility','Work and careers','Health and lifestyle','Media and advertising','Tourism and culture','Cities of the future','Family and society','Competition and cooperation','Learning languages','Money and happiness','Traditions and change','Public transport and traffic','Sports and health','Reading and the internet']);
-const P2T=['a person you admire','a place you like to visit','an object that is important to you','a memorable event','a skill you want to learn','a journey you remember','a book or film you enjoyed','a teacher who helped you','a gift you received','a time you helped someone','a hobby you enjoy','a piece of technology you use','a happy childhood memory','a place in nature','a celebration you enjoyed','a useful website or app'];
+const dedupe=gs=>{const seen=new Set();gs.forEach(g=>{g.t=g.t.filter(x=>!seen.has(x)&&seen.add(x))});return gs};
+const cap=x=>x.charAt(0).toUpperCase()+x.slice(1);
+const P1GS=dedupe([
+ G('خانه و خانواده','p1',['Hometown','Accommodation','Home decoration','Furniture','Neighbours','Family','Relatives','Grandparents','Brothers and sisters','Children','Pets','Household chores','Living alone','Flatmates','Gardens','Moving house','Apartments','Village life','Big cities','Keys','Doors and windows']),
+ G('کار و تحصیل','p1',['Work','Jobs','Studies','University','School subjects','Teachers','Homework','Exams','Learning languages','Libraries','Study habits','Dream job','Colleagues','Working from home','Business','Career plans','Volunteering','Internships','Teamwork','Public speaking','Handwriting','Typing']),
+ G('زندگی روزمره','p1',['Daily routine','Mornings','Evenings','Sleep','Time management','Being on time','Planning','Weekends','Holidays','Birthdays','Gifts','Celebrations','Festivals','Public holidays','Habits','Memories','Childhood','Friends','Making friends','Happiness','Patience','Alarm clocks','Calendars','Watches and clocks']),
+ G('سرگرمی و فراغت','p1',['Free time','Hobbies','Reading','Films','Music','Singing','Dancing','Painting','Drawing','Photography','Handicrafts','Collecting things','Games','Board games','Video games','Gardening','Fishing','Camping','Cycling','Walking','Running','Swimming','Sports','Gym','Yoga','Chess','Theatre','Concerts','Magazines','Podcasts','Television','Cooking','Parties','Picnics']),
+ G('غذا و سلامت','p1',['Food','Restaurants','Fast food','Street food','Coffee and tea','Healthy eating','Breakfast','Desserts','Fruit and vegetables','Drinking water','Supermarkets','Health','Doctors','Hospitals','Stress','Relaxation','Medicine','Dentists','Hair salons','Bakeries','Sweet things','Spicy food']),
+ G('سفر و مکان‌ها','p1',['Transport','Public transport','Buses','Trains','Taxis','Traffic','Driving','Cars','Bicycles','Airports','Flying','Hotels','Tourism','Travel','Maps and directions','Museums','Parks','Beaches','Mountains','Rivers','Islands','Shopping malls','Markets','Cities','Famous places','Weather','Seasons','Sunshine','Rain','Snow','Wind','Bridges','Roads']),
+ G('فناوری و رسانه','p1',['Mobile phones','Computers','The internet','Social media','Messaging apps','Online shopping','Email','Video calls','News','Newspapers','Radio','Advertising','Photos','Apps','Artificial intelligence','Robots','Online learning','Passwords','Headphones','Cameras','Printers','Selfies']),
+ G('مردم و جامعه','p1',['Teenagers','Old people','Names','Leaders','Famous people','Role models','Manners','Shyness','Crowds','Noise','Colours','Clothes','Fashion','Shoes','Jewellery','Bags','Perfume','Hairstyles','Money','Saving money','Shopping','Bargains','Banks','Charity','Weddings','Neighbourhoods','Strangers','Police','Rules and laws']),
+ G('طبیعت و محیط‌زیست','p1',['Nature','Trees and flowers','Birds','Animals','Zoos','Wildlife','Recycling','Pollution','Plastic','Water','Energy','The sea','Forests','Deserts','Stars and the moon','Sunsets','Rainy days','Farms','Rubbish']),
+ G('فرهنگ و هنر','p1',['Traditions','Customs','Languages','Art','Architecture','History','Poetry','Books','Crafts','Traditional clothes','National food','Folk music','Painting exhibitions','Cinema','Comedy','Stories','Heroes and legends','Old buildings'])
+]);
+const P3GS=dedupe([
+ G('آموزش','p3',['Education and schools','Teaching methods','University or work','Online education','Exams and stress','Lifelong learning','Learning languages','Studying abroad','Parents and education','Children and creativity','Teachers and technology','Homework']),
+ G('فناوری و علم','p3',['Technology and society','Artificial intelligence','Social media and privacy','Smartphones and children','Robots and jobs','Cybersecurity','Online communication','Space exploration','Scientific research','Inventions','The digital divide','Video games and young people']),
+ G('محیط‌زیست','p3',['The environment and responsibility','Climate change','Pollution','Recycling and waste','Renewable energy','Protecting wildlife','Water shortage','Green spaces in cities','Sustainable living','Natural disasters','Farming and food production','Plastic','Deforestation']),
+ G('کار و اقتصاد','p3',['Work and careers','Job satisfaction','Working from home','Unemployment','Women in the workforce','Entrepreneurs and business','Advertising and consumers','Global companies','Money and happiness','Wealth and poverty','Salaries','Retirement','Consumerism','Tourism and the economy']),
+ G('سلامت','p3',['Health and lifestyle','Sports and health','Healthy diets','Fast food and obesity','Mental health','Healthcare systems','Ageing populations','Stress at work','Medicine and technology','Sleep','Public health campaigns']),
+ G('جامعه','p3',['Family and society','The generation gap','Changing family roles','Marriage and relationships','Neighbours and community','Crime and punishment','Laws and rules','Volunteering and charity','Social inequality','Immigration and diversity','The role of government','Leadership','Public safety','Cities and housing']),
+ G('فرهنگ و رسانه','p3',['Media and advertising','News and the press','Celebrities and fame','Traditions and change','Festivals and cultures','Art and society','Museums and heritage','Music and culture','Cinema and TV','Reading and the internet','Language and identity','Globalisation','Fashion and trends','Sports and national pride','Competition and cooperation']),
+ G('سفر و شهر','p3',['Tourism and culture','Cities of the future','Public transport and traffic','Air travel','Travel and learning','Rural and urban life','Architecture and design','Transport and the environment','Cars and bicycles','Holidays and hotels']),
+ G('ارزش‌ها و شخصیت','p3',['Success and failure','Honesty','Friendship','Personality and character','Risk and safety','Memory and learning','Happiness and wellbeing','Decision making','Ambition and goals','Tradition and modern life','Role models','Politeness and manners','Patience','Creativity'])
+]);
+const P2GS=dedupe([
+ G('آدم‌ها','p2',['a person you admire','a family member you are close to','a teacher who helped you','a friend you have known for a long time','a neighbour you get on with','a famous person you would like to meet','a person who helps others','an old person you respect','a person with a good sense of humour','a leader you respect','a person who is good at their job','a child you know well'].map(cap)),
+ G('مکان‌ها','p2',['a place you like to visit','your hometown','a place in nature','a historical place','a restaurant you enjoyed','a park or garden','a museum or gallery','a beautiful building','a place where you go to relax','a city you would like to live in','a quiet place','a place you visited on holiday','a library','a market or shopping centre','a noisy place'].map(cap)),
+ G('اشیا','p2',['an object that is important to you','a gift you received','a piece of technology you use','a piece of clothing you like','a book you enjoyed','a piece of furniture','a toy from your childhood','a photograph you like','a musical instrument','a useful website or app','a gadget you want to buy','something you bought and were happy with','a watch or clock','a vehicle you like'].map(cap)),
+ G('رویدادها','p2',['a memorable event','a celebration you enjoyed','a journey you remember','a wedding you attended','a time you helped someone','a time you were very busy','a time you got lost','a time you waited for something','a time you made a mistake','a time you received good news','a time you were late','a sports event you watched','a family gathering','a concert or show','a time you laughed a lot','a time you saw something beautiful','a difficult decision you made','a time you felt proud','a surprise you had'].map(cap)),
+ G('فعالیت و مهارت','p2',['a skill you want to learn','a hobby you enjoy','a sport you enjoy','a way you relax','a healthy habit','a language you want to learn','something you learned from a book','a job you would like to do','a subject you enjoyed at school','a plan you made for the future','a goal you want to achieve','a game you played as a child','an outdoor activity','a time you worked in a team','an activity you do with friends','a time you cooked something'].map(cap)),
+ G('رسانه و ایده','p2',['a book or film you enjoyed','a TV programme you like','a song you like','a news story you remember','an advertisement you remember','an interesting website','a famous person in your country','a law that is useful','a rule you follow','an invention you find useful','an old tradition','a festival in your country','a piece of advice you received','a time you used a map'].map(cap)),
+ G('غذا و زندگی روزمره','p2',['a meal you enjoyed','a food you cook well','a healthy meal','a traditional dish','a cafe you like','a day you remember well','your daily routine','a happy childhood memory','a time you felt very tired'].map(cap))
+]);
 const topicStarter=(k,x)=>k==='kid'?'play a short English game about: '+x+'. Teach two or three simple words, say each one slowly and ask the child to repeat the first word.':k==='mech'?'a mechanical engineering topic: '+x+'. Explain any technical word simply and ask one easy question.':'the topic: '+x.toLowerCase()+'. Ask one easy, concrete opening question.';
 const tc=()=>jget('tcount',{});
 function bumpTopic(k){const m=tc();m[k]=(m[k]||0)+1;jset('tcount',m);scheduleSync()}
@@ -931,7 +1161,7 @@ function randomFrom(groups,pre){
   const min=Math.min(...pool.map(x=>x.c)),p=pool.filter(x=>x.c===min);
   return p[Math.floor(Math.random()*p.length)];
 }
-function randomTopic(){return PROF==='kid'?randomFrom(KIDG,''):randomFrom(GEN.filter(g=>g.k==='gen').concat([P1G]),'')}
+function randomTopic(){return PROF==='kid'?randomFrom(KIDG,''):randomFrom(GEN.filter(g=>g.k==='gen').concat(P1GS),'')}
 let NEW=null,micWarmed=false;
 function openTopics(title,groups,pre,cb){
   NEW={groups,pre,cb};
@@ -990,10 +1220,10 @@ $('#iesh').addEventListener('click',e=>{
   if(e.target===$('#iesh')){$('#iesh').hidden=true;return}
   const b=e.target.closest('.iebtn');if(!b)return;
   const k=b.dataset.ie;$('#iesh').hidden=true;
-  if(k==='p1')openTopics('Part 1 — موضوع',[P1G],'P1:',tp=>startIelts('p1',tp));
-  else if(k==='p3')openTopics('Part 3 — موضوع',[P3G],'P3:',tp=>startIelts('p3',tp));
-  else if(k==='p2')startIelts('p2',null);
-  else if(k==='full')startIelts('full',randomFrom([P1G],'P1:'));
+  if(k==='p1')openTopics('Part 1 — موضوع',P1GS,'P1:',tp=>startIelts('p1',tp));
+  else if(k==='p3')openTopics('Part 3 — موضوع',P3GS,'P3:',tp=>startIelts('p3',tp));
+  else if(k==='p2')openTopics('Part 2 — موضوع کارت',P2GS,'P2:',tp=>startIelts('p2',tp));
+  else if(k==='full')startIelts('full',randomFrom(P1GS,'P1:'));
   else if(k&&k[0]==='l')startListening(+k[1]);
 });
 
@@ -1009,16 +1239,17 @@ async function startIelts(mode,tp){
   ie={mode,part,n:0,topic:tp?tp.l:'',card:null,answers:[],fixes:[],sounds:[],done:false};
   cur=makeChat();hist=[];log.textContent='';
   cur.title='🎓 '+({p1:'Part 1',p2:'Part 2',p3:'Part 3',full:'Mock test'}[mode])+(tp?' · '+tp.l:'');cur.named=true;
-  if(tp)bumpTopic('P'+(mode==='p3'?3:1)+':'+tp.l);
+  if(tp)bumpTopic((mode==='p2'?'P2:':mode==='p3'?'P3:':'P1:')+tp.l);
   setTitle();showGoal();
-  if(mode==='p2')return ieCard();
+  if(mode==='p2')return ieCard(tp&&tp.l);
   turn(null);
 }
-async function ieCard(){
+async function ieCard(theme){
   if(!ie)return;
+  if(!theme){const t=randomFrom(P2GS,'P2:');theme=t.l;bumpTopic('P2:'+theme)}
   busy=true;mic.disabled=true;say('دارم کارت موضوع را آماده می‌کنم…');
   try{
-    const j=await call({level:lv.value,card:true,theme:P2T[Math.floor(Math.random()*P2T.length)]});
+    const j=await call({level:lv.value,card:true,theme:theme});
     ie.card=j.card;ie.topic=j.card.theme||j.card.topic;ie.part=2;ie.n=0;ie.done=false;
     hist.push({r:'c',t:'[Part 2 cue card] '+j.card.topic+' — '+j.card.points.join('; ')});
     showCard(j.card);saveChat();
@@ -1027,7 +1258,7 @@ async function ieCard(){
   busy=false;mic.disabled=false;
 }
 function showCard(c){
-  const f=el('fix snd'),h=document.createElement('b');h.textContent='🎓 Part 2';f.appendChild(h);
+  const f=el('fix snd cue'),h=document.createElement('b');h.textContent='🎓 Part 2';f.appendChild(h);
   const t=document.createElement('b');t.textContent=c.topic;ear(t,c.topic);f.appendChild(t);
   c.points.forEach(x=>{const d=document.createElement('div');d.textContent='• '+x;d.style.direction='ltr';f.appendChild(d)});
   el('fa','یک دقیقه فرصت داری فکر کنی (روی کاغذ یادداشت کن)، بعد ۱ تا ۲ دقیقه حرف بزن.',f);
@@ -1070,7 +1301,7 @@ async function ieFinish(){
   busy=false;mic.disabled=false;
 }
 function showAssess(a){
-  const f=el('fix snd'),h=document.createElement('b');h.textContent='🎓 Estimated band: '+a.overall;h.style.direction='ltr';f.appendChild(h);
+  const f=el('fix snd cue'),h=document.createElement('b');h.textContent='🎓 Estimated band: '+a.overall;h.style.direction='ltr';f.appendChild(h);
   [['Fluency & Coherence','fc'],['Lexical Resource','lr'],['Grammar','gra'],['Pronunciation','pr']].forEach(([n,k])=>{
     const d=document.createElement('div');d.textContent=n+': '+a[k].band;d.style.fontWeight='700';d.style.direction='ltr';f.appendChild(d);
     if(a[k].fa)el('fa',a[k].fa,f);
@@ -1101,7 +1332,7 @@ async function startListening(sec){
   stopVoice();if(rc)giveUp();
   $('#ltitle').textContent='Listening — Section '+sec;$('#lis').hidden=false;lisMsg('در حال ساختن تمرین… (چند ثانیه)');
   try{
-    const j=await call({level:lv.value,listen:{section:sec}});
+    const lt=randomFrom(P1GS.concat(P3GS),'LT:'),j=await call({level:lv.value,listen:{section:sec,topic:lt.l}});bumpTopic('LT:'+lt.l);
     L={ex:j.exercise,sec,played:false,playing:false,rate:lv.value==='A2'?0.8:lv.value==='B1'?0.92:1,ans:{},done:false};
     renderLis();
   }catch(e){lisMsg(errMsg(e))}
@@ -1188,6 +1419,71 @@ if(PROF==='kid'){
   const p=document.querySelector('#start p');if(p)p.textContent='سلام آرشا! با هم انگلیسی بازی می‌کنیم. من یک کلمه می‌گویم و تو تکرارش می‌کنی. اگر بلد نبودی، فارسی بگو؛ اشکالی ندارد!';
   $('#note').textContent='هدف امروز: ۵ دقیقه بازی با انگلیسی. اگر کمک خواستی، دکمهٔ 💡 را بزن.';
 }
+
+const WEAKTOP={tense:['Childhood','Memories','Future plans','Birthdays','Holidays','Weekends'],article:['My home','Furniture','Food & cooking','Neighbourhood'],preposition:['Travel','City life','Public transport','Airports','Hometown'],agreement:['Friends','Family','Neighbours','Pets'],plural:['Markets','Shopping malls','Clothes','Gifts'],wordorder:['Daily routine','Hobbies','Mornings'],wordchoice:['My job','Restaurants','Smartphones','Technology at school']};
+let SUGL=[];
+function renderSug(){
+  const box=$('#sug');if(!box)return;
+  const m=tc(),kid=PROF==='kid',groups=kid?KIDG:GEN.filter(g=>g.k==='gen'),pool=[];
+  groups.forEach(g=>g.t.forEach(x=>pool.push({l:x,s:topicStarter(g.k,x),k:g.k,c:m[x]||0})));
+  const r=rangeStat(13,0),wk=kid?[]:topK(r.c,2),prefer=new Set();
+  wk.forEach(k=>(WEAKTOP[k]||[]).forEach(x=>prefer.add(x)));
+  pool.forEach(p=>{p.sc=p.c*10-(prefer.has(p.l)?15:0)+Math.random()*6});
+  pool.sort((a,b)=>a.sc-b.sc);SUGL=pool.slice(0,6);
+  box.textContent='';
+  const t=document.createElement('div');t.className='sgt';t.textContent=kid?'امروز این‌ها را بازی کنیم؟':'پیشنهاد برای تو';box.appendChild(t);
+  if(wk.length){const w=document.createElement('div');w.className='sgw';w.textContent='چون «'+(CATS[wk[0]]||wk[0])+'» اخیراً برایت پرتکرار بوده، موضوع‌هایی که همین را تمرین می‌دهند جلوتر آمده‌اند.';box.appendChild(w)}
+  const row=document.createElement('div');row.className='sgr';
+  SUGL.forEach((p,i)=>{const c=document.createElement('button');c.className='chip';c.textContent=p.l;c.dataset.i=i;row.appendChild(c)});
+  box.appendChild(row);box.hidden=false;
+}
+$('#sug').onclick=e=>{const c=e.target.closest('button[data-i]');if(c&&SUGL[+c.dataset.i])startNew(SUGL[+c.dataset.i])};
+
+let LGW='';
+function showLogin(msg){$('#login').hidden=false;if(msg)$('#lgerr').textContent=msg}
+document.querySelectorAll('#login [data-who]').forEach(b=>b.onclick=()=>{
+  LGW=b.dataset.who;
+  document.querySelectorAll('#login [data-who]').forEach(x=>x.classList.toggle('sel',x===b));
+  $('#lgpw').hidden=false;$('#lgerr').textContent='';setTimeout(()=>$('#lgpass').focus(),60);
+});
+async function doLogin(){
+  const err=$('#lgerr'),ok=$('#lgok');
+  if(!LGW){err.textContent='اول انتخاب کن کی هستی.';return}
+  if(!api&&!setApi())return;
+  const pw=$('#lgpass').value.trim();
+  let old='';try{old=localStorage.getItem('pass')||''}catch(e){}
+  try{localStorage.setItem('pass',pw);localStorage.setItem('logged','1')}catch(e){}
+  ok.disabled=true;err.textContent='در حال ورود…';
+  try{
+    const j=await call({who:true,want:LGW},true);
+    const np=j.profile==='kid'?'kid':'';
+    try{localStorage.setItem('prof',np);localStorage.setItem((np?np+':':'')+'uname',j.name||'')}catch(e){}
+    location.reload();await new Promise(()=>{});
+  }catch(e){
+    try{localStorage.setItem('pass',old);if(!LOGGED)localStorage.removeItem('logged')}catch(x){}
+    const m=e&&e.message;
+    err.textContent=(m==='badpass'||m==='needpass')?'رمز درست نیست.':m==='kid_not_set'?'برای آرشا هنوز رمز (KID_PASS) در Script properties تنظیم نشده.':m==='forbidden'?'کد دسترسی آدرس درست نیست.':(e instanceof TypeError)?'به سرور وصل نشد؛ اینترنت یا VPN را بررسی کن.':'خطا: '+m;
+  }
+  ok.disabled=false;
+}
+$('#lgok').onclick=doLogin;
+$('#lgpass').onkeydown=e=>{if(e.key==='Enter')doLogin()};
+function openAcc(){
+  let n='';try{n=localStorage.getItem(K('uname'))||''}catch(e){}
+  $('#accwho').textContent=(PROF==='kid'?'🧒 ':'🧑‍🎓 ')+(n||(PROF==='kid'?'آرشا':'من'));
+  $('#accinfo').textContent=practiceDays()+' روز تمرین · '+chats().length+' گفتگوی ذخیره‌شده · '+Object.keys(jget('vbook',{})).length+' واژه در دفترچه';
+  $('#accsync').textContent=$('#syncst').textContent||'';
+  $('#acc').hidden=false;
+}
+$('#accx').onclick=()=>{$('#acc').hidden=true};
+$('#acc').onclick=e=>{if(e.target===$('#acc'))$('#acc').hidden=true};
+$('#accsy').onclick=async()=>{$('#accsync').textContent='در حال همگام‌سازی…';await syncNow();$('#accsync').textContent=$('#syncst').textContent||'';$('#accinfo').textContent=practiceDays()+' روز تمرین · '+chats().length+' گفتگوی ذخیره‌شده · '+Object.keys(jget('vbook',{})).length+' واژه در دفترچه'};
+$('#acclo').onclick=()=>{try{['logged','pass','prof'].forEach(k=>localStorage.removeItem(k))}catch(e){}location.reload()};
+$('#dseg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setDiff(b.dataset.d,DMSG[b.dataset.d])});
+applyDiffUI();
+if(PROF==='kid')$('#dseg').hidden=true;
+$('#login').hidden=LOGGED;
+if(LOGGED)renderSug();
 </script>
 </body>
 </html>
