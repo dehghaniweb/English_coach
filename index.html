@@ -251,6 +251,32 @@ details.ng .cnt{background:var(--gc);color:#fff}
 #mic{width:64px;height:64px}
 #mic svg{width:30px;height:30px}
 #dock{gap:6px}
+
+/* compact layout v3 */
+header.top{gap:6px;padding:6px 10px 4px;justify-content:flex-start}
+.tools{gap:6px;margin-inline-start:auto}
+.tbtn,.ibtn{width:36px;height:36px;padding:0;justify-content:center;border-radius:11px;font-size:17px}
+.tbtn span{display:none}
+.tbtn svg{width:18px;height:18px}
+#reset{width:36px;height:36px;padding:0;justify-content:center;font-size:22px;line-height:1;border-radius:11px}
+#ctitle{flex:1;min-width:0;height:36px;padding:0 12px;text-align:start;font-size:13.5px}
+.badge{top:-5px;min-width:17px;height:17px;font:700 10px/17px Vazirmatn,system-ui,sans-serif}
+#dock{padding:8px 12px 8px;gap:4px}
+#dock>#prog{height:4px}
+.dmeta{align-items:center!important;justify-content:space-between}
+#goal{flex:1 1 0;min-width:0;font-size:12px;line-height:1.35}
+.dside{flex:1 1 0;min-width:0;align-items:flex-start;gap:2px}
+#mic{flex:none}
+#hf{font-size:12px;padding:3px 10px}
+#mic{width:52px;height:52px}
+#mic svg{width:25px;height:25px}
+#status{min-height:16px;font-size:12px;line-height:1.3}
+.seg button{line-height:1.5;font-size:12px}
+.drow input,.ibtn.sm{height:40px}
+.ibtn.sm{width:40px}
+/* my voice bubble: play/pause on the left of my text */
+.b.me{display:flex;align-items:center;gap:8px}
+.b.me>.ear{order:-1;flex:none;margin:0}
 /* login + account */
 .lg{position:fixed;inset:0;z-index:60;background:var(--glow),var(--bg);display:flex;align-items:center;justify-content:center;padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto}
 .lg-card{width:100%;max-width:400px;text-align:center;display:flex;flex-direction:column;gap:14px}
@@ -269,6 +295,7 @@ details.ng .cnt{background:var(--gc);color:#fff}
 <body>
 <header class="top">
   <button class="tbtn" id="hb" aria-label="History"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg><span>گفتگوهای قبلی</span></button>
+  <button class="chip" id="reset" hidden aria-label="گفتگوی تازه" title="گفتگوی تازه">＋</button><button class="ghost" id="ctitle" hidden></button>
   <div class="tools">
     <button class="tbtn" id="ieb" aria-label="IELTS"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg><span>آیلتس</span></button>
     <button class="ibtn" id="revb" aria-label="Review">📘<i class="badge" id="revn" hidden></i></button>
@@ -276,7 +303,6 @@ details.ng .cnt{background:var(--gc);color:#fff}
     <button class="ibtn" id="cfg" aria-label="Password"><svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg></button>
   </div>
 </header>
-<div class="crow"><button class="chip" id="reset" hidden>＋ گفتگوی تازه</button><button class="ghost" id="ctitle" hidden></button></div>
 <div hidden><select id="level"><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option></select><select id="focus"><option value="auto">auto</option><option value="mech">mech</option></select></div>
 
 <section id="start">
@@ -296,12 +322,11 @@ details.ng .cnt{background:var(--gc);color:#fff}
 <div id="log" hidden aria-live="polite"></div>
 
 <footer id="dock" hidden>
-  <button id="mic" aria-label="Speak">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-    </button>
-  <div id="status"></div>
   <div id="prog"><div id="bar"></div></div>
-  <div class="dmeta"><div id="goal"><div id="g2"></div><div id="g1"></div></div><div class="dside"><button class="ghost" id="hf" aria-pressed="false">دست‌آزاد: خاموش</button><span id="gd"></span></div></div>
+  <div class="dmeta"><div id="goal"><div id="g2"></div><div id="g1"></div></div><button id="mic" aria-label="Speak">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+    </button><div class="dside"><button class="ghost" id="hf" aria-pressed="false">دست‌آزاد: خاموش</button><span id="gd"></span></div></div>
+  <div id="status"></div>
   <div class="seg" id="dseg" role="group" aria-label="سختی مربی"><button data-d="easy" aria-pressed="false">🐢 آسان</button><button data-d="normal" aria-pressed="true">🙂 معمولی</button><button data-d="hard" aria-pressed="false">🚀 چالشی</button></div>
   <div class="drow">
     <button class="ibtn sm" id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
@@ -403,7 +428,8 @@ function el(c,t,p){const d=document.createElement('div');d.className=c;if(t)d.te
 const IC={
  spk:'<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>',
  tr:'<svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>',
- play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'};
+ play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+ pause:'<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>'};
 function acts(p){
   if(!p.classList||!p.classList.contains('c'))return p;
   p.classList.add('g');
@@ -422,6 +448,16 @@ function extras(p,t){
   const a=acts(p);
   const s=document.createElement('button');s.className='ear xs';s.textContent='🐢';s.dataset.slow=t;s.title='آهسته بخوان';s.setAttribute('aria-label','آهسته‌تر بخوان');a.appendChild(s);
   if(PROF!=='kid'){const m=document.createElement('button');m.className='ear xs';m.textContent='✨';m.dataset.simple=t;m.title='ساده‌ترش کن';m.setAttribute('aria-label','ساده‌ترش کن');a.appendChild(m)}
+}
+let vAud=null,vBtn=null;
+function toggleVoice(a,p){
+  if(vAud&&vBtn===p){if(vAud.paused){stopVoice();vAud.play()}else vAud.pause();return}
+  stopVoice();if(vBtn)vBtn.innerHTML=IC.play;
+  const au=new Audio(a.url);vAud=au;vBtn=p;
+  au.onplay=()=>{p.innerHTML=IC.pause};
+  au.onpause=()=>{p.innerHTML=IC.play};
+  au.onended=()=>{p.innerHTML=IC.play;au.currentTime=0};
+  au.play().catch(()=>{p.innerHTML=IC.play});
 }
 let cur=null,ie=null,ieT=0;
 const chats=()=>jget('chats',[]);
@@ -578,7 +614,7 @@ function toWav(chunks,rate){
   const blob=new Blob([h,pcm],{type:'audio/wav'});blob.secs=len/R;blob.peak=peak;return blob;
 }
 
-function stopVoice(){vt++;try{if(spk)spk.stop()}catch(e){}spk=null;if(window.speechSynthesis)speechSynthesis.cancel()}
+function stopVoice(){vt++;try{if(vAud)vAud.pause()}catch(e){}try{if(spk)spk.stop()}catch(e){}spk=null;if(window.speechSynthesis)speechSynthesis.cancel()}
 function pickVoice(){
   const v=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(x=>/^en/i.test(x.lang));
   const sc=x=>(/natural|neural|enhanced|premium/i.test(x.name)?4:0)+(/google|samantha|aria|jenny|ava|zoe|daniel/i.test(x.name)?2:0)+(/en[-_]US/i.test(x.lang)?1:0);
@@ -972,7 +1008,7 @@ async function turn(u,a,ch,tp){
     if(a){
       a.bubble.textContent=j.heard||'(نامفهوم)';hist.push({r:'u',t:j.heard||''});addSecs(a.secs);
       const p=document.createElement('button');p.className='ear';p.dataset.play='1';p.innerHTML=IC.play;p.setAttribute('aria-label','Play my voice');
-      p.onclick=()=>new Audio(a.url).play();a.bubble.appendChild(p);
+      p.onclick=()=>toggleVoice(a,p);a.bubble.appendChild(p);
     }
     if(u!==null){
       const fx=Array.isArray(j.fixes)?j.fixes:[],sn=Array.isArray(j.sounds)?j.sounds:[];
