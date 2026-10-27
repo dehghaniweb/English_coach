@@ -265,7 +265,7 @@ header.top{gap:6px;padding:6px 10px 4px;justify-content:flex-start}
 #dock>#prog{height:4px}
 .dmeta{align-items:center!important;justify-content:space-between}
 #goal{flex:1 1 0;min-width:0;font-size:12px;line-height:1.35}
-.dside{flex:1 1 0;min-width:0;align-items:flex-start;gap:2px}
+.dside{flex:1 1 0;min-width:0;align-items:flex-end;gap:2px}
 #mic{flex:none}
 #hf{font-size:12px;padding:3px 10px}
 #mic{width:52px;height:52px}
@@ -277,6 +277,7 @@ header.top{gap:6px;padding:6px 10px 4px;justify-content:flex-start}
 /* my voice bubble: play/pause on the left of my text */
 .b.me{display:flex;align-items:center;gap:8px}
 .b.me>.ear{order:-1;flex:none;margin:0}
+.fix .drl{margin-top:8px;display:block}
 /* login + account */
 .lg{position:fixed;inset:0;z-index:60;background:var(--glow),var(--bg);display:flex;align-items:center;justify-content:center;padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto}
 .lg-card{width:100%;max-width:400px;text-align:center;display:flex;flex-direction:column;gap:14px}
@@ -444,12 +445,13 @@ function tr(p,t){
   acts(p).appendChild(b);p.appendChild(f);
 }
 
+const cleanFa=t=>String(t||'').replace(/([\u0600-\u06FF])[A-Za-z0-9]{3,}/g,'$1');
 function extras(p,t){
   const a=acts(p);
   const s=document.createElement('button');s.className='ear xs';s.textContent='🐢';s.dataset.slow=t;s.title='آهسته بخوان';s.setAttribute('aria-label','آهسته‌تر بخوان');a.appendChild(s);
   if(PROF!=='kid'){const m=document.createElement('button');m.className='ear xs';m.textContent='✨';m.dataset.simple=t;m.title='ساده‌ترش کن';m.setAttribute('aria-label','ساده‌ترش کن');a.appendChild(m)}
 }
-let vAud=null,vBtn=null;
+let vAud=null,vBtn=null,DRILL=null;
 function toggleVoice(a,p){
   if(vAud&&vBtn===p){if(vAud.paused){stopVoice();vAud.play()}else vAud.pause();return}
   stopVoice();if(vBtn)vBtn.innerHTML=IC.play;
@@ -457,7 +459,7 @@ function toggleVoice(a,p){
   au.onplay=()=>{p.innerHTML=IC.pause};
   au.onpause=()=>{p.innerHTML=IC.play};
   au.onended=()=>{p.innerHTML=IC.play;au.currentTime=0};
-  au.play().catch(()=>{p.innerHTML=IC.play});
+  mediaMeta();au.play().catch(()=>{p.innerHTML=IC.play});
 }
 let cur=null,ie=null,ieT=0;
 const chats=()=>jget('chats',[]);
@@ -511,13 +513,19 @@ function fixCard(x){
   const f=el('fix'),a=document.createElement('s'),b=document.createElement('b');
   a.textContent=String(x.said);f.appendChild(a);
   b.textContent='✓ '+x.better;ear(b,String(x.better));f.appendChild(b);
-  el('fa',x.fa,f);
+  el('fa',cleanFa(x.fa),f);
+  drillBtn(f,x.better,x.said);
+}
+function drillBtn(f,target,said){
+  const d=document.createElement('button');d.className='ghost sm drl';d.textContent='🔁 تمرین تکرار';
+  d.dataset.drill=String(target);d.dataset.said=String(said||'');f.appendChild(d);
 }
 
 function soundCard(x){
   const f=el('fix snd'),b=document.createElement('b');
   b.textContent='🗣 '+x.word+(x.say?'  →  '+x.say:'');ear(b,String(x.word));f.appendChild(b);
-  el('fa',x.fa,f);
+  el('fa',cleanFa(x.fa),f);
+  drillBtn(f,x.word,'');
 }
 
 let AC=null,MS=null,SRC=null,PROC=null,rc=null,starting=false,hands=false,tts=true,vt=0,spk=null,mr=null,mrChunks=[],mrMime='',lastSize=0;
@@ -543,8 +551,9 @@ function onChunk(e){
   if(rc.t<0.4){rc.noise=Math.max(rc.noise,rms);return}
   const thr=Math.min(0.08,Math.max(0.02,rc.noise*3));
   if(rms>thr){rc.voiced+=dt;rc.quiet=0;if(rc.voiced>0.25)rc.spoke=true}else rc.quiet+=dt;
-  if(hands&&rc.spoke&&rc.quiet>2.4)finish();
-  else if(hands&&!rc.spoke&&rc.t>14)giveUp();
+  const auto=hands||DRILL;
+  if(auto&&rc.spoke&&rc.quiet>(DRILL?1.5:2.4))finish();
+  else if(auto&&!rc.spoke&&rc.t>14)giveUp();
 }
 function tick(){
   if(!rc)return;const n=Math.floor(rc.t);
@@ -586,6 +595,7 @@ const b64=blob=>new Promise(res=>{const f=new FileReader();f.onload=()=>res(f.re
 function giveUp(){
   const r=rc;if(!r)return;rc=null;
   clearTimeout(r.timer);clearInterval(r.tick);mic.classList.remove('on');killMr();release();
+  if(DRILL){const d=DRILL;d.fails++;if(d.fails>=3){DRILL=null;say('تمرین تکرار متوقف شد؛ هر وقت خواستی دوباره 🔁 را بزن.');return}say('چیزی نشنیدم؛ یک بار دیگر.');drillRound(true);return}
   say('چیزی نشنیدم. هر وقت آماده بودی دکمه را بزن.');
 }
 async function finish(){
@@ -594,10 +604,13 @@ async function finish(){
   const comp=await stopMr();
   release();
   const wav=toWav(r.chunks,AC.sampleRate);
-  if(wav.secs<0.7||wav.peak<0.02){say('صدایی نشنیدم یا خیلی کوتاه بود؛ دوباره بزن.');return}
+  if(wav.secs<0.7||wav.peak<0.02){
+    if(DRILL){const d=DRILL;d.fails++;if(d.fails>=4){DRILL=null;say('تمرین تکرار متوقف شد.');return}say('صدایی نشنیدم؛ دوباره.');drillRound(d.good===0);return}
+    say('صدایی نشنیدم یا خیلی کوتاه بود؛ دوباره بزن.');return}
   const sendB=(comp&&comp.size>500&&fmtOK()!=='wav')?comp:wav;
   const data=await b64(sendB);
   stopVoice();
+  if(DRILL){addSecs(wav.secs);drillCheck(data,sendB===wav?'audio/wav':sendB.type);return}
   turn('',{data,mime:sendB===wav?'audio/wav':sendB.type,wav,secs:wav.secs,bubble:el('b me','…'),url:URL.createObjectURL(sendB)});
 }
 function toWav(chunks,rate){
@@ -631,21 +644,30 @@ function browserSpeak(t,r){
   });
 }
 function speak(t,slow){stopVoice();browserSpeak(t,slow?.62:0)}
+function wavFromPcm(u8,rate){
+  const h=new DataView(new ArrayBuffer(44)),W=(p,t)=>{for(let i=0;i<t.length;i++)h.setUint8(p+i,t.charCodeAt(i))};
+  W(0,'RIFF');h.setUint32(4,36+u8.length,true);W(8,'WAVE');W(12,'fmt ');h.setUint32(16,16,true);h.setUint16(20,1,true);h.setUint16(22,1,true);h.setUint32(24,rate,true);h.setUint32(28,rate*2,true);h.setUint16(32,2,true);h.setUint16(34,16,true);W(36,'data');h.setUint32(40,u8.length,true);
+  return new Blob([h,u8],{type:'audio/wav'});
+}
+function mediaMeta(){try{if('mediaSession' in navigator)navigator.mediaSession.metadata=new MediaMetadata({title:'Speaking Coach',artist:'English tutor'})}catch(e){}}
 async function play(j){
-  let buf;
-  const bin=atob(j.audio);
-  if(j.fmt==='mp3'||j.fmt==='wav'){
-    const u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
-    buf=await AC.decodeAudioData(u8.buffer);
-  }else{
-    const n=bin.length>>1,f=new Float32Array(n);
-    for(let i=0;i<n;i++){let v=bin.charCodeAt(2*i)|(bin.charCodeAt(2*i+1)<<8);if(v>=32768)v-=65536;f[i]=v/32768}
-    buf=AC.createBuffer(1,n,24000);buf.copyToChannel(f,0);
-  }
+  const bin=atob(j.audio),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+  const blob=j.fmt==='mp3'?new Blob([u8],{type:'audio/mpeg'}):j.fmt==='wav'?new Blob([u8],{type:'audio/wav'}):wavFromPcm(u8,24000);
+  const url=URL.createObjectURL(blob);
   return new Promise(res=>{
-    const src=AC.createBufferSource();src.buffer=buf;src.connect(AC.destination);
-    src.onended=()=>res(true);spk=src;src.start();
+    const au=new Audio(url);let fin=false;
+    const end=v=>{if(fin)return;fin=true;try{URL.revokeObjectURL(url)}catch(e){}if(spk===h)spk=null;res(v)};
+    const h={stop(){try{au.pause()}catch(e){}end(true)}};
+    spk=h;au.onended=()=>end(true);au.onerror=()=>end(false);
+    mediaMeta();
+    au.play().catch(()=>end(false));
   });
+}
+async function speakNat(text,slow){
+  const my=++vt;
+  if(tts){try{await initAudio();const j=await call({tts:text,slow:!!slow});if(my!==vt)return;if(j.audio&&await play(j))return}catch(e){if(my!==vt)return}}
+  if(my!==vt)return;
+  await browserSpeak(text,slow?.7:0);
 }
 async function sayReply(text){
   const my=++vt;
@@ -717,6 +739,46 @@ async function simplify(btn){
     saveChat();
   }catch(e){say(errMsg(e))}
   busy=false;mic.disabled=false;
+}
+function startDrill(target,said){
+  if(busy||rc||starting)return;
+  stopVoice();DRILL={target,said,good:0,fails:0};
+  drillRound(true);
+}
+async function drillRound(listen){
+  const d=DRILL;if(!d)return;
+  if(listen){
+    say('🔊 گوش کن…');
+    await speakNat(d.target,d.fails>0);
+    if(DRILL!==d)return;
+    say('🎙 حالا تو بگو: «'+d.target+'»');
+  }else{
+    el('ok','🧠 این بار بدون شنیدن، از حفظ بگو'+(d.said?' (به‌جای «'+d.said+'»)':'')+'.');
+    log.scrollTop=log.scrollHeight;
+    say('🎙 از حفظ بگو…');
+  }
+  try{await startRec(14)}catch(e){DRILL=null;say('اجازهٔ میکروفون داده نشده یا میکروفون پیدا نشد.')}
+}
+async function drillCheck(data,mime){
+  const d=DRILL;if(!d)return;
+  busy=true;mic.disabled=true;say('دارم گوش می‌دهم و چک می‌کنم…');
+  let r;
+  try{const j=await call({level:lv.value,drill:{target:d.target},audio:data,mime});r=j.drill||{}}
+  catch(e){busy=false;mic.disabled=false;DRILL=null;say(errMsg(e));return}
+  busy=false;mic.disabled=false;
+  if(DRILL!==d)return;
+  const card=(cls,t,fa)=>{const f=el('fix snd '+cls),b=document.createElement('b');b.textContent=t;f.appendChild(b);if(fa)el('fa',cleanFa(fa),f);log.scrollTop=log.scrollHeight};
+  if(r.ok){
+    d.good++;
+    if(d.good>=2){card('voc','🎉 دو بار درست گفتی: «'+d.target+'»');DRILL=null;say('آفرین! این جمله را تمرین کردی. هر وقت آماده‌ای ادامه بده.');saveChat();return}
+    card('voc','✅ درست بود! یک بار دیگر، این بار از حفظ.');saveChat();
+    setTimeout(()=>drillRound(false),700);
+  }else{
+    d.fails++;d.good=0;
+    card('hnt','🔁 من شنیدم: «'+(r.heard||'…')+'»',r.tip||'');
+    if(d.fails>=4){DRILL=null;say('برای الان کافی است؛ بعداً دوباره 🔁 را بزن.');saveChat();return}
+    saveChat();setTimeout(()=>drillRound(true),600);
+  }
 }
 function practiceDays(){return Object.keys(jget('daysDone',{})).length}
 function engPct(){return $('#focus').value==='mech'?100:0}
@@ -1000,6 +1062,7 @@ async function hint(){
 }
 
 async function turn(u,a,ch,tp){
+  DRILL=null;
   if(!cur)cur=makeChat();
   busy=true;mic.disabled=true;say('مربی در حال '+(a?'گوش دادن و ':'')+'فکر کردن است…');
   let reply='';
@@ -1021,7 +1084,7 @@ async function turn(u,a,ch,tp){
     if(j.note){notes.push(String(j.note).slice(0,160));notes=notes.slice(-20);jset('notes',notes)}
     hist.push({r:'c',t:j.reply});
     log.querySelectorAll('.b.c.cur').forEach(x=>x.classList.remove('cur'));
-      const b=el('b c cur',j.reply);ear(b,j.reply);if(j.reply_fa){tr(b,j.reply_fa);if(PROF==='kid'){const f=b.querySelector(':scope > .fa[data-t]');if(f)f.hidden=false}}extras(b,j.reply);
+      const b=el('b c cur',j.reply);ear(b,j.reply);if(j.reply_fa){j.reply_fa=cleanFa(j.reply_fa);tr(b,j.reply_fa);if(PROF==='kid'){const f=b.querySelector(':scope > .fa[data-t]');if(f)f.hidden=false}}extras(b,j.reply);
     if(Array.isArray(j.vocab)&&j.vocab.length){vocabCard(j.vocab);addVocab(j.vocab)}
     reply=j.reply;if(j.summary&&cur)cur.summary=String(j.summary).slice(0,240);saveChat();scheduleSync();
   }catch(e){
@@ -1086,6 +1149,7 @@ log.addEventListener('click',e=>{
   if(b&&b.dataset.dff){setDiff(b.dataset.dff,DMSG[b.dataset.dff]);b.remove();return}
   if(b&&b.dataset.slow!==undefined){noteHelp();speak(b.dataset.slow,true);return}
   if(b&&b.dataset.simple!==undefined){noteHelp();simplify(b);return}
+  if(b&&b.dataset.drill!==undefined){startDrill(b.dataset.drill,b.dataset.said||'');return}
   if(b&&b.dataset.ie==='prep'){iePrep();return}
   if(b&&b.dataset.ie==='speak'){ieSpeak();return}
   if(b&&b.dataset.say!==undefined){speak(b.dataset.say);return}
