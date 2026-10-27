@@ -278,6 +278,9 @@ header.top{gap:6px;padding:6px 10px 4px;justify-content:flex-start}
 .b.me{display:flex;align-items:center;gap:8px}
 .b.me>.ear{order:-1;flex:none;margin:0}
 .fix .drl{margin-top:8px;display:block}
+.fa .rt{margin-inline-start:8px;width:26px;height:26px;padding:0;border:1px solid color-mix(in srgb,var(--tx) 18%,transparent);background:var(--bg);color:var(--mu);border-radius:999px;font-size:14px;line-height:1;cursor:pointer;vertical-align:middle}
+#jump{position:fixed;inset-inline-start:8px;bottom:calc(var(--dockh,170px) + 12px);z-index:12;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+#jump button{pointer-events:auto;width:34px;height:34px;padding:0;border-radius:50%;border:1px solid color-mix(in srgb,var(--tx) 16%,transparent);background:color-mix(in srgb,var(--sf) 88%,transparent);color:var(--ac);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sh);opacity:.92;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 /* login + account */
 .lg{position:fixed;inset:0;z-index:60;background:var(--glow),var(--bg);display:flex;align-items:center;justify-content:center;padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto}
 .lg-card{width:100%;max-width:400px;text-align:center;display:flex;flex-direction:column;gap:14px}
@@ -336,6 +339,10 @@ header.top{gap:6px;padding:6px 10px 4px;justify-content:flex-start}
   </div>
 </footer>
 
+<div id="jump" hidden>
+  <button id="jtop" aria-label="رفتن به بالای گفتگو" title="بالای گفتگو"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 5h12M6 16l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button id="jbot" aria-label="رفتن به آخر گفتگو" title="آخر گفتگو"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 19h12M6 8l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
 <div id="login" class="lg" hidden>
   <div class="lg-card">
     <div class="lg-logo" aria-hidden="true">🎙</div>
@@ -442,10 +449,11 @@ function ear(p,t){const b=document.createElement('button');b.className='ear';b.i
 function tr(p,t){
   const b=document.createElement('button');b.className='ear';b.innerHTML=IC.tr;b.dataset.tr='1';b.setAttribute('aria-label','ترجمه');
   const f=document.createElement('div');f.className='fa';f.dataset.t='1';f.textContent=t;f.hidden=true;
+  const rt=document.createElement('button');rt.className='rt';rt.textContent='↻';rt.dataset.rt='1';rt.title='ترجمهٔ دوباره';rt.setAttribute('aria-label','ترجمهٔ دوباره');f.appendChild(rt);
   acts(p).appendChild(b);p.appendChild(f);
 }
 
-const cleanFa=t=>String(t||'').replace(/([\u0600-\u06FF])[A-Za-z0-9]{3,}/g,'$1');
+const cleanFa=t=>String(t||'').replace(/([\u0620-\u065F\u066E-\u06D3\u06D5\u06FA-\u06FF])(?=[0-9]*[A-Za-z])[A-Za-z0-9]{3,}/g,'$1').replace(/([\u0620-\u065F\u066E-\u06D3\u06D5\u06FA-\u06FF])[0-9\u0660-\u0669\u06F0-\u06F9A-Za-z]{1,2}(?=[\u0620-\u065F\u066E-\u06D3\u06D5\u06FA-\u06FF])/g,'$1').replace(/[\u0370-\u03FF\u0400-\u04FF\u0590-\u05FF\u0900-\u097F\u0E00-\u0E7F\u3040-\u30FF\u3400-\u9FFF\uAC00-\uD7AF]/g,'');
 function extras(p,t){
   const a=acts(p);
   const s=document.createElement('button');s.className='ear xs';s.textContent='🐢';s.dataset.slow=t;s.title='آهسته بخوان';s.setAttribute('aria-label','آهسته‌تر بخوان');a.appendChild(s);
@@ -739,6 +747,16 @@ async function simplify(btn){
     saveChat();
   }catch(e){say(errMsg(e))}
   busy=false;mic.disabled=false;
+}
+async function retranslate(btn){
+  const host=btn.closest('.b'),fa=btn.closest('.fa'),sp=host&&host.querySelector('[data-say]');
+  if(!host||!fa||!sp||btn.disabled)return;
+  btn.disabled=true;btn.textContent='…';
+  try{
+    const j=await call({level:lv.value,translate:sp.dataset.say});
+    if(j.fa){fa.firstChild.nodeValue=cleanFa(j.fa);saveChat()}
+  }catch(e){say(errMsg(e))}
+  btn.disabled=false;btn.textContent='↻';
 }
 function startDrill(target,said){
   if(busy||rc||starting)return;
@@ -1145,6 +1163,7 @@ $('#tp').onclick=openNew;
 
 log.addEventListener('click',e=>{
   const b=e.target.closest('button'),f=e.target.closest('.fa[data-t]');
+  if(b&&b.dataset.rt!==undefined){retranslate(b);return}
   if(b&&b.dataset.lvl){lv.value=b.dataset.lvl;try{localStorage.setItem(K('lvl'),b.dataset.lvl)}catch(x){}touchPrefs();b.remove();return}
   if(b&&b.dataset.dff){setDiff(b.dataset.dff,DMSG[b.dataset.dff]);b.remove();return}
   if(b&&b.dataset.slow!==undefined){noteHelp();speak(b.dataset.slow,true);return}
@@ -1595,6 +1614,20 @@ $('#acclo').onclick=()=>{try{['logged','pass','prof'].forEach(k=>localStorage.re
 $('#dseg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setDiff(b.dataset.d,DMSG[b.dataset.d])});
 applyDiffUI();
 if(PROF==='kid')$('#dseg').hidden=true;
+const jump=$('#jump'),jt=$('#jtop'),jb=$('#jbot'),dockEl=$('#dock');
+function updJump(){
+  const can=!log.hidden&&!dockEl.hidden&&log.scrollHeight>log.clientHeight+80;
+  jt.hidden=!can||log.scrollTop<60;
+  jb.hidden=!can||log.scrollHeight-log.scrollTop-log.clientHeight<80;
+  jump.hidden=jt.hidden&&jb.hidden;
+}
+new MutationObserver(updJump).observe(log,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
+new MutationObserver(updJump).observe(dockEl,{attributes:true,attributeFilter:['hidden']});
+log.addEventListener('scroll',updJump,{passive:true});
+addEventListener('resize',updJump);
+if(window.ResizeObserver)new ResizeObserver(()=>{document.documentElement.style.setProperty('--dockh',dockEl.offsetHeight+'px');updJump()}).observe(dockEl);
+jt.onclick=()=>log.scrollTo({top:0,behavior:'smooth'});
+jb.onclick=()=>log.scrollTo({top:log.scrollHeight,behavior:'smooth'});
 $('#login').hidden=LOGGED;
 if(LOGGED)renderSug();
 </script>
