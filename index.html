@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F4F1FF">
+<meta name="theme-color" content="#EAE6DC">
+<meta name="color-scheme" content="light dark">
+<script>try{var _t=localStorage.getItem("theme");if(_t==="light"||_t==="dark")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
 <title>Speaking Coach</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap">
 <style>
@@ -294,6 +296,73 @@ header.top{gap:6px;padding:6px 10px 4px;justify-content:flex-start}
 .who button[data-who="kid"].sel{border-color:#FF9A3C;background:var(--t-hnt)}
 .lg input{width:100%;height:50px;border-radius:16px;border:2px solid var(--ln);background:var(--sf);padding:0 16px;font-size:18px;direction:ltr;text-align:center}
 #lgerr{min-height:22px;color:var(--red);font-size:14px}
+
+/* ================= CALM THEME v4: soft, low-glare, eye-comfort ================= */
+:root{--bg:#EAE6DC;--glow:linear-gradient(transparent,transparent);--sf:#F5F2EA;--tx:#2A2926;--mu:#66625A;--ln:#D3CDBF;--ac:#2B6F6A;--ac2:#8F5436;--on:#F5F2EA;--btn:#2F746E;--btn2:#296A64;--btn-tx:#F5F2EA;--me:#4A5F86;--me2:#4A5F86;--mt:#F3F1EB;--wn:#7B5F17;--wb:#F0E7D0;--grn:#3F6B3A;--red:#A44538;--sh:0 2px 8px rgba(60,50,30,.10);--cb:#F6F3EC;--cbd:#D9D3C5;--cbs:#5E8F89;--t-snd:#E1E9EC;--t-voc:#E2EADD;--t-hnt:#F0E2DB;--t-cue:#E6E2EE;--t-sim:#DCE9E6;--tb1:#E1E8EA;--tb2:#EEE0DA;--tb3:#E2EADD;--tb4:#EFE6CF;--k1:#2B6F6A;--k2:#46608F;--k3:#8F5436;--k4:#4A6B44;--k5:#7E4F74;--k6:#7C6118;--f-easy:#4E7048;--f-norm:#4A5F86;--f-hard:#96563A;--f-tx:#F5F2EA;--jb:#D8AE3E;--jt:#2B2208}
+:root[data-theme="light"]{--bg:#EAE6DC;--glow:linear-gradient(transparent,transparent);--sf:#F5F2EA;--tx:#2A2926;--mu:#66625A;--ln:#D3CDBF;--ac:#2B6F6A;--ac2:#8F5436;--on:#F5F2EA;--btn:#2F746E;--btn2:#296A64;--btn-tx:#F5F2EA;--me:#4A5F86;--me2:#4A5F86;--mt:#F3F1EB;--wn:#7B5F17;--wb:#F0E7D0;--grn:#3F6B3A;--red:#A44538;--sh:0 2px 8px rgba(60,50,30,.10);--cb:#F6F3EC;--cbd:#D9D3C5;--cbs:#5E8F89;--t-snd:#E1E9EC;--t-voc:#E2EADD;--t-hnt:#F0E2DB;--t-cue:#E6E2EE;--t-sim:#DCE9E6;--tb1:#E1E8EA;--tb2:#EEE0DA;--tb3:#E2EADD;--tb4:#EFE6CF;--k1:#2B6F6A;--k2:#46608F;--k3:#8F5436;--k4:#4A6B44;--k5:#7E4F74;--k6:#7C6118;--f-easy:#4E7048;--f-norm:#4A5F86;--f-hard:#96563A;--f-tx:#F5F2EA;--jb:#D8AE3E;--jt:#2B2208}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17191C;--glow:linear-gradient(transparent,transparent);--sf:#212428;--tx:#D4D7D9;--mu:#979DA3;--ln:#343A40;--ac:#7DBBB4;--ac2:#D9A287;--on:#17191C;--btn:#336F6A;--btn2:#2E6762;--btn-tx:#E4EBEA;--me:#3C4C6E;--me2:#3C4C6E;--mt:#E2E5EA;--wn:#CDAE6A;--wb:#332E22;--grn:#9CC694;--red:#E39A8F;--sh:0 2px 10px rgba(0,0,0,.35);--cb:#262A2F;--cbd:#363B42;--cbs:#5E9E97;--t-snd:#202C35;--t-voc:#222E24;--t-hnt:#33262A;--t-cue:#2A2837;--t-sim:#1F2F2E;--tb1:#25323A;--tb2:#3A2E2B;--tb3:#26332A;--tb4:#38311F;--k1:#7DBBB4;--k2:#9DB4DE;--k3:#D9A287;--k4:#A3C79A;--k5:#C79DBB;--k6:#D2B46C;--f-easy:#3F6A47;--f-norm:#3F5683;--f-hard:#8A5238;--f-tx:#E4EBEA;--jb:#B99434;--jt:#1B1606}}
+:root[data-theme="dark"]{--bg:#17191C;--glow:linear-gradient(transparent,transparent);--sf:#212428;--tx:#D4D7D9;--mu:#979DA3;--ln:#343A40;--ac:#7DBBB4;--ac2:#D9A287;--on:#17191C;--btn:#336F6A;--btn2:#2E6762;--btn-tx:#E4EBEA;--me:#3C4C6E;--me2:#3C4C6E;--mt:#E2E5EA;--wn:#CDAE6A;--wb:#332E22;--grn:#9CC694;--red:#E39A8F;--sh:0 2px 10px rgba(0,0,0,.35);--cb:#262A2F;--cbd:#363B42;--cbs:#5E9E97;--t-snd:#202C35;--t-voc:#222E24;--t-hnt:#33262A;--t-cue:#2A2837;--t-sim:#1F2F2E;--tb1:#25323A;--tb2:#3A2E2B;--tb3:#26332A;--tb4:#38311F;--k1:#7DBBB4;--k2:#9DB4DE;--k3:#D9A287;--k4:#A3C79A;--k5:#C79DBB;--k6:#D2B46C;--f-easy:#3F6A47;--f-norm:#3F5683;--f-hard:#8A5238;--f-tx:#E4EBEA;--jb:#B99434;--jt:#1B1606}
+:root.kid.kid{--bg:#EAE6DC;--glow:linear-gradient(transparent,transparent);--sf:#F5F2EA;--tx:#2A2926;--mu:#66625A;--ln:#D3CDBF;--ac:#2B6F6A;--ac2:#8F5436;--on:#F5F2EA;--btn:#2F746E;--btn2:#296A64;--btn-tx:#F5F2EA;--me:#4A5F86;--me2:#4A5F86;--mt:#F3F1EB;--wn:#7B5F17;--wb:#F0E7D0;--grn:#3F6B3A;--red:#A44538;--sh:0 2px 8px rgba(60,50,30,.10);--cb:#F6F3EC;--cbd:#D9D3C5;--cbs:#5E8F89;--t-snd:#E1E9EC;--t-voc:#E2EADD;--t-hnt:#F0E2DB;--t-cue:#E6E2EE;--t-sim:#DCE9E6;--tb1:#E1E8EA;--tb2:#EEE0DA;--tb3:#E2EADD;--tb4:#EFE6CF;--k1:#2B6F6A;--k2:#46608F;--k3:#8F5436;--k4:#4A6B44;--k5:#7E4F74;--k6:#7C6118;--f-easy:#4E7048;--f-norm:#4A5F86;--f-hard:#96563A;--f-tx:#F5F2EA;--jb:#D8AE3E;--jt:#2B2208;--bg:#F2E9D5;--sf:#FAF5E8;--btn:#A5562A;--btn2:#9A4F26;--ac:#9A4F26;--me:#3F68A6;--me2:#3F68A6;--cbs:#C08A4E}
+@media (prefers-color-scheme:dark){:root.kid.kid:not([data-theme="light"]){--bg:#17191C;--glow:linear-gradient(transparent,transparent);--sf:#212428;--tx:#D4D7D9;--mu:#979DA3;--ln:#343A40;--ac:#7DBBB4;--ac2:#D9A287;--on:#17191C;--btn:#336F6A;--btn2:#2E6762;--btn-tx:#E4EBEA;--me:#3C4C6E;--me2:#3C4C6E;--mt:#E2E5EA;--wn:#CDAE6A;--wb:#332E22;--grn:#9CC694;--red:#E39A8F;--sh:0 2px 10px rgba(0,0,0,.35);--cb:#262A2F;--cbd:#363B42;--cbs:#5E9E97;--t-snd:#202C35;--t-voc:#222E24;--t-hnt:#33262A;--t-cue:#2A2837;--t-sim:#1F2F2E;--tb1:#25323A;--tb2:#3A2E2B;--tb3:#26332A;--tb4:#38311F;--k1:#7DBBB4;--k2:#9DB4DE;--k3:#D9A287;--k4:#A3C79A;--k5:#C79DBB;--k6:#D2B46C;--f-easy:#3F6A47;--f-norm:#3F5683;--f-hard:#8A5238;--f-tx:#E4EBEA;--jb:#B99434;--jt:#1B1606;--btn:#8F5230;--btn2:#85492A;--ac:#E0A67F;--me:#3A5A92;--me2:#3A5A92;--cbs:#C08A4E}}
+:root.kid.kid[data-theme="dark"]{--bg:#17191C;--glow:linear-gradient(transparent,transparent);--sf:#212428;--tx:#D4D7D9;--mu:#979DA3;--ln:#343A40;--ac:#7DBBB4;--ac2:#D9A287;--on:#17191C;--btn:#336F6A;--btn2:#2E6762;--btn-tx:#E4EBEA;--me:#3C4C6E;--me2:#3C4C6E;--mt:#E2E5EA;--wn:#CDAE6A;--wb:#332E22;--grn:#9CC694;--red:#E39A8F;--sh:0 2px 10px rgba(0,0,0,.35);--cb:#262A2F;--cbd:#363B42;--cbs:#5E9E97;--t-snd:#202C35;--t-voc:#222E24;--t-hnt:#33262A;--t-cue:#2A2837;--t-sim:#1F2F2E;--tb1:#25323A;--tb2:#3A2E2B;--tb3:#26332A;--tb4:#38311F;--k1:#7DBBB4;--k2:#9DB4DE;--k3:#D9A287;--k4:#A3C79A;--k5:#C79DBB;--k6:#D2B46C;--f-easy:#3F6A47;--f-norm:#3F5683;--f-hard:#8A5238;--f-tx:#E4EBEA;--jb:#B99434;--jt:#1B1606;--btn:#8F5230;--btn2:#85492A;--ac:#E0A67F;--me:#3A5A92;--me2:#3A5A92;--cbs:#C08A4E}
+:root{--gp:linear-gradient(135deg,var(--btn),var(--btn2))}
+html{background:var(--bg);color-scheme:light dark}
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark}
+
+/* buttons / badges: flat, calm */
+.logo,.lg-logo{background:var(--gp);color:var(--btn-tx);box-shadow:none}
+.badge,.chip.pri{background:var(--btn);color:var(--btn-tx)}
+.big{background:var(--btn);color:var(--btn-tx);box-shadow:0 1px 4px rgba(0,0,0,.18)}
+#start h2,.lg h2{background:none;-webkit-text-fill-color:currentColor;color:var(--tx)}
+.wave rect:nth-child(1){fill:var(--k1)}.wave rect:nth-child(2){fill:var(--k3)}.wave rect:nth-child(3){fill:var(--k6)}.wave rect:nth-child(4){fill:var(--k4)}.wave rect:nth-child(5){fill:var(--k2)}
+
+/* chat */
+.b.c{background:var(--cb);border:1px solid var(--cbd);border-left:5px solid var(--cbs)}
+.b.me{background:var(--me);color:var(--mt)}
+.b.me .ear{background:rgba(255,255,255,.16);color:var(--mt)}
+.fix.snd{--st:var(--k2);border-color:color-mix(in srgb,var(--st) 30%,transparent)}
+.fix.snd.voc{--st:var(--k4)}
+.fix.snd.hnt{--st:var(--k3)}
+.fix.snd.cue{--st:var(--k5)}
+.fix.snd.sim{--st:var(--k1)}
+
+/* dock */
+#dock{background:var(--sf);border-top:1px solid var(--ln);box-shadow:0 -3px 12px rgba(0,0,0,.10)}
+#bar{background:linear-gradient(90deg,var(--k4),var(--k1))}
+#mic{background:var(--btn);color:var(--btn-tx);box-shadow:0 2px 8px rgba(0,0,0,.28)}
+@keyframes p{from{box-shadow:0 0 0 0 color-mix(in srgb,var(--k3) 50%,transparent)}to{box-shadow:0 0 0 20px transparent}}
+#hf[aria-pressed="true"]{background:var(--f-easy);color:var(--f-tx);border-color:transparent}
+.seg button[aria-pressed="true"]{color:var(--f-tx);box-shadow:none}
+.seg button[data-d="easy"][aria-pressed="true"]{background:var(--f-easy)}
+.seg button[data-d="normal"][aria-pressed="true"]{background:var(--f-norm)}
+.seg button[data-d="hard"][aria-pressed="true"]{background:var(--f-hard)}
+#thseg button[aria-pressed="true"]{background:var(--f-norm)}
+#thseg{margin:6px 0 14px}
+/* hands-free: flush to the left screen edge */
+.dside{margin-left:-12px;gap:3px}
+#hf{border-left-width:0;border-radius:0 999px 999px 0;padding:3px 12px 3px 10px}
+#gd{padding-left:8px}
+
+/* lists / reports */
+.hrow:nth-child(6n+1),.rline:nth-child(6n+1){--rc:var(--k1)}.hrow:nth-child(6n+2),.rline:nth-child(6n+2){--rc:var(--k2)}.hrow:nth-child(6n+3),.rline:nth-child(6n+3){--rc:var(--k3)}.hrow:nth-child(6n+4),.rline:nth-child(6n+4){--rc:var(--k4)}.hrow:nth-child(6n+5),.rline:nth-child(6n+5){--rc:var(--k5)}.hrow:nth-child(6n+6),.rline:nth-child(6n+6){--rc:var(--k6)}
+.hrow,.rline{--rc:var(--k1)}
+.wkb i{background:var(--k2)}.wkb:last-child i{background:var(--k3)}
+details.ng:nth-of-type(6n+1){--gc:var(--k1)}details.ng:nth-of-type(6n+2){--gc:var(--k2)}details.ng:nth-of-type(6n+3){--gc:var(--k3)}details.ng:nth-of-type(6n+4){--gc:var(--k4)}details.ng:nth-of-type(6n+5){--gc:var(--k5)}details.ng:nth-of-type(6n+6){--gc:var(--k6)}
+details.ng{--gc:var(--k1)}
+details.ng .cnt{background:var(--gc);color:var(--on)}
+.iebtn{--ib:var(--k1)}
+.iebtn[data-ie="p1"]{--ib:var(--k3)}.iebtn[data-ie="p2"]{--ib:var(--k6)}.iebtn[data-ie="p3"]{--ib:var(--k5)}.iebtn[data-ie="full"]{--ib:var(--k4)}.iebtn[data-ie="l1"]{--ib:var(--k2)}.iebtn[data-ie="l2"]{--ib:var(--k1)}.iebtn[data-ie="l3"]{--ib:var(--k6)}.iebtn[data-ie="l4"]{--ib:var(--k5)}
+.sheet{background:var(--sf);border-top:1px solid var(--ln);box-shadow:0 -6px 22px rgba(0,0,0,.22)}
+.ov{background:rgba(12,13,15,.5)}
+.who button[data-who="main"].sel{border-color:var(--k1);background:var(--t-snd)}
+.who button[data-who="kid"].sel{border-color:var(--k3);background:var(--t-hnt)}
+.who button{box-shadow:none}
+
+/* jump arrows: small, opaque, far right edge, a colour that differs from bubbles */
+#jump{position:fixed;left:auto;right:2px;inset-inline-start:auto;bottom:calc(var(--dockh,170px) + 10px);gap:6px}
+#jump button{width:24px;height:24px;border-radius:8px;border:1px solid rgba(0,0,0,.35);background:var(--jb);color:var(--jt);opacity:1;box-shadow:0 1px 4px rgba(0,0,0,.35);-webkit-backdrop-filter:none;backdrop-filter:none}
+#jump svg{width:15px;height:15px}
 </style>
 </head>
 <body>
@@ -366,6 +435,8 @@ header.top{gap:6px;padding:6px 10px 4px;justify-content:flex-start}
     <div class="sh-t" id="accwho"></div>
     <div class="sh-p" id="accinfo"></div>
     <div class="sh-p" id="accsync"></div>
+    <div class="sh-p">ظاهر برنامه (برای چشم‌های خسته):</div>
+    <div class="seg" id="thseg" role="group" aria-label="ظاهر"><button data-th="auto" aria-pressed="true">🌗 خودکار</button><button data-th="light" aria-pressed="false">☀️ روز</button><button data-th="dark" aria-pressed="false">🌙 شب</button></div>
     <div class="sh-a"><button class="ghost sm" id="accsy">همگام‌سازی حالا</button><button class="ghost sm" id="acclo" style="color:var(--red)">خروج / تعویض کاربر</button></div>
   </div>
 </div>
@@ -1628,6 +1699,18 @@ addEventListener('resize',updJump);
 if(window.ResizeObserver)new ResizeObserver(()=>{document.documentElement.style.setProperty('--dockh',dockEl.offsetHeight+'px');updJump()}).observe(dockEl);
 jt.onclick=()=>log.scrollTo({top:0,behavior:'smooth'});
 jb.onclick=()=>log.scrollTo({top:log.scrollHeight,behavior:'smooth'});
+function applyTheme(t){
+  const r=document.documentElement;
+  if(t==='light'||t==='dark')r.setAttribute('data-theme',t);else{r.removeAttribute('data-theme');t='auto'}
+  try{localStorage.setItem('theme',t)}catch(e){}
+  const dark=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  const mt=document.querySelector('meta[name="theme-color"]');if(mt)mt.setAttribute('content',dark?'#17191C':'#EAE6DC');
+  document.querySelectorAll('#thseg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.th===t));
+}
+let THEME='auto';try{THEME=localStorage.getItem('theme')||'auto'}catch(e){}
+applyTheme(THEME);
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if((localStorage.getItem('theme')||'auto')==='auto')applyTheme('auto')})}catch(e){}
+$('#thseg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)applyTheme(b.dataset.th)});
 $('#login').hidden=LOGGED;
 if(LOGGED)renderSug();
 </script>
