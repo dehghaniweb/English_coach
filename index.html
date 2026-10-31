@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#EAE6DC">
 <meta name="color-scheme" content="light dark">
-<script>try{var _t=localStorage.getItem("theme");if(_t==="light"||_t==="dark")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
+<script>try{var _vv=window.visualViewport,_vh=(_vv?_vv.height*_vv.scale:innerHeight);document.documentElement.style.setProperty("--app-h",Math.round(_vh)+"px")}catch(e){}try{var _t=localStorage.getItem("theme");if(_t==="light"||_t==="dark")document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
 <title>Speaking Coach</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap">
 <style>
@@ -283,6 +283,19 @@ header.top{gap:6px;padding:6px 10px 4px;justify-content:flex-start}
 .fa .rt{margin-inline-start:8px;width:26px;height:26px;padding:0;border:1px solid color-mix(in srgb,var(--tx) 18%,transparent);background:var(--bg);color:var(--mu);border-radius:999px;font-size:14px;line-height:1;cursor:pointer;vertical-align:middle}
 #jump{position:fixed;inset-inline-start:8px;bottom:calc(var(--dockh,170px) + 12px);z-index:12;display:flex;flex-direction:column;gap:8px;pointer-events:none}
 #jump button{pointer-events:auto;width:34px;height:34px;padding:0;border-radius:50%;border:1px solid color-mix(in srgb,var(--tx) 16%,transparent);background:color-mix(in srgb,var(--sf) 88%,transparent);color:var(--ac);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sh);opacity:.92;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+
+/* ================= v5: dock glued to the visible bottom + its own colour ================= */
+html,body{height:var(--app-h,100dvh);overflow:hidden}
+@supports not (height:100dvh){html,body{height:var(--app-h,100%)}}
+:root{--dk:#CBDAD6;--dk-line:#9BB3AD;--dk-mu:#4E4A44;--dk-track:rgba(0,0,0,.15)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--dk:#1F3036;--dk-line:#46747C;--dk-mu:#A9AFB5;--dk-track:rgba(255,255,255,.16)}}
+:root[data-theme="dark"]{--dk:#1F3036;--dk-line:#46747C;--dk-mu:#A9AFB5;--dk-track:rgba(255,255,255,.16)}
+:root[data-theme="light"]{--dk:#CBDAD6;--dk-line:#9BB3AD;--dk-mu:#4E4A44;--dk-track:rgba(0,0,0,.15)}
+:root.kid.kid{--dk:#E8D5AE;--dk-line:#C9AE79;--dk-mu:#54493A;--dk-track:rgba(0,0,0,.15)}
+@media (prefers-color-scheme:dark){:root.kid.kid:not([data-theme="light"]){--dk:#1F3036;--dk-line:#46747C;--dk-mu:#A9AFB5;--dk-track:rgba(255,255,255,.16)}}
+:root.kid.kid[data-theme="dark"]{--dk:#1F3036;--dk-line:#46747C;--dk-mu:#A9AFB5;--dk-track:rgba(255,255,255,.16)}
+#dock{background:var(--dk);border-top:2px solid var(--dk-line);--mu:var(--dk-mu);box-shadow:0 -6px 18px rgba(0,0,0,.20);padding-bottom:8px}
+#prog{background:var(--dk-track)}
 /* login + account */
 .lg{position:fixed;inset:0;z-index:60;background:var(--glow),var(--bg);display:flex;align-items:center;justify-content:center;padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto}
 .lg-card{width:100%;max-width:400px;text-align:center;display:flex;flex-direction:column;gap:14px}
@@ -363,6 +376,10 @@ details.ng .cnt{background:var(--gc);color:var(--on)}
 #jump{position:fixed;left:auto;right:2px;inset-inline-start:auto;bottom:calc(var(--dockh,170px) + 10px);gap:6px}
 #jump button{width:24px;height:24px;border-radius:8px;border:1px solid rgba(0,0,0,.35);background:var(--jb);color:var(--jt);opacity:1;box-shadow:0 1px 4px rgba(0,0,0,.35);-webkit-backdrop-filter:none;backdrop-filter:none}
 #jump svg{width:15px;height:15px}
+
+/* v6 (last): dock has its own colour, different from the chat background */
+#dock{background:var(--dk);border-top:2px solid var(--dk-line);box-shadow:0 -6px 18px rgba(0,0,0,.20)}
+#prog{background:var(--dk-track)}
 </style>
 </head>
 <body>
@@ -686,11 +703,11 @@ async function finish(){
   if(wav.secs<0.7||wav.peak<0.02){
     if(DRILL){const d=DRILL;d.fails++;if(d.fails>=4){DRILL=null;say('تمرین تکرار متوقف شد.');return}say('صدایی نشنیدم؛ دوباره.');drillRound(d.good===0);return}
     say('صدایی نشنیدم یا خیلی کوتاه بود؛ دوباره بزن.');return}
-  const sendB=(comp&&comp.size>500&&fmtOK()!=='wav')?comp:wav;
+  const sendB=(comp&&comp.size>500&&fmtOK()!=='wav'&&wav.peak>=0.15)?comp:wav;
   const data=await b64(sendB);
   stopVoice();
   if(DRILL){addSecs(wav.secs);drillCheck(data,sendB===wav?'audio/wav':sendB.type);return}
-  turn('',{data,mime:sendB===wav?'audio/wav':sendB.type,wav,secs:wav.secs,bubble:el('b me','…'),url:URL.createObjectURL(sendB)});
+  turn('',{data,mime:sendB===wav?'audio/wav':sendB.type,wav,secs:wav.secs,bubble:el('b me','…'),url:URL.createObjectURL(wav)});
 }
 function toWav(chunks,rate){
   let n=0;chunks.forEach(c=>n+=c.length);
@@ -701,6 +718,8 @@ function toWav(chunks,rate){
     for(let j=a;j<b;j++)s+=all[j];
     const v=Math.max(-1,Math.min(1,s/(b-a)));peak=Math.max(peak,Math.abs(v));pcm[i]=v<0?v*32768:v*32767;
   }
+  const gain=peak>0&&peak<0.5?Math.min(8,0.9/peak):1;
+  if(gain>1)for(let i=0;i<len;i++)pcm[i]=Math.max(-32768,Math.min(32767,Math.round(pcm[i]*gain)));
   const h=new DataView(new ArrayBuffer(44)),W=(p,t)=>{for(let i=0;i<t.length;i++)h.setUint8(p+i,t.charCodeAt(i))};
   W(0,'RIFF');h.setUint32(4,36+len*2,true);W(8,'WAVE');W(12,'fmt ');h.setUint32(16,16,true);h.setUint16(20,1,true);h.setUint16(22,1,true);h.setUint32(24,R,true);h.setUint32(28,R*2,true);h.setUint16(32,2,true);h.setUint16(34,16,true);W(36,'data');h.setUint32(40,len*2,true);
   const blob=new Blob([h,pcm],{type:'audio/wav'});blob.secs=len/R;blob.peak=peak;return blob;
@@ -714,15 +733,27 @@ function pickVoice(){
 }
 function browserSpeak(t,r){
   return new Promise(res=>{
-    if(!window.speechSynthesis){res();return}
-    speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(t),f=pickVoice();
-    u.lang='en-US';u.rate=r||(PROF==='kid'?.85:.95);if(f)u.voice=f;
-    u.onend=u.onerror=()=>res();
-    speechSynthesis.speak(u);
+    const ss=window.speechSynthesis;
+    if(!ss||!String(t||'').trim()){res();return}
+    try{if(ss.speaking||ss.pending)ss.cancel()}catch(e){}
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(t),f=pickVoice();
+      u.lang='en-US';u.rate=r||(PROF==='kid'?.85:.95);if(f)u.voice=f;
+      let done=false,wd=0;
+      const fin=()=>{if(done)return;done=true;clearTimeout(wd);window._utt=null;res()};
+      u.onend=u.onerror=fin;
+      window._utt=u;
+      wd=setTimeout(fin,Math.max(8000,String(t).length*150));
+      try{ss.resume()}catch(e){}
+      ss.speak(u);
+    },130);
   });
 }
-function speak(t,slow){stopVoice();browserSpeak(t,slow?.62:0)}
+function speak(t,slow){
+  stopVoice();
+  const st=$('#status'),prev=st.textContent,fix=()=>{if(st.textContent.indexOf('🔊')===0)say(prev)};
+  speakNat(t,slow,true).then(fix,fix);
+}
 function wavFromPcm(u8,rate){
   const h=new DataView(new ArrayBuffer(44)),W=(p,t)=>{for(let i=0;i<t.length;i++)h.setUint8(p+i,t.charCodeAt(i))};
   W(0,'RIFF');h.setUint32(4,36+u8.length,true);W(8,'WAVE');W(12,'fmt ');h.setUint32(16,16,true);h.setUint16(20,1,true);h.setUint16(22,1,true);h.setUint32(24,rate,true);h.setUint32(28,rate*2,true);h.setUint16(32,2,true);h.setUint16(34,16,true);W(36,'data');h.setUint32(40,u8.length,true);
@@ -742,9 +773,23 @@ async function play(j){
     au.play().catch(()=>end(false));
   });
 }
-async function speakNat(text,slow){
-  const my=++vt;
-  if(tts){try{await initAudio();const j=await call({tts:text,slow:!!slow});if(my!==vt)return;if(j.audio&&await play(j))return}catch(e){if(my!==vt)return}}
+const TTSC=new Map();
+async function speakNat(text,slow,notify){
+  const my=++vt,key=(slow?'s|':'n|')+text;
+  if(tts||TTSC.has(key)){
+    try{
+      let j=TTSC.get(key);
+      if(!j){
+        if(notify)say('🔊 صدا در حال آماده‌شدن…');
+        await initAudio();
+        j=await call({tts:text,slow:!!slow});
+        if(my!==vt)return;
+        if(j&&j.audio){TTSC.set(key,j);if(TTSC.size>40)TTSC.delete(TTSC.keys().next().value)}
+      }
+      if(my!==vt)return;
+      if(j&&j.audio&&await play(j))return;
+    }catch(e){if(my!==vt)return}
+  }
   if(my!==vt)return;
   await browserSpeak(text,slow?.7:0);
 }
@@ -1157,12 +1202,14 @@ async function turn(u,a,ch,tp){
   let reply='';
   try{
     const j=await call({level:lv.value,start:u===null,starter:(u===null&&!ch)?(tp?tp.s:starter()):'',chal:ch?{task:ch.task,words:ch.words}:undefined,hist:hist.slice(-12),ielts:ie?{part:ie.part,n:(u===null?0:ie.n+1),topic:ie.topic,card:ie.card?ie.card.topic:undefined}:undefined,audio:a?a.data:undefined,mime:a?a.mime:undefined,secs:a?a.secs:undefined});
+    const unclear=!!a&&!String(j.heard||'').trim();
     if(a){
-      a.bubble.textContent=j.heard||'(نامفهوم)';hist.push({r:'u',t:j.heard||''});addSecs(a.secs);
+      a.bubble.textContent=j.heard||'(نامفهوم)';if(!unclear){hist.push({r:'u',t:j.heard});addSecs(a.secs)}
       const p=document.createElement('button');p.className='ear';p.dataset.play='1';p.innerHTML=IC.play;p.setAttribute('aria-label','Play my voice');
       p.onclick=()=>toggleVoice(a,p);a.bubble.appendChild(p);
     }
-    if(u!==null){
+    if(u!==null&&unclear){el('ok','🎙 صدا واضح نبود یا خیلی آهسته ضبط شد؛ کمی بلندتر و نزدیک‌تر به میکروفون بگو و دوباره امتحان کن.')}
+    else if(u!==null){
       const fx=Array.isArray(j.fixes)?j.fixes:[],sn=Array.isArray(j.sounds)?j.sounds:[];
       fx.forEach(fixCard);sn.forEach(soundCard);
       if(!fx.length&&!sn.length)el('ok',a?'✓ جمله و تلفظت خوب بود':'✓ جمله‌ات درست بود');
@@ -1171,6 +1218,7 @@ async function turn(u,a,ch,tp){
       if(ie){ie.answers.push({t:(a?j.heard:u)||'',w:nw,s:a?a.secs:0});fx.forEach(x=>ie.fixes.push(x));sn.forEach(x=>ie.sounds.push(x));ie.n++;if(ie.n>=(IE_LIM[ie.part]||4))ie.done=true}
     }
     if(j.note){notes.push(String(j.note).slice(0,160));notes=notes.slice(-20);jset('notes',notes)}
+    if(!j.reply||/^\s*[\[{]/.test(String(j.reply).trim())){j.reply='Sorry, I did not catch that. Could you say it again, please?';j.reply_fa='ببخشید، متوجه نشدم. می‌شود دوباره بگویید؟'}
     hist.push({r:'c',t:j.reply});
     log.querySelectorAll('.b.c.cur').forEach(x=>x.classList.remove('cur'));
       const b=el('b c cur',j.reply);ear(b,j.reply);if(j.reply_fa){j.reply_fa=cleanFa(j.reply_fa);tr(b,j.reply_fa);if(PROF==='kid'){const f=b.querySelector(':scope > .fa[data-t]');if(f)f.hidden=false}}extras(b,j.reply);
@@ -1685,6 +1733,15 @@ $('#acclo').onclick=()=>{try{['logged','pass','prof'].forEach(k=>localStorage.re
 $('#dseg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setDiff(b.dataset.d,DMSG[b.dataset.d])});
 applyDiffUI();
 if(PROF==='kid')$('#dseg').hidden=true;
+function fitApp(){
+  const vv=window.visualViewport,h=vv?vv.height*vv.scale:innerHeight;
+  document.documentElement.style.setProperty('--app-h',Math.round(h)+'px');
+  if(scrollY||document.documentElement.scrollTop)scrollTo(0,0);
+}
+fitApp();
+['resize','orientationchange','pageshow','focus'].forEach(e=>addEventListener(e,fitApp));
+if(window.visualViewport){visualViewport.addEventListener('resize',fitApp);visualViewport.addEventListener('scroll',fitApp)}
+[120,400,900,1800,3500].forEach(t=>setTimeout(fitApp,t));
 const jump=$('#jump'),jt=$('#jtop'),jb=$('#jbot'),dockEl=$('#dock');
 function updJump(){
   const can=!log.hidden&&!dockEl.hidden&&log.scrollHeight>log.clientHeight+80;
