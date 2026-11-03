@@ -380,6 +380,11 @@ details.ng .cnt{background:var(--gc);color:var(--on)}
 /* v6 (last): dock has its own colour, different from the chat background */
 #dock{background:var(--dk);border-top:2px solid var(--dk-line);box-shadow:0 -6px 18px rgba(0,0,0,.20)}
 #prog{background:var(--dk-track)}
+#rf{position:fixed;inset:0;z-index:15;background:var(--glow),var(--bg);overflow-y:auto;padding:calc(10px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px))}
+#rf .rcard input,#rf .qrow input{width:100%;height:42px;border:1px solid var(--ln);border-radius:12px;background:var(--bg);padding:0 12px;margin-top:8px}
+#rf .rcard .ren{font-size:22px;margin:12px 0}
+#rf .big{width:100%;margin-top:10px}
+#rfb{background:var(--tb3)}
 </style>
 </head>
 <body>
@@ -387,13 +392,14 @@ details.ng .cnt{background:var(--gc);color:var(--on)}
   <button class="tbtn" id="hb" aria-label="History"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg><span>گفتگوهای قبلی</span></button>
   <button class="chip" id="reset" hidden aria-label="گفتگوی تازه" title="گفتگوی تازه">＋</button><button class="ghost" id="ctitle" hidden></button>
   <div class="tools">
+    <button class="tbtn" id="rfb" aria-label="Refp"><svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg><span>Refp</span></button>
     <button class="tbtn" id="ieb" aria-label="IELTS"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg><span>آیلتس</span></button>
     <button class="ibtn" id="revb" aria-label="Review">📘<i class="badge" id="revn" hidden></i></button>
     <button class="ibtn" id="repb" aria-label="Report">📊</button>
     <button class="ibtn" id="cfg" aria-label="Password"><svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg></button>
   </div>
 </header>
-<div hidden><select id="level"><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option></select><select id="focus"><option value="auto">auto</option><option value="mech">mech</option></select></div>
+<div hidden><select id="level"><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option><option value="C1">C1</option></select><select id="focus"><option value="auto">auto</option><option value="mech">mech</option></select></div>
 
 <section id="start">
   <div class="hero" aria-hidden="true">
@@ -491,6 +497,10 @@ details.ng .cnt{background:var(--gc);color:var(--on)}
   <div class="hhead"><b id="ltitle">Listening</b><button class="ghost" id="lx" aria-label="Close">✕</button></div>
   <div id="lbody"></div>
 </div>
+<div id="rf" hidden>
+  <div class="hhead"><b id="rft">Refp</b><button class="ghost" id="rfx" aria-label="Close">✕</button></div>
+  <div id="rfbody"></div>
+</div>
 <div id="modal" class="ov" hidden>
   <div class="sheet" role="dialog" aria-modal="true">
     <div class="sh-t" id="mtitle"></div>
@@ -508,6 +518,7 @@ details.ng .cnt{background:var(--gc);color:var(--on)}
   </div>
 </div>
 
+<script src="refp-data.js"></script>
 <script>
 const PROF=(()=>{try{return localStorage.getItem('prof')||''}catch(e){return ''}})();
 const LOGGED=(()=>{try{return localStorage.getItem('logged')==='1'||!!localStorage.getItem('pass')}catch(e){return false}})();
@@ -597,7 +608,7 @@ function openChat(c){
   stopVoice();if(rc)giveUp();
   if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
   if(!AC){initAudio();warmMic()}
-  cur=c;hist=(c.hist||[]).slice();if(c.html)log.innerHTML=c.html;else rebuild(c);
+  cur=c;RPPAT=c.pat||'';hist=(c.hist||[]).slice();if(c.html)log.innerHTML=c.html;else rebuild(c);
   log.querySelectorAll('[data-play]').forEach(x=>x.remove());
   lv.value=c.level||lv.value;
   $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
@@ -647,8 +658,8 @@ function onChunk(e){
   if(rc.t<0.4){rc.noise=Math.max(rc.noise,rms);return}
   const thr=Math.min(0.08,Math.max(0.02,rc.noise*3));
   if(rms>thr){rc.voiced+=dt;rc.quiet=0;if(rc.voiced>0.25)rc.spoke=true}else rc.quiet+=dt;
-  const auto=hands||DRILL;
-  if(auto&&rc.spoke&&rc.quiet>(DRILL?1.5:2.4))finish();
+  const auto=hands||DRILL||RPX;
+  if(auto&&rc.spoke&&rc.quiet>(DRILL||RPX?1.5:2.4))finish();
   else if(auto&&!rc.spoke&&rc.t>14)giveUp();
 }
 function tick(){
@@ -691,6 +702,7 @@ const b64=blob=>new Promise(res=>{const f=new FileReader();f.onload=()=>res(f.re
 function giveUp(){
   const r=rc;if(!r)return;rc=null;
   clearTimeout(r.timer);clearInterval(r.tick);mic.classList.remove('on');killMr();release();
+  if(RPX){const x=RPX;RPX=null;x.cb(null);return}
   if(DRILL){const d=DRILL;d.fails++;if(d.fails>=3){DRILL=null;say('تمرین تکرار متوقف شد؛ هر وقت خواستی دوباره 🔁 را بزن.');return}say('چیزی نشنیدم؛ یک بار دیگر.');drillRound(true);return}
   say('چیزی نشنیدم. هر وقت آماده بودی دکمه را بزن.');
 }
@@ -701,11 +713,13 @@ async function finish(){
   release();
   const wav=toWav(r.chunks,AC.sampleRate);
   if(wav.secs<0.7||wav.peak<0.02){
+    if(RPX){const x=RPX;RPX=null;x.cb(null);return}
     if(DRILL){const d=DRILL;d.fails++;if(d.fails>=4){DRILL=null;say('تمرین تکرار متوقف شد.');return}say('صدایی نشنیدم؛ دوباره.');drillRound(d.good===0);return}
     say('صدایی نشنیدم یا خیلی کوتاه بود؛ دوباره بزن.');return}
   const sendB=(comp&&comp.size>500&&fmtOK()!=='wav'&&wav.peak>=0.15)?comp:wav;
   const data=await b64(sendB);
   stopVoice();
+  if(RPX){const x=RPX;RPX=null;addSecs(wav.secs);x.cb({data,mime:sendB===wav?'audio/wav':sendB.type});return}
   if(DRILL){addSecs(wav.secs);drillCheck(data,sendB===wav?'audio/wav':sendB.type);return}
   turn('',{data,mime:sendB===wav?'audio/wav':sendB.type,wav,secs:wav.secs,bubble:el('b me','…'),url:URL.createObjectURL(wav)});
 }
@@ -760,12 +774,12 @@ function wavFromPcm(u8,rate){
   return new Blob([h,u8],{type:'audio/wav'});
 }
 function mediaMeta(){try{if('mediaSession' in navigator)navigator.mediaSession.metadata=new MediaMetadata({title:'Speaking Coach',artist:'English tutor'})}catch(e){}}
-async function play(j){
+async function play(j,rate){
   const bin=atob(j.audio),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
   const blob=j.fmt==='mp3'?new Blob([u8],{type:'audio/mpeg'}):j.fmt==='wav'?new Blob([u8],{type:'audio/wav'}):wavFromPcm(u8,24000);
   const url=URL.createObjectURL(blob);
   return new Promise(res=>{
-    const au=new Audio(url);let fin=false;
+    const au=new Audio(url);if(rate)au.playbackRate=rate;let fin=false;
     const end=v=>{if(fin)return;fin=true;try{URL.revokeObjectURL(url)}catch(e){}if(spk===h)spk=null;res(v)};
     const h={stop(){try{au.pause()}catch(e){}end(true)}};
     spk=h;au.onended=()=>end(true);au.onerror=()=>end(false);
@@ -774,7 +788,7 @@ async function play(j){
   });
 }
 const TTSC=new Map();
-async function speakNat(text,slow,notify){
+async function speakNat(text,slow,notify,rate){
   const my=++vt,key=(slow?'s|':'n|')+text;
   if(tts||TTSC.has(key)){
     try{
@@ -784,14 +798,14 @@ async function speakNat(text,slow,notify){
         await initAudio();
         j=await call({tts:text,slow:!!slow});
         if(my!==vt)return;
-        if(j&&j.audio){TTSC.set(key,j);if(TTSC.size>40)TTSC.delete(TTSC.keys().next().value)}
+        if(j&&j.audio){TTSC.set(key,j);if(TTSC.size>150)TTSC.delete(TTSC.keys().next().value)}
       }
       if(my!==vt)return;
-      if(j&&j.audio&&await play(j))return;
+      if(j&&j.audio&&await play(j,rate))return;
     }catch(e){if(my!==vt)return}
   }
   if(my!==vt)return;
-  await browserSpeak(text,slow?.7:0);
+  await browserSpeak(text,slow?.7:(rate>1?Math.min(1.6,rate*.95):0));
 }
 async function sayReply(text){
   const my=++vt;
@@ -819,7 +833,7 @@ function afterSpeak(){
   if(hands&&!busy&&!rc&&!(ie&&ie.done))startRec().catch(()=>say('اجازهٔ میکروفون داده نشده یا میکروفون پیدا نشد.'));
 }
 
-const GOAL=PROF==='kid'?300:600;
+const GOAL=PROF==='kid'?300:planGoalSec();
 const ago=n=>new Date(Date.now()-n*864e5).toLocaleDateString('en-CA');
 const jget=(k,d)=>{try{return JSON.parse(localStorage.getItem(K(k)))||d}catch(e){return d}};
 const jset=(k,v)=>{try{localStorage.setItem(K(k),JSON.stringify(v))}catch(e){}};
@@ -1109,7 +1123,7 @@ const errMsg=e=>{
   return 'خطا: '+(m||e);
 };
 async function call(p,quiet){
-  p.notes=notes.slice(-12);p.days=practiceDays();p.eng=engPct();p.topic=$('#focus').value==='ielts'?'ielts':'';p.diff=PROF==='kid'?'normal':diff;
+  p.pat=RPPAT||'';p.notes=notes.slice(-12);p.days=practiceDays();p.eng=engPct();p.topic=$('#focus').value==='ielts'?'ielts':'';p.diff=PROF==='kid'?'normal':diff;
   if(!p.sync&&!p.tts&&!p.hint&&!p.challenge){
     p.past=chats().filter(c=>c.summary&&(!cur||c.id!==cur.id)).slice(0,5).map(c=>({d:new Date(c.updated).toLocaleDateString('en-CA'),s:c.summary}));
     p.weak=jget('weak',[]).slice(-6);p.areas=areas();
@@ -1140,6 +1154,12 @@ async function setPass(){
 }
 
 let syncing=false,syncTimer=0;
+function mergeRefp(r){
+  if(!r||!r.d)return;const o=RPO();let ch=false;
+  ['L','I'].forEach(k=>Object.keys(r.d[k]||{}).forEach(i=>{if(!o[k][i]||(r.d[k][i].u||0)>(o[k][i].u||0)){o[k][i]=r.d[k][i];ch=true}}));
+  const lm=jget('lisMin',{});Object.keys(r.lm||{}).forEach(d=>{if((r.lm[d]||0)>(lm[d]||0)){lm[d]=r.lm[d];ch=true}});
+  if(ch){jset('refp',o);jset('lisMin',lm)}
+}
 function recentStat(){const all=jget('dstat',{}),o={};for(let i=3;i>=0;i--){const k=ago(i);if(all[k])o[k]=all[k]}return o}
 function changedVocab(since){const vb=jget('vbook',{}),o={};Object.keys(vb).forEach(k=>{if((vb[k].u||0)>since)o[k]=vb[k]});return o}
 function scheduleSync(){clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,3000)}
@@ -1149,7 +1169,8 @@ async function syncNow(){
   try{
     const lastPush=jget('lastPush',0),tomb=jget('tomb',[]);
     const out=chats().filter(c=>(c.updated||0)>lastPush).concat(tomb);
-    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),dayLog:jget('dayLog',{}),tcount:jget('tcount',{}),dstat:recentStat(),vbook:changedVocab(lastPush),streak:jget('streak',null),day:jget('day',null),prefs:{diff,lvl:lv.value,u:jget('prefsU',0)},weak:{list:jget('weak',[]),u:jget('weakU',0)}}},true);
+    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),dayLog:jget('dayLog',{}),tcount:jget('tcount',{}),dstat:recentStat(),vbook:changedVocab(lastPush),streak:jget('streak',null),day:jget('day',null),prefs:{diff,lvl:lv.value,u:jget('prefsU',0)},weak:{list:jget('weak',[]),u:jget('weakU',0)},refp:{u:jget('refpU',0),d:RPO(),lm:jget('lisMin',{})}}},true);
+    try{mergeRefp(j.refp)}catch(x){}
     const a=chats();
     (j.chats||[]).forEach(r=>{
       const i=a.findIndex(x=>x.id===r.id);
@@ -1168,7 +1189,7 @@ async function syncNow(){
     const ls=jget('streak',null);if(j.streak&&(!ls||(j.streak.u||0)>(ls.u||0)))jset('streak',j.streak);
     if(j.prefs&&(j.prefs.u||0)>jget('prefsU',0)){
       if(['easy','normal','hard'].includes(j.prefs.diff)){diff=j.prefs.diff;jset('diff',diff);applyDiffUI()}
-      if(['A2','B1','B2'].includes(j.prefs.lvl)){lv.value=j.prefs.lvl;try{localStorage.setItem(K('lvl'),j.prefs.lvl)}catch(e){}}
+      if(['A2','B1','B2','C1'].includes(j.prefs.lvl)){lv.value=j.prefs.lvl;try{localStorage.setItem(K('lvl'),j.prefs.lvl)}catch(e){}}
       jset('prefsU',j.prefs.u);
     }
     if(j.weak&&Array.isArray(j.weak.list)&&(j.weak.u||0)>jget('weakU',0)){jset('weak',j.weak.list);jset('weakU',j.weak.u)}
@@ -1440,7 +1461,8 @@ async function startNew(tp){
   if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
   await initAudio();
   $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
-  cur=makeChat();hist=[];log.textContent='';
+  if(!(tp&&tp.k==='refp'))RPPAT='';
+  cur=makeChat();cur.pat=RPPAT;hist=[];log.textContent='';
   if(tp&&tp.l){cur.title='💬 '+tp.l;cur.named=true;bumpTopic(tp.l)}
   setTitle();showGoal();
   if(!micWarmed){micWarmed=true;warmMic()}
@@ -1584,7 +1606,7 @@ async function startListening(sec){
   $('#ltitle').textContent='Listening — Section '+sec;$('#lis').hidden=false;lisMsg('در حال ساختن تمرین… (چند ثانیه)');
   try{
     const lt=randomFrom(P1GS.concat(P3GS),'LT:'),j=await call({level:lv.value,listen:{section:sec,topic:lt.l}});bumpTopic('LT:'+lt.l);
-    L={ex:j.exercise,sec,played:false,playing:false,rate:lv.value==='A2'?0.8:lv.value==='B1'?0.92:1,ans:{},done:false};
+    L={ex:j.exercise,sec,played:false,playing:false,rate:lv.value==='A2'?0.8:lv.value==='B1'?0.92:lv.value==='C1'?1.15:1,ans:{},done:false};
     renderLis();
   }catch(e){lisMsg(errMsg(e))}
 }
@@ -1593,7 +1615,7 @@ function renderLis(){
   const mk=(c,t)=>{const d=document.createElement('div');d.className=c;if(t)d.textContent=t;box.appendChild(d);return d};
   mk('ok','سؤال‌ها را بخوان، بعد پخش را بزن. مثل آزمون واقعی فقط یک‌بار پخش می‌شود.');
   const sp=mk('row2');
-  [['آهسته',0.8],['عادی',1]].forEach(([n,r])=>{const b=document.createElement('button');b.className='chip'+(L.rate===r?' pri':'');b.textContent=n;b.dataset.ls=r;sp.appendChild(b)});
+  [['آهسته',0.8],['عادی',1],['سریع',1.2],['خیلی سریع',1.4]].forEach(([n,r])=>{const b=document.createElement('button');b.className='chip'+(L.rate===r?' pri':'');b.textContent=n;b.dataset.ls=r;sp.appendChild(b)});
   const pb=document.createElement('button');pb.className='big';pb.id='lplay';pb.dataset.lp='1';pb.style.width='100%';pb.style.margin='10px 0';box.appendChild(pb);
   L.ex.questions.forEach((q,i)=>{
     const r=mk('qrow'),t=document.createElement('div');t.textContent=(i+1)+'. '+q.q;t.style.direction='ltr';r.appendChild(t);
@@ -1770,6 +1792,178 @@ try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if
 $('#thseg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)applyTheme(b.dataset.th)});
 $('#login').hidden=LOGGED;
 if(LOGGED)renderSug();
+
+/* ================= Refp + Roadmap (added) ================= */
+const PLAN=[
+ {m:'ماه ۱',spk:20,lis:90,t:'پایه و عادت: Refp درس ۱ تا ۱۰، دیکتهٔ روزانه، گوش دادن هر روز ≥ ۹۰ دقیقه (پادکست آسان + زیرنویس).',c:'یک تست شنیداری/گفتاری رایگان (مثل EF SET) بده و نتیجه را یادداشت کن: نقطهٔ شروع.'},
+ {m:'ماه ۲',spk:25,lis:105,t:'هدف B1: Refp درس ۱۱ تا ۲۰ (زمان‌ها)، سایه‌گویی (shadowing) ۱۰ دقیقه، ۱ آزمون Listening آیلتس در هفته.',c:'آزمون پایان ماه: Listening Section 1–2 در اپ؛ باید ≥ ۷۰٪ باشد.'},
+ {m:'ماه ۳',spk:30,lis:120,t:'B1+: Refp درس ۲۱ تا ۳۰، پادکست بدون زیرنویس (اول با متن)، گفتار ۱ دقیقه‌ای پشت‌سرهم.',c:'تست رایگان دوباره + یک Mock کامل Speaking در اپ.'},
+ {m:'ماه ۴',spk:35,lis:135,t:'B2: Refp درس ۳۱ تا ۴۰، سخنرانی/اخبار با سرعت واقعی، Part 2 و 3 آیلتس.',c:'Listening Section 3–4 در اپ ≥ ۷۰٪؛ Mock Speaking با نمرهٔ تخمینی ≥ ۵٫۵.'},
+ {m:'ماه ۵',spk:40,lis:150,t:'B2+: مرور Refp با تحویل درس، سطح C1 در Listening اپ، سخنرانی‌های طولانی (TED، دانشگاهی).',c:'تست رسمی یا شبیه‌ساز IELTS Listening کامل؛ هدف ≥ ۶٫۵.'},
+ {m:'ماه ۶',spk:40,lis:180,t:'فشار C1: محتوای بدون زیرنویس با لهجه‌های مختلف، یادداشت‌برداری، Mock Speaking هفتگی.',c:'ارزیابی نهایی؛ برنامهٔ ماه بعد را براساس نتیجه بچین.'}
+];
+function planGoalSec(){
+  let d=null;try{d=JSON.parse(localStorage.getItem(K('road')))}catch(e){}
+  if(!d||!d.d){d={d:new Date().toLocaleDateString('en-CA')};try{localStorage.setItem(K('road'),JSON.stringify(d))}catch(e){}}
+  const m=Math.max(0,Math.min(5,Math.floor((Date.now()-new Date(d.d))/864e5/30)));
+  return [20,25,30,35,40,40][m]*60;
+}
+const roadMonth=()=>{const d=jget('road',{d:ago(0)}).d;return Math.max(0,Math.min(5,Math.floor((new Date(ago(0))-new Date(d))/864e5/30)))};
+const RPO=()=>{const o=jget('refp',null)||{};o.L=o.L||{};o.I=o.I||{};return o};
+function rpSave(o){jset('refp',o);jset('refpU',Date.now());scheduleSync()}
+const lisToday=()=>jget('lisMin',{})[ago(0)]||0;
+function addLis(m){const d=jget('lisMin',{});d[ago(0)]=Math.max(0,(d[ago(0)]||0)+m);jset('lisMin',d);jset('refpU',Date.now());scheduleSync()}
+let RPX=null,RPPAT='';
+const rpd=()=>$('#rfbody');
+function rE(tag,cls,txt,p){const d=document.createElement(tag);if(cls)d.className=cls;if(txt!==undefined&&txt!==null)d.textContent=txt;if(p)p.appendChild(d);return d}
+function rBtn(txt,cls,fn,p){const b=rE('button',cls||'chip',txt,p);b.onclick=fn;return b}
+const rpSay=t=>{const s=$('#rfst');if(s)s.textContent=t};
+const normS=x=>String(x||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g,' ').replace(/\s+/g,' ').trim();
+const fixSrs=(n,i,ok)=>{const o=RPO(),k=n+':'+i,x=o.I[k]||{box:0};x.box=ok?Math.min(5,(x.box||0)+1):0;x.next=ago(-INT[x.box]);x.u=Date.now();o.I[k]=x;rpSave(o)};
+const rpDue=()=>{const o=RPO(),t=ago(0);return Object.keys(o.I).filter(k=>(o.I[k].next||t)<=t).map(k=>({n:+k.split(':')[0],i:+k.split(':')[1]}))};
+
+function openRefp(){
+  if(typeof REFP==='undefined'){alert('فایل refp-data.js کنار index.html بارگذاری نشده است.');return}
+  stopVoice();$('#rf').hidden=false;rpHome();
+}
+function rpHome(){
+  RPX=null;const b=rpd();b.textContent='';$('#rft').textContent='Refp';
+  const o=RPO(),mo=roadMonth(),P=PLAN[mo];
+  const rd=rE('div','rline',null,b);
+  rE('b','','🧭 نقشهٔ ۶ ماهه — '+P.m+' (هدف: Speaking B2 و Listening C1)',rd);
+  rE('div','',P.t,rd);
+  const spk=Math.round(((jget('day',{}).d===ago(0)?jget('day',{}).s:0)||0)/60);
+  rE('div','','امروز: حرف زدن '+spk+' از '+P.spk+' دقیقه · گوش دادن '+lisToday()+' از '+P.lis+' دقیقه',rd);
+  const r2=rE('div','row2',null,rd);
+  [15,30,60].forEach(m=>rBtn('+'+m+' دقیقه گوش دادن','chip',()=>{addLis(m);rpHome()},r2));
+  rE('div','ok','«گوش دادن» یعنی پادکست/ویدیو/اخبار انگلیسی بیرون از اپ؛ زمانش را اینجا ثبت کن. چک‌پوینت: '+P.c,rd);
+  const due=rpDue();
+  if(due.length){const r=rE('div','row2',null,b);rBtn('🔁 مرور امروز ('+due.length+' جمله)','big sm',()=>rpRun(due.slice(0,10).map(x=>({n:x.n,i:x.i,t:'say'})),'مرور',(s,t)=>rpEnd('مرور','',s,t,()=>rpHome())),r)}
+  rE('div','ok','درس‌ها را مثل یک مربی تحویل بده: یاد بگیر ← بگو ← آزمون (تحویل درس) ← گفتگو.',b);
+  REFP.forEach(L=>{
+    const s=o.L[L.n]||{},row=rE('button','iebtn',null,b);
+    rE('b','',(s.pass?'✅ ':s.r?'🔸 ':'')+'درس '+L.l+' · '+L.t+' ('+L.lv+')',row);
+    rE('span','',L.tf+(s.r?' — دور '+s.r+' از '+Math.ceil(L.core.length/6):'')+(s.best?' — بهترین آزمون '+Math.round(s.best*100)+'٪':''),row);
+    row.onclick=()=>rpLesson(L.n);
+  });
+}
+function rpTop(L,back){
+  const b=rpd();b.textContent='';
+  const h=rE('div','row2',null,b);h.style.justifyContent='flex-start';
+  rBtn('← برگشت','ghost sm',back||rpHome,h);
+  rE('div','sh-t','درس '+L.l+' · '+L.t,b);
+  const st=rE('div','ok','',b);st.id='rfst';
+}
+function rpLesson(n){
+  const L=REFP.find(x=>x.n===n),s=RPO().L[n]||{};RPX=null;
+  rpTop(L);const b=rpd();
+  const c=rE('div','rline',null,b);
+  rE('b','',L.tf+' — الگو: '+L.pat,c).style.direction='ltr';
+  rE('div','',L.rule,c);
+  L.mis.forEach(x=>rE('div','fa','• '+x,c));
+  rBtn('📖 یاد بگیر و بگو ('+(s.r?'دور '+(s.r+1):'دور ۱')+')','big',()=>rpRound(n),b).style.width='100%';
+  const r=rE('div','row2',null,b);
+  rBtn('🎯 تحویل درس (آزمون)','chip pri',()=>rpTest(n),r);
+  rBtn('💬 گفتگوی تمرینی','chip',()=>rpChat(n),r);
+  rBtn('➕ جمله‌های بیشتر','chip',()=>rpMore(n),r);
+}
+function rpSpeakBtn(p,t,slow){const x=rBtn('🔊','ear',()=>{speakNat(t,false,true)},p);if(slow)rBtn('🐢','ear xs',()=>speakNat(t,true,true),p)}
+function rpRound(n){
+  const L=REFP.find(x=>x.n===n),o=RPO(),s=o.L[n]||{},R=Math.ceil(L.core.length/6),st=((s.r||0)%R)*6;
+  const idx=[];for(let i=st;i<Math.min(L.core.length,st+6);i++)idx.push(i);
+  rpTop(L);const b=rpd();
+  rE('div','ok','گوش بده و بلند تکرار کن؛ بعد از من می‌خواهم این جمله‌ها را از روی ترجمه‌شان بگویی.',b);
+  idx.forEach(i=>{const c=L.core[i],q=rE('div','qrow',null,b);const e=rE('div','',c.e,q);e.style.direction='ltr';e.style.fontWeight='700';rpSpeakBtn(q,c.e,true);rE('div','fa',c.f,q);});
+  idx.slice(0,3).forEach(i=>{const c=L.core[i];speakNat.prefetch&&speakNat.prefetch(c.e)});
+  rBtn('✅ آماده‌ام؛ ازم بپرس','big',()=>rpRun(idx.map(i=>({n,i,t:'say'})),'درس '+L.l,(sc,t)=>{
+    const o2=RPO(),s2=o2.L[n]||{};if(sc/t>=0.5){s2.r=(s2.r||0)+1}s2.u=Date.now();o2.L[n]=s2;rpSave(o2);
+    rpEnd('درس '+L.l,'دور '+(s2.r||0)+' ثبت شد.',sc,t,()=>rpLesson(n));
+  }),b).style.width='100%';
+}
+function rpEnd(title,msg,sc,t,back){
+  RPX=null;const b=rpd();b.textContent='';
+  const c=rE('div','rline',null,b);
+  rE('b','',title+': '+sc+' از '+t+' ('+Math.round(sc/t*100)+'٪)',c);
+  rE('div','',(msg||'')+(sc/t>=0.7?' آفرین! 🎉':' جمله‌های اشتباه به مرور امروز اضافه شدند؛ دوباره امتحان کن.'),c);
+  rBtn('ادامه','big',back,b).style.width='100%';
+}
+function rpTest(n){
+  const L=REFP.find(x=>x.n===n),s=RPO().L[n]||{},pool=L.core.map((c,i)=>i).slice(0,Math.max(12,(s.r||0)*6));
+  const pick=pool.sort(()=>Math.random()-.5).slice(0,8);
+  rpRun(pick.map((i,k)=>({n,i,t:k%4===3?'dict':'say'})),'تحویل درس '+L.l,(sc,t)=>{
+    const o=RPO(),x=o.L[n]||{};x.best=Math.max(x.best||0,sc/t);if(sc/t>=0.7)x.pass=true;x.u=Date.now();o.L[n]=x;rpSave(o);
+    rpEnd('تحویل درس '+L.l,x.pass?'درس قبول شد ✅':'',sc,t,()=>rpLesson(n));
+  });
+}
+function rpMore(n){
+  const L=REFP.find(x=>x.n===n);rpTop(L,()=>rpLesson(n));const b=rpd(),T=jget('rpT',{});
+  rE('div','ok','جمله‌های بیشتر همین درس برای تمرین. با زدن «ترجمه» ترجمه ساخته و ذخیره می‌شود.',b);
+  L.more.slice(0,60).forEach(e=>{
+    const q=rE('div','qrow',null,b);const d=rE('div','',e,q);d.style.direction='ltr';rpSpeakBtn(q,e,true);
+    const f=rE('div','fa',T[e]||'',q);
+    rBtn('ترجمه','ghost sm',async function(){this.disabled=true;try{const j=await call({level:lv.value,translate:e});f.textContent=cleanFa(j.fa||'');const t=jget('rpT',{});t[e]=f.textContent;jset('rpT',t)}catch(x){f.textContent=errMsg(x)}this.disabled=false},q);
+  });
+}
+function rpChat(n){
+  const L=REFP.find(x=>x.n===n);
+  RPPAT='Refp lesson '+L.l+': '+L.pat+'. '+L.focus;
+  $('#rf').hidden=true;
+  startNew({l:'Refp '+L.l+' · '+L.t,s:'grammar practice for the pattern "'+L.pat+'". '+L.focus+' Ask one easy question that needs this pattern.',k:'refp'});
+}
+function rpMic(cb,btn){
+  if(rc){finish();return}
+  stopVoice();RPX={cb:d=>{btn.textContent='🎙 ضبط کن';btn.classList.remove('pri');cb(d)}};
+  btn.textContent='⏹ تمام (یا ساکت شو)';btn.classList.add('pri');rpSay('در حال ضبط…');
+  startRec(20).catch(()=>{RPX=null;btn.textContent='🎙 ضبط کن';rpSay('اجازهٔ میکروفون داده نشده؛ می‌توانی تایپ کنی.')});
+}
+function rpRun(q,title,done){
+  let k=0,sc=0;
+  const next=()=>{
+    if(k>=q.length){RPX=null;done(sc,q.length);return}
+    const it=q[k],L=REFP.find(x=>x.n===it.n),c=L.core[it.i],b=rpd();b.textContent='';
+    const h=rE('div','row2',null,b);h.style.justifyContent='space-between';
+    rBtn('✕ خروج','ghost sm',()=>{RPX=null;if(rc)giveUp();rpHome()},h);rE('b','',title+' — '+(k+1)+'/'+q.length,h);
+    const st=rE('div','ok','',b);st.id='rfst';
+    const card=rE('div','rcard',null,b),res=rE('div','',null,b);let done1=false,hinted=false;
+    const finish1=(ok,t)=>{if(done1)return;done1=true;if(ok&&!hinted)sc++;fixSrs(it.n,it.i,ok&&!hinted);
+      rBtn(k+1>=q.length?'پایان':'بعدی ←','big',()=>{k++;next()},res).style.width='100%'};
+    if(it.t==='dict'){
+      rE('div','',L.t+' — گوش بده و بنویس',card);
+      const sp=rE('div','row2',null,card);
+      [['🐢 آهسته',0.8,true],['▶ عادی',1,false],['⏩ سریع',1.25,false]].forEach(([n,r,sl])=>rBtn(n,'chip',()=>speakNat(c.e,sl,true,r),sp));
+      const inp=document.createElement('input');inp.dir='ltr';inp.placeholder='...';inp.autocomplete='off';card.appendChild(inp);
+      const chk=()=>{if(done1)return;const a=normS(c.e).split(' '),u=normS(inp.value).split(' ');
+        const ok=a.filter(w=>u.includes(w)).length/a.length>=0.85&&Math.abs(a.length-u.length)<=1;
+        rE('div',ok?'rline good':'rline bad',(ok?'✓ ':'✗ ')+c.e,res).style.direction='ltr';rE('div','fa',c.f,res);finish1(ok)};
+      rBtn('بررسی','big',chk,card);inp.onkeydown=e=>{if(e.key==='Enter')chk()};
+      setTimeout(()=>speakNat(c.e,false,true),300);
+    }else{
+      rE('div','ren',c.f,card).style.direction='rtl';rE('div','ok','این را به انگلیسی بگو',card);
+      const judge=async(data,mime,text)=>{
+        if(done1)return;rpSay('دارم چک می‌کنم…');
+        try{
+          const j=await call({level:lv.value,recall:{target:c.e,cue:c.f,mode:'say'},audio:data||undefined,mime:data?mime:undefined,text:text||undefined});
+          const r=j.recall||{},ok=r.verdict==='perfect'||r.verdict==='good';
+          const f=rE('div','fix snd '+(ok?'voc':'hnt'),null,res);
+          rE('b','',(ok?'✅ ':'🔁 ')+'شنیدم: «'+(r.heard||text||'…')+'»',f);
+          const bb=rE('b','','✓ '+(r.better||c.e),f);bb.style.direction='ltr';rpSpeakBtn(f,r.better||c.e,false);
+          if(r.fa)rE('div','fa',cleanFa(r.fa),f);
+          (r.sounds||[]).slice(0,1).forEach(x=>rE('div','fa','🗣 '+x.word+' → '+(x.say||'')+' '+cleanFa(x.fa||''),f));
+          rpSay('');finish1(ok);
+        }catch(e){rpSay(errMsg(e))}
+      };
+      const r1=rE('div','row2',null,card);
+      const mb=rBtn('🎙 ضبط کن','chip',()=>rpMic(d=>{if(!d){rpSay('چیزی نشنیدم؛ دوباره.');return}judge(d.data,d.mime)},mb),r1);
+      rBtn('💡 نشانم بده','ghost sm',function(){hinted=true;this.disabled=true;const e=rE('div','',c.e,card);e.style.direction='ltr';e.style.fontWeight='700';speakNat(c.e,false,true)},r1);
+      const inp=document.createElement('input');inp.dir='ltr';inp.placeholder='یا اینجا تایپ کن';inp.autocomplete='off';card.appendChild(inp);
+      inp.onkeydown=e=>{if(e.key==='Enter'&&inp.value.trim())judge(null,null,inp.value.trim())};
+    }
+  };
+  next();
+}
+$('#rfb').onclick=openRefp;$('#rfx').onclick=()=>{RPX=null;if(rc)giveUp();$('#rf').hidden=true};
+if(PROF==='kid')$('#rfb').hidden=true;
+(function(){const t=$('#ieb');if(t&&t.parentNode&&$('#rfb')&&$('#rfb').parentNode!==t.parentNode)t.parentNode.insertBefore($('#rfb'),t)})();
 </script>
 </body>
 </html>
