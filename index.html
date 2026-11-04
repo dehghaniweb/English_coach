@@ -385,6 +385,29 @@ details.ng .cnt{background:var(--gc);color:var(--on)}
 #rf .rcard .ren{font-size:22px;margin:12px 0}
 #rf .big{width:100%;margin-top:10px}
 #rfb{background:var(--tb3)}
+
+#rfb,#ieb,#revb{display:none!important}
+#start #tp,#start #sug,#start #note,#start #hs{display:none!important}
+#start #go{margin-top:2px}
+.plh{background:linear-gradient(145deg,var(--ac),color-mix(in srgb,var(--ac) 78%,#000));color:var(--on);border-radius:20px;padding:16px;margin-bottom:12px;direction:rtl;text-align:right;box-shadow:var(--sh)}
+.plh b{font-size:20px;display:block}.plh .sub{opacity:.93;font-size:14px;margin-top:4px}
+.plbar{height:8px;border-radius:6px;background:rgba(255,255,255,.3);margin-top:10px;overflow:hidden}.plbar i{display:block;height:100%;background:#fff;border-radius:6px}
+.plbar.plsm{height:6px;background:var(--ln);margin-top:6px}.plbar.plsm i{background:var(--ac)}
+.pls{display:flex;gap:10px;align-items:center;background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:10px 12px;margin-bottom:8px;direction:rtl}
+.pls.done{opacity:.62}.pls.next{border-color:var(--ac);box-shadow:0 0 0 2px color-mix(in srgb,var(--ac) 28%,transparent)}
+.pls .no{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--bg);font-weight:700;border:1px solid var(--ln)}
+.pls.done .no{background:var(--ac);color:var(--on);border-color:var(--ac)}
+.pls .tx{flex:1;min-width:0;text-align:right}.pls .tx b{display:block;font-size:15.5px}
+.pls .en{direction:ltr;text-align:left;color:var(--mu);font-size:13.5px}.pls .su{color:var(--mu);font-size:13px}
+.plmore{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.plm{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:12px;margin-bottom:10px;direction:rtl;text-align:right}
+.plm.cur{border-color:var(--ac);box-shadow:0 0 0 2px color-mix(in srgb,var(--ac) 28%,transparent)}.plm.past{opacity:.7}
+.plm b{display:block;font-size:16px;margin-bottom:2px}.plm .su{color:var(--mu);font-size:13.5px;margin:3px 0}.plm .plw{font-size:14px;margin:3px 0}
+.plg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.plc{background:var(--bg);border:1px solid var(--ln);border-radius:999px;padding:2px 10px;font-size:13px}
+#rfbody{direction:rtl;text-align:right}
+#log .fix,#log .ok{align-self:stretch;max-width:100%}
+#log .fix .fa,#log .ok{text-align:right}
+#log .envl{direction:ltr;text-align:left}
 </style>
 </head>
 <body>
@@ -407,8 +430,8 @@ details.ng .cnt{background:var(--gc);color:var(--on)}
   </div>
   <h2>Let's talk!</h2>
   <p>لازم نیست کامل حرف بزنی؛ فقط حرف بزن. من سؤال می‌پرسم، تو با صدا جواب می‌دهی و من همان لحظه غلط‌های گرامر و تلفظت را با توضیح فارسی نشان می‌دهم.</p>
-  <button class="big" id="plan">📋 برنامهٔ امروز (۶ ماهه)</button>
-  <button class="big" id="go">شروع مکالمه</button>
+  <button class="big" id="plan">📋 برنامهٔ امروز</button>
+  <button class="ghost" id="go">💬 گفتگوی آزاد</button>
   <div id="sug" hidden></div>
   <button class="ghost" id="tp">انتخاب موضوع</button>
   <button class="ghost" id="hc" hidden></button>
@@ -520,6 +543,7 @@ details.ng .cnt{background:var(--gc);color:var(--on)}
 </div>
 
 <script src="refp-data.js"></script>
+<script src="kid-data.js"></script>
 <script>
 const PROF=(()=>{try{return localStorage.getItem('prof')||''}catch(e){return ''}})();
 const LOGGED=(()=>{try{return localStorage.getItem('logged')==='1'||!!localStorage.getItem('pass')}catch(e){return false}})();
@@ -946,6 +970,11 @@ function addSecs(x){
   if(s>=180){const dd=jget('daysDone',{});if(!dd[ago(0)]){dd[ago(0)]=true;jset('daysDone',dd)}}
   if(s>=GOAL){const k=jget('streak',{n:0,last:''});if(k.last!==ago(0)){const nn=k.last===ago(1)?k.n+1:1;jset('streak',{n:nn,last:ago(0),u:Date.now(),best:Math.max(k.best||0,nn)})}}
   showGoal();
+  if(PROF!=='kid'&&(s-x)<GOAL&&s>=GOAL){try{planInc('spk')}catch(e){}setTimeout(goalReached,1200)}
+}
+function goalReached(){
+  const f=el('fix snd'),b=document.createElement('b');b.textContent='🎉 هدف گفتگوی امروز کامل شد! برای ادامهٔ برنامه (کار بعدی) دکمه را بزن.';f.appendChild(b);
+  const x=document.createElement('button');x.className='big';x.textContent='▶ مرحلهٔ بعد';x.style.width='100%';x.style.marginTop='8px';x.onclick=()=>{stopVoice();if(rc)giveUp();openRefp()};f.appendChild(x);
 }
 function weekBars(){
   const dl=jget('dayLog',{});let o='',t=0;
@@ -1088,7 +1117,7 @@ function trackStats(words,nf){
 }
 function vocabCard(list){
   const f=el('fix snd voc');
-  list.forEach(v=>{const b=document.createElement('b');b.textContent='📘 '+v.en+'  —  '+(v.fa||'');ear(b,String(v.en));f.appendChild(b);if(v.ex){const x=document.createElement('b');x.textContent='💬 '+v.ex+(v.ex_fa?'  —  '+v.ex_fa:'');ear(x,String(v.ex));f.appendChild(x)}});
+  list.forEach(v=>{const b=document.createElement('b');b.className='envl';b.textContent='📘 '+v.en;ear(b,String(v.en));f.appendChild(b);el('fa',v.fa||'',f);if(v.ex){const x=document.createElement('b');x.className='envl';x.textContent='💬 '+v.ex;ear(x,String(v.ex));f.appendChild(x);if(v.ex_fa)el('fa',v.ex_fa,f)}});
 }
 function chalCard(c){
   const f=el('fix snd cue'),h=document.createElement('b');h.textContent='🎯 '+(c.title||'');f.appendChild(h);
@@ -1130,7 +1159,7 @@ async function call(p,quiet){
   p.pat=RPPAT||'';p.notes=notes.slice(-12);p.days=practiceDays();p.eng=engPct();p.topic=$('#focus').value==='ielts'?'ielts':'';p.diff=PROF==='kid'?'normal':diff;
   if(!p.sync&&!p.tts&&!p.hint&&!p.challenge){
     p.past=chats().filter(c=>c.summary&&(!cur||c.id!==cur.id)).slice(0,5).map(c=>({d:new Date(c.updated).toLocaleDateString('en-CA'),s:c.summary}));
-    p.weak=jget('weak',[]).slice(-6);p.areas=areas();p.avoid=avoidTxt();
+    p.weak=jget('weak',[]).slice(-6);p.areas=areas();p.avoid=avoidTxt();p.known=knownTxt();p.asked=askedTxt();
   }
   try{p.pass=localStorage.getItem('pass')||''}catch(e){p.pass=''}
   for(let t=0;t<2;t++){
@@ -1242,6 +1271,7 @@ async function turn(u,a,ch,tp){
       const nw=((a?j.heard:u)||'').split(/\s+/).filter(Boolean).length;keepWeak(fx);trackStats(nw,fx.length);logTurn(nw,fx,sn);
       if(ie){ie.answers.push({t:(a?j.heard:u)||'',w:nw,s:a?a.secs:0});fx.forEach(x=>ie.fixes.push(x));sn.forEach(x=>ie.sounds.push(x));ie.n++;if(ie.n>=(IE_LIM[ie.part]||4))ie.done=true}
     }
+    if(Array.isArray(j.facts)&&j.facts.length&&cur){cur.facts=Array.from(new Set((cur.facts||[]).concat(j.facts.map(x=>String(x).slice(0,100))))).slice(-40);const g=jget('facts',[]);jset('facts',Array.from(new Set(g.concat(j.facts.map(x=>String(x).slice(0,100))))).slice(-60))}
     if(j.note){notes.push(String(j.note).slice(0,160));notes=notes.slice(-20);jset('notes',notes)}
     if(!j.reply||/^\s*[\[{]/.test(String(j.reply).trim())){j.reply='Sorry, I did not catch that. Could you say it again, please?';j.reply_fa='ببخشید، متوجه نشدم. می‌شود دوباره بگویید؟'}
     hist.push({r:'c',t:j.reply});
@@ -1431,6 +1461,8 @@ const P2GS=dedupe([
 const topicStarter=(k,x)=>k==='kid'?'play a short English game about: '+x+'. Teach two or three simple words, say each one slowly and ask the child to repeat the first word.':k==='mech'?'a mechanical engineering topic: '+x+'. Explain any technical word simply and ask one easy question.':'the topic: '+x.toLowerCase()+'. Ask one easy, concrete opening question.';
 const tc=()=>jget('tcount',{});
 function bumpTopic(k){const m=tc();m[k]=(m[k]||0)+1;jset('tcount',m);const r=jget('trecent',[]);r.push(k);jset('trecent',r.slice(-90));scheduleSync()}
+function knownTxt(){return Array.from(new Set(((cur&&cur.facts)||[]).concat(jget('facts',[])))).slice(-40).join('; ').slice(0,900)}
+function askedTxt(){const q=[];(hist||[]).forEach(m=>{if(m.r==='c')(String(m.t).match(/[^.!?]*\?/g)||[]).forEach(s=>q.push(s.trim().slice(0,90)))});return q.slice(-20).join(' | ').slice(0,900)}
 function avoidTxt(){const w=Object.values(jget('vbook',{})).sort((a,b)=>(b.u||0)-(a.u||0)).slice(0,40).map(x=>x.en).join('; ');const t=jget('trecent',[]).slice(-12).map(x=>x.replace(/^[A-Z0-9]+:/,'')).join('; ');return ((w?'already taught: '+w+'. ':'')+(t?'recent topics: '+t+'.':'')).slice(0,700)}
 function randomFrom(groups,pre){
   const m=tc(),pool=[];
@@ -1798,6 +1830,7 @@ try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if
 $('#thseg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)applyTheme(b.dataset.th)});
 $('#login').hidden=LOGGED;
 if(LOGGED)renderSug();
+const RCUR=(PROF==='kid'&&typeof KIDREFP!=='undefined')?KIDREFP:(typeof REFP!=='undefined'?REFP:undefined);
 
 /* ================= Refp + Roadmap (added) ================= */
 const PLAN=[
@@ -1829,7 +1862,7 @@ const fixSrs=(n,i,ok)=>{const o=RPO(),k=n+':'+i,x=o.I[k]||{box:0};x.box=ok?Math.
 const rpDue=()=>{const o=RPO(),t=ago(0);return Object.keys(o.I).filter(k=>(o.I[k].next||t)<=t).map(k=>({n:+k.split(':')[0],i:+k.split(':')[1]}))};
 
 function openRefp(){
-  if(typeof REFP==='undefined'){alert('فایل refp-data.js کنار index.html بارگذاری نشده است.');return}
+  if(typeof RCUR==='undefined'){alert('فایل refp-data.js کنار index.html بارگذاری نشده است.');return}
   {const mo=roadMonth();if(jget('lvMonth',-1)!==mo){lv.value=PLV[mo];try{localStorage.setItem(K('lvl'),lv.value)}catch(e){}jset('lvMonth',mo);touchPrefs()}}
   stopVoice();$('#rf').hidden=false;rpHome();
 }
@@ -1837,39 +1870,110 @@ let PLANMODE=false;
 const PLV=['A2','B1','B1','B2','B2','C1'],PRF=[2,2,3,3,1,1],PSEC=[1,1,2,3,4,4];
 const PD=()=>jget('planDone',{})[ago(0)]||{};
 function planInc(k){const a=jget('planDone',{}),d=a[ago(0)]||(a[ago(0)]={});d[k]=(d[k]||0)+1;jset('planDone',a)}
-const curLesson=()=>REFP.find(L=>!(RPO().L[L.n]||{}).pass);
+const curLesson=()=>RCUR.find(L=>!(RPO().L[L.n]||{}).pass);
 const dayIdx=()=>Math.floor((new Date(ago(0))-new Date(jget('road',{d:ago(0)}).d))/864e5);
+const PLANW=[
+ ['هفتهٔ ۱: عادت‌سازی — روزی ۲ بخش Refp، ۲۰ دقیقه گفتگو، پادکست با متن باز','هفتهٔ ۲: دیکتهٔ جمله‌ها؛ هر روز ۵ جملهٔ مرور را بدون نگاه کردن بگو','هفتهٔ ۳: اولین آزمون درس؛ تمرین کردن با «Is/Are ... ?»','هفتهٔ ۴: تکرار درس‌های ضعیف + تست نقطهٔ شروع'],
+ ['هفتهٔ ۱: زمان حال ساده و continuous؛ گفتگو دربارهٔ روز خودت','هفتهٔ ۲: گذشتهٔ ساده؛ تعریف کردن دیروز','هفتهٔ ۳: Shadowing — جملهٔ مربی را با همان ریتم تکرار کن','هفتهٔ ۴: آزمون Listening Section 1–2 در اپ'],
+ ['هفتهٔ ۱: پادکست با متن مخفی؛ اول گوش بده، بعد متن','هفتهٔ ۲: گفتار ۱ دقیقه‌ای پشت‌سرهم دربارهٔ یک موضوع','هفتهٔ ۳: زمان آینده، مقایسه و دلیل (because / so)','هفتهٔ ۴: اولین Mock کامل Speaking'],
+ ['هفتهٔ ۱: سرعت «سریع» در پادکست؛ مرور خطاهای تکراری','هفتهٔ ۲: Part 2 آیلتس (۲ دقیقه حرف زدن)','هفتهٔ ۳: Part 3 آیلتس (نظر و دلیل)','هفتهٔ ۴: Listening Section 3–4 و Mock Speaking'],
+ ['هفتهٔ ۱: سطح C1 در Listening؛ یادداشت‌برداری هنگام گوش دادن','هفتهٔ ۲: مرور Refp با تحویل درس','هفتهٔ ۳: بحث و نظر دادن (agree / disagree)','هفتهٔ ۴: شبیه‌ساز IELTS Listening کامل'],
+ ['هفتهٔ ۱: پادکست «خیلی سریع» با متن مخفی','هفتهٔ ۲: Mock Speaking کامل + بازبینی خطاها','هفتهٔ ۳: Mock Listening کامل','هفتهٔ ۴: ارزیابی نهایی و برنامهٔ آزمون IELTS']
+];
+function bi(p,fa,en){const d=rE('div','tx',null,p);rE('b','',fa,d);if(en){const e=rE('div','en',en,d);e.dir='ltr'}return d}
+function spkSecToday(){const dy=jget('day',{});return(dy.d===ago(0)?dy.s:0)||0}
 function planTasks(){
-  const m=roadMonth(),P=PLAN[m],d=PD(),due=rpDue(),cl=curLesson(),dy=jget('day',{}),spkS=(dy.d===ago(0)?dy.s:0)||0,need=PRF[m],T=[];
-  T.push({k:'rev',t:'🔁 مرور جمله‌های Refp ('+due.length+' جمله)',done:!due.length||d.rev>0,go:()=>{PLANMODE=true;rpRun(due.slice(0,10).map(x=>({n:x.n,i:x.i,t:'say'})),'مرور',(s,t)=>{planInc('rev');rpEnd('مرور','',s,t,rpHome)})}});
-  T.push({k:'refp',t:'📖 Refp'+(cl?' — درس '+cl.l+' · '+cl.t:' — آزمون مرور')+' ('+Math.min(d.refp||0,need)+'/'+need+' بخش)',done:(d.refp||0)>=need,go:()=>{PLANMODE=true;if(!cl){rpTest(REFP[Math.floor(Math.random()*REFP.length)].n);return}const s=RPO().L[cl.n]||{};(s.r||0)>=Math.ceil(cl.core.length/6)?rpTest(cl.n):rpRound(cl.n)}});
-  T.push({k:'lis',t:'🎧 تمرین Listening اپ (سطح '+PLV[m]+')',done:d.lis>0,go:()=>{PLANMODE=true;$('#rf').hidden=true;lv.value=PLV[m];startListening(PSEC[m])}});
-  T.push({k:'spk',t:'🎙 گفتگو با مربی ('+Math.floor(spkS/60)+' از '+P.spk+' دقیقه)'+(cl?' — تمرکز: '+cl.t:''),done:spkS>=GOAL,go:()=>{PLANMODE=false;if(cl)rpChat(cl.n);else{$('#rf').hidden=true;startNew(randomTopic())}}});
-  T.push({k:'out',t:'🎧 پادکست روزانهٔ اپ ('+Math.round(lisToday())+' از '+P.lis+' دقیقه)',done:lisToday()>=P.lis,go:()=>openFeed()});
-  if(m>=2&&dayIdx()%7===6){const a=lastAssess()[0];T.push({k:'mock',t:'🎓 آزمون هفتگی Speaking (Mock کامل)',done:!!(a&&a.assess.d===ago(0)),go:()=>{PLANMODE=false;$('#rf').hidden=true;startIelts('full',randomFrom(P1GS,'P1:'))}}) }
+  const kid=PROF==='kid',m=roadMonth(),P=PLAN[m],d=PD(),due=rpDue(),cl=curLesson(),spkS=spkSecToday(),T=[];
+  T.push({k:'rev',ic:'🔁',t:'مرور جمله‌ها',su:due.length?due.length+' جمله برای مرور':'امروز جملهٔ مرور نداری',done:!due.length||d.rev>0,
+    go:()=>{PLANMODE=true;rpRun(due.slice(0,kid?5:10).map(x=>({n:x.n,i:x.i,t:'say'})),'مرور',(s,t)=>{planInc('rev');rpEnd('مرور','',s,t,rpHome)})}});
+  if(kid){
+    T.push({k:'refp',ic:'📖',t:'جملهٔ جدید امروز',en:cl?cl.t:'',su:cl?cl.tf+' — '+cl.lv:'همهٔ واحدها تمام شد 🎉',done:!cl||(d.refp||0)>=1,
+      go:()=>{PLANMODE=true;if(cl)rpRound(cl.n);else rpHome()}});
+    T.push({k:'spk',ic:'🎙',t:'بازی و گفتگو با مربی',su:Math.floor(spkS/60)+' از '+Math.round(GOAL/60)+' دقیقه',pct:spkS/GOAL,done:spkS>=GOAL,
+      go:()=>{PLANMODE=false;if(cl)rpChat(cl.n);else{$('#rf').hidden=true;startNew(randomTopic())}}});
+    return T;
+  }
+  const need=PRF[m];
+  T.push({k:'refp',ic:'📖',t:'درس Refp',en:cl?'Lesson '+cl.l+' · '+cl.t:'',su:cl?'بخش '+Math.min(d.refp||0,need)+' از '+need:'آزمون مرور',pct:(d.refp||0)/need,done:(d.refp||0)>=need,
+    go:()=>{PLANMODE=true;if(!cl){rpTest(RCUR[Math.floor(Math.random()*RCUR.length)].n);return}const s=RPO().L[cl.n]||{};(s.r||0)>=Math.ceil(cl.core.length/6)?rpTest(cl.n):rpRound(cl.n)}});
+  T.push({k:'out',ic:'🎧',t:'پادکست روزانه',su:Math.round(lisToday())+' از '+P.lis+' دقیقه',pct:lisToday()/P.lis,done:lisToday()>=P.lis,go:()=>openFeed()});
+  T.push({k:'lis',ic:'📝',t:'تمرین Listening آیلتس‌گونه',su:'سطح '+PLV[m],done:d.lis>0,go:()=>{PLANMODE=true;$('#rf').hidden=true;lv.value=PLV[m];startListening(PSEC[m])}});
+  T.push({k:'spk',ic:'🎙',t:'گفتگو با مربی',en:cl?'Focus: '+cl.t:'',su:Math.floor(spkS/60)+' از '+Math.round(GOAL/60)+' دقیقه',pct:spkS/GOAL,done:spkS>=GOAL,
+    go:()=>{PLANMODE=false;if(cl)rpChat(cl.n);else{$('#rf').hidden=true;startNew(randomTopic())}}});
+  if(m>=2&&dayIdx()%7===6){const a=lastAssess()[0];T.push({k:'mock',ic:'🎓',t:'آزمون هفتگی Speaking (Mock کامل)',su:'هر هفته یک‌بار',done:!!(a&&a.assess.d===ago(0)),go:()=>{PLANMODE=false;$('#rf').hidden=true;startIelts('full',randomFrom(P1GS,'P1:'))}}) }
   return T;
 }
 function rpHome(){
-  RPX=null;const b=rpd();b.textContent='';$('#rft').textContent='برنامهٔ امروز';
-  const mo=roadMonth(),P=PLAN[mo],T=planTasks(),nx=T.find(x=>!x.done&&x.go),nd=T.filter(x=>x.done).length;
-  const rd=rE('div','rline',null,b);
-  rE('b','','🧭 روز '+(dayIdx()+1)+' از ۱۸۰ — '+P.m+' (هدف: Speaking B2، Listening C1)',rd);
-  rE('div','',P.t,rd);
-  rE('div','ok','پیشرفت امروز: '+nd+' از '+T.length+' کار',rd);
-  T.forEach(t=>{const r=rE('div','qrow',null,b);rE('div','',(t.done?'✅ ':'⬜ ')+t.t,r);
-    if(!t.done||t.k==='out')rBtn(t.done?'یک اپیزود دیگر':'شروع','chip',t.go,r)});
-  if(nx)rBtn('▶ ادامهٔ برنامه: '+nx.t.replace(/\(.*$/,''),'big',nx.go,b);
-  else rE('div','rline','🎉 برنامهٔ امروز تمام شد؛ فردا ادامه می‌دهیم. چک‌پوینت ماه: '+P.c,b);
-  rE('div','ok','پادکست روزانه را خود اپ می‌سازد (خبر، داستان، مصاحبه، گفتگو…) و موضوع‌ها تکرار نمی‌شوند؛ نیازی به منبع بیرونی نیست.',b);
-  netCard(b);voiceRow(b);
-  const dt=document.createElement('details');dt.className='ng';b.appendChild(dt);rE('summary','','📚 همهٔ درس‌های Refp',dt);
+  RPX=null;const b=rpd();b.textContent='';const kid=PROF==='kid';$('#rft').textContent=kid?'برنامهٔ امروز آرشا':'برنامهٔ امروز';
+  const T=planTasks(),nd=T.filter(x=>x.done).length,nx=T.find(x=>!x.done&&x.go),h=rE('div','plh',null,b);
+  if(kid){const cl=curLesson(),ps=Object.values(RPO().L).filter(x=>x.pass).length;
+    rE('b','','روز '+(dayIdx()+1)+(cl?' · '+cl.lv:' · پایان دوره 🎉'),h);
+    rE('div','sub','واحد '+(cl?cl.l:RCUR.length)+' از '+RCUR.length+' · '+(ps*6)+' جمله یاد گرفته‌ای',h);
+  }else{const mo=roadMonth(),P=PLAN[mo];
+    rE('b','','روز '+(dayIdx()+1)+' از ۱۸۰ · '+P.m,h);
+    rE('div','sub','هدف این ماه: سطح '+PLV[mo]+' — مقصد: Speaking B2 و Listening C1',h);
+  }
+  rE('i','',null,rE('div','plbar',null,h)).style.width=Math.round(nd/T.length*100)+'%';
+  rE('div','sub','امروز '+nd+' از '+T.length+' کار انجام شد',h);
+  T.forEach((t,i)=>{
+    const r=rE('div','pls'+(t.done?' done':'')+(t===nx?' next':''),null,b);
+    rE('div','no',t.done?'✓':String(i+1),r);
+    const x=bi(r,t.ic+' '+t.t,t.en);rE('div','su',t.su,x);
+    if(t.pct!==undefined&&!t.done)rE('i','',null,rE('div','plbar plsm',null,x)).style.width=Math.min(100,Math.round(t.pct*100))+'%';
+    if(t.go&&(!t.done||t.k==='out'))rBtn(t.done?'یکی دیگر':(t===nx?'شروع ▶':'شروع'),'chip'+(t===nx?' pri':''),t.go,r);
+  });
+  if(nx)rBtn('▶ ادامه: '+nx.t,'big',nx.go,b);
+  else rE('div','rline','🎉 برنامهٔ امروز تمام شد؛ فردا همین‌جا ادامه می‌دهیم.'+(kid?'':' چک‌پوینت این ماه: '+PLAN[roadMonth()].c),b);
+  const row=rE('div','row2',null,b);
+  rBtn('🗺 نقشهٔ '+(kid?'سطح‌ها':'۶ ماهه'),'chip',rpRoad,row);
+  rBtn('📚 همهٔ درس‌ها','chip',rpLessons,row);
+  const dt=rE('details','ng',null,b);rE('summary','','⋯ ابزارهای بیشتر و تنظیمات',dt);
+  const go=(f)=>()=>{PLANMODE=false;$('#rf').hidden=true;f()};
+  const tl=rE('div','plmore',null,dt);
+  rBtn('💬 گفتگوی آزاد','chip',go(()=>startNew(randomTopic())),tl);
+  rBtn('🕘 گفتگوهای قبلی','chip',go(()=>$('#hb').click()),tl);
+  rBtn('📘 مرور کلمه‌ها','chip',go(()=>$('#revb').click()),tl);
+  rBtn('📊 گزارش','chip',go(()=>$('#repb').click()),tl);
+  if(!kid)rBtn('🎓 آیلتس','chip',go(()=>$('#ieb').click()),tl);
+  netCard(dt);voiceRow(dt);
+}
+function rpLessons(){
+  const b=rpd();b.textContent='';$('#rft').textContent='همهٔ درس‌ها';
+  rBtn('← برگشت به برنامه','ghost sm',rpHome,b);
   const o=RPO();
-  REFP.forEach(L=>{
-    const s=o.L[L.n]||{},row=rE('button','iebtn',null,dt);
-    rE('b','',(s.pass?'✅ ':s.r?'🔸 ':'')+'درس '+L.l+' · '+L.t+' ('+L.lv+')',row);
-    rE('span','',L.tf+(s.r?' — دور '+s.r+' از '+Math.ceil(L.core.length/6):'')+(s.best?' — آزمون '+Math.round(s.best*100)+'٪':''),row);
+  RCUR.forEach(L=>{
+    const s=o.L[L.n]||{},row=rE('button','iebtn',null,b);
+    rE('b','',(s.pass?'✅ ':s.r?'🔸 ':'')+'درس '+L.l+' · '+L.tf+' ('+L.lv+')',row);
+    const e=rE('span','',L.t+(s.best?' — '+Math.round(s.best*100)+'٪':''),row);e.dir='ltr';
     row.onclick=()=>{PLANMODE=false;rpLesson(L.n)};
   });
+}
+function rpRoad(){
+  const b=rpd();b.textContent='';const kid=PROF==='kid';$('#rft').textContent=kid?'نقشهٔ سطح‌ها':'نقشهٔ ۶ ماهه';
+  rBtn('← برگشت به برنامه','ghost sm',rpHome,b);const o=RPO();
+  if(kid){
+    const cl=curLesson();
+    ['سطح ۱ — مبتدی','سطح ۲ — پایه','سطح ۳ — سؤال و جواب','سطح ۴ — زندگی روزمره','سطح ۵ — گذشته و دلیل','سطح ۶ — پیشرفته'].forEach(lvn=>{
+      const us=RCUR.filter(u=>u.lv===lvn),ps=us.filter(u=>(o.L[u.n]||{}).pass).length,here=us.some(u=>cl&&u.n===cl.n);
+      const c=rE('div','plm'+(here?' cur':ps===us.length?' past':''),null,b);
+      rE('b','',(ps===us.length?'✅ ':here?'📍 ':'')+lvn+'  ('+ps+' از '+us.length+')',c);
+      us.forEach(u=>{const r=rE('div','plw',null,c);r.textContent=((o.L[u.n]||{}).pass?'✓ ':'• ')+u.tf+'  ';const e=rE('span','',u.t,r);e.dir='ltr';e.style.color='var(--mu)'});
+    });
+    return;
+  }
+  const mo=roadMonth();
+  rE('div','ok','هر ماه یک سطح: روزانه ۶ کار کوتاه را در «برنامهٔ امروز» انجام بده؛ نیازی به انتخاب منو نیست.',b);
+  PLAN.forEach((P,i)=>{
+    const c=rE('div','plm'+(i===mo?' cur':i<mo?' past':''),null,b);
+    rE('b','',(i<mo?'✅ ':i===mo?'📍 ':'')+P.m+' · سطح '+PLV[i],c);
+    rE('div','su',P.t,c);
+    const g=rE('div','plg',null,c);
+    ['🎙 '+P.spk+' دقیقه گفتگو','🎧 '+P.lis+' دقیقه پادکست','📖 '+PRF[i]+' بخش Refp'].forEach(x=>rE('span','plc',x,g));
+    if(i<4){const ps=RCUR.filter(L=>L.n>i*10&&L.n<=i*10+10&&(o.L[L.n]||{}).pass).length;rE('div','su','درس‌های Refp '+(i*10+1)+' تا '+(i*10+10)+' — '+ps+' از ۱۰ قبول شده',c)}
+    PLANW[i].forEach(w=>rE('div','plw','• '+w,c));
+    rE('div','su','🎯 چک‌پوینت: '+P.c,c);
+  });
+  rE('div','rline','🏁 پایان ماه ۶: ارزیابی نهایی و رزرو آزمون IELTS.',b);
 }
 function rpTop(L,back){
   const b=rpd();b.textContent='';
@@ -1879,7 +1983,7 @@ function rpTop(L,back){
   const st=rE('div','ok','',b);st.id='rfst';
 }
 function rpLesson(n){
-  const L=REFP.find(x=>x.n===n),s=RPO().L[n]||{};RPX=null;
+  const L=RCUR.find(x=>x.n===n),s=RPO().L[n]||{};RPX=null;
   rpTop(L);const b=rpd();
   const c=rE('div','rline',null,b);
   rE('b','',L.tf+' — الگو: '+L.pat,c).style.direction='ltr';
@@ -1889,18 +1993,18 @@ function rpLesson(n){
   const r=rE('div','row2',null,b);
   rBtn('🎯 تحویل درس (آزمون)','chip pri',()=>rpTest(n),r);
   rBtn('💬 گفتگوی تمرینی','chip',()=>rpChat(n),r);
-  rBtn('➕ جمله‌های بیشتر','chip',()=>rpMore(n),r);
+  if(L.more.length)rBtn('➕ جمله‌های بیشتر','chip',()=>rpMore(n),r);
 }
 function rpSpeakBtn(p,t,slow){const x=rBtn('🔊','ear',()=>{speakNat(t,false,true)},p);if(slow)rBtn('🐢','ear xs',()=>speakNat(t,true,true),p)}
 function rpRound(n){
-  const L=REFP.find(x=>x.n===n),o=RPO(),s=o.L[n]||{},R=Math.ceil(L.core.length/6),st=((s.r||0)%R)*6;
+  const L=RCUR.find(x=>x.n===n),o=RPO(),s=o.L[n]||{},R=Math.ceil(L.core.length/6),st=((s.r||0)%R)*6;
   const idx=[];for(let i=st;i<Math.min(L.core.length,st+6);i++)idx.push(i);
   rpTop(L);const b=rpd();
   rE('div','ok','گوش بده و بلند تکرار کن؛ بعد از من می‌خواهم این جمله‌ها را از روی ترجمه‌شان بگویی.',b);
   idx.forEach(i=>{const c=L.core[i],q=rE('div','qrow',null,b);const e=rE('div','',c.e,q);e.style.direction='ltr';e.style.fontWeight='700';rpSpeakBtn(q,c.e,true);rE('div','fa',c.f,q);});
   idx.slice(0,3).forEach(i=>{const c=L.core[i];speakNat.prefetch&&speakNat.prefetch(c.e)});
   rBtn('✅ آماده‌ام؛ ازم بپرس','big',()=>rpRun(idx.map(i=>({n,i,t:'say'})),'درس '+L.l,(sc,t)=>{
-    const o2=RPO(),s2=o2.L[n]||{};if(sc/t>=0.5){s2.r=(s2.r||0)+1}s2.u=Date.now();o2.L[n]=s2;rpSave(o2);
+    const o2=RPO(),s2=o2.L[n]||{};if(sc/t>=0.5){s2.r=(s2.r||0)+1;if(PROF==='kid')s2.pass=true}s2.u=Date.now();o2.L[n]=s2;rpSave(o2);
     planInc('refp');rpEnd('درس '+L.l,'دور '+(s2.r||0)+' ثبت شد.',sc,t,()=>PLANMODE?rpHome():rpLesson(n));
   }),b).style.width='100%';
 }
@@ -1912,7 +2016,7 @@ function rpEnd(title,msg,sc,t,back){
   rBtn('ادامه','big',back,b).style.width='100%';
 }
 function rpTest(n){
-  const L=REFP.find(x=>x.n===n),s=RPO().L[n]||{},pool=L.core.map((c,i)=>i).slice(0,Math.max(12,(s.r||0)*6));
+  const L=RCUR.find(x=>x.n===n),s=RPO().L[n]||{},pool=L.core.map((c,i)=>i).slice(0,Math.max(12,(s.r||0)*6));
   const pick=pool.sort(()=>Math.random()-.5).slice(0,8);
   rpRun(pick.map((i,k)=>({n,i,t:k%4===3?'dict':'say'})),'تحویل درس '+L.l,(sc,t)=>{
     const o=RPO(),x=o.L[n]||{};x.best=Math.max(x.best||0,sc/t);if(sc/t>=0.7)x.pass=true;x.u=Date.now();o.L[n]=x;rpSave(o);
@@ -1920,7 +2024,7 @@ function rpTest(n){
   });
 }
 function rpMore(n){
-  const L=REFP.find(x=>x.n===n);rpTop(L,()=>rpLesson(n));const b=rpd(),T=jget('rpT',{});
+  const L=RCUR.find(x=>x.n===n);rpTop(L,()=>rpLesson(n));const b=rpd(),T=jget('rpT',{});
   rE('div','ok','جمله‌های بیشتر همین درس برای تمرین. با زدن «ترجمه» ترجمه ساخته و ذخیره می‌شود.',b);
   L.more.slice(0,60).forEach(e=>{
     const q=rE('div','qrow',null,b);const d=rE('div','',e,q);d.style.direction='ltr';rpSpeakBtn(q,e,true);
@@ -1929,10 +2033,10 @@ function rpMore(n){
   });
 }
 function rpChat(n){
-  const L=REFP.find(x=>x.n===n);
-  RPPAT='Refp lesson '+L.l+': '+L.pat+'. '+L.focus;
+  const L=RCUR.find(x=>x.n===n);
+  RPPAT=(PROF==='kid'?'Unit '+L.l+': '+L.pat+'. '+L.focus+' Sentences the child already learned (review them, do not re-teach): '+RCUR.filter(x=>(RPO().L[x.n]||{}).pass&&x.n!==L.n).slice(-5).map(x=>x.core.slice(0,2).map(c=>c.e).join(' / ')).join(' | '):'Refp lesson '+L.l+': '+L.pat+'. '+L.focus).slice(0,700);
   $('#rf').hidden=true;
-  startNew({l:'Refp '+L.l+' · '+L.t,s:'grammar practice for the pattern "'+L.pat+'". '+L.focus+' Ask one easy question that needs this pattern.',k:'refp'});
+  startNew({l:(PROF==='kid'?'Unit ':'Refp ')+L.l+' · '+L.t,s:PROF==='kid'?'play a short game with the sentences of this unit: '+L.core.slice(0,3).map(c=>c.e).join(' / ')+'. Say the first sentence slowly and ask the child to repeat the whole sentence.':'grammar practice for the pattern "'+L.pat+'". '+L.focus+' Ask one easy question that needs this pattern.',k:'refp'});
 }
 function rpMic(cb,btn){
   if(rc){finish();return}
@@ -1944,7 +2048,7 @@ function rpRun(q,title,done){
   let k=0,sc=0;
   const next=()=>{
     if(k>=q.length){RPX=null;done(sc,q.length);return}
-    const it=q[k],L=REFP.find(x=>x.n===it.n),c=L.core[it.i],b=rpd();b.textContent='';
+    const it=q[k],L=RCUR.find(x=>x.n===it.n),c=L.core[it.i],b=rpd();b.textContent='';
     const h=rE('div','row2',null,b);h.style.justifyContent='space-between';
     rBtn('✕ خروج','ghost sm',()=>{RPX=null;if(rc)giveUp();rpHome()},h);rE('b','',title+' — '+(k+1)+'/'+q.length,h);
     const st=rE('div','ok','',b);st.id='rfst';
@@ -1986,11 +2090,10 @@ function rpRun(q,title,done){
   next();
 }
 $('#rfb').onclick=openRefp;$('#rfx').onclick=()=>{RPX=null;if(rc)giveUp();$('#rf').hidden=true};
-if(PROF==='kid')$('#rfb').hidden=true;
 (function(){const t=$('#ieb');if(t&&t.parentNode&&$('#rfb')&&$('#rfb').parentNode!==t.parentNode)t.parentNode.insertBefore($('#rfb'),t)})();
 
 $('#plan').onclick=openRefp;
-if(PROF!=='kid'&&LOGGED&&typeof REFP!=='undefined'){const a=jget('planOpen','');if(a!==ago(0)){jset('planOpen',ago(0));setTimeout(openRefp,700)}}
+if(LOGGED&&typeof RCUR!=='undefined'){const a=jget('planOpen','');if(a!==ago(0)){jset('planOpen',ago(0));setTimeout(openRefp,700)}}
 /* ===== Daily listening feed + data meter + male voice ===== */
 const FEEDK=['a short news report','a short story','an interview (two speakers, A is the host, B is the guest)','a phone conversation between two people (A and B)','a mini lecture','a travel diary','an explainer podcast ("how things work")','an advice podcast','a true-style history story','a daily-life monologue','a podcast chat between two friends (A and B)'];
 const feedHist=()=>jget('feedHist',[]);
@@ -2115,6 +2218,23 @@ function voiceRow(p){
   s.onchange=()=>{jset('voiceName',s.value);speakLine('Hello, I am your English coach.',pickVoice(),1,1)};
   rE('div','ok','اگر صدای مربی زنانه شد، از این فهرست یک صدای مردانه (مثل David، Daniel، Mark، Guy، George) انتخاب کن؛ انتخابت ثابت می‌ماند.',c);
 }
+(function(){
+  const sel='div,p,b,s,span.su,span.en',skip=/^(BUTTON|SELECT|INPUT|TEXTAREA|SVG|I)$/;
+  function fix(r){
+    if(!r||r.nodeType!==1)return;
+    const all=[r].concat(Array.from(r.querySelectorAll(sel)));
+    all.forEach(e=>{
+      if(e.dir||skip.test(e.tagName)||!e.matches(sel))return;
+      let own='';e.childNodes.forEach(n=>{if(n.nodeType===3)own+=n.textContent});
+      if(own.trim().length<2)return;
+      e.dir='auto';
+    });
+  }
+  const run=()=>['#log','#rfbody','#hist','#rbody','#lbody'].forEach(s=>fix(document.querySelector(s)));
+  let t=0;const mo=new MutationObserver(()=>{clearTimeout(t);t=setTimeout(run,60)});
+  ['#log','#rfbody','#hist','#rbody','#lbody'].forEach(s=>{const x=document.querySelector(s);if(x)mo.observe(x,{childList:true,subtree:true})});
+  run();
+})();
 </script>
 </body>
 </html>
