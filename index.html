@@ -1461,7 +1461,7 @@ const P2GS=dedupe([
 const topicStarter=(k,x)=>k==='kid'?'play a short English game about: '+x+'. Teach two or three simple words, say each one slowly and ask the child to repeat the first word.':k==='mech'?'a mechanical engineering topic: '+x+'. Explain any technical word simply and ask one easy question.':'the topic: '+x.toLowerCase()+'. Ask one easy, concrete opening question.';
 const tc=()=>jget('tcount',{});
 function bumpTopic(k){const m=tc();m[k]=(m[k]||0)+1;jset('tcount',m);const r=jget('trecent',[]);r.push(k);jset('trecent',r.slice(-90));scheduleSync()}
-function knownTxt(){return Array.from(new Set(((cur&&cur.facts)||[]).concat(jget('facts',[])))).slice(-40).join('; ').slice(0,900)}
+function knownTxt(){let k=Array.from(new Set(((cur&&cur.facts)||[]).concat(jget('facts',[])))).slice(-40).join('; ');if(PROF==='kid'&&typeof KIDREFP!=='undefined'){const o=RPO().L,s=KIDREFP.filter(L=>(o[L.n]||{}).r||(o[L.n]||{}).pass).slice(-6).map(L=>L.core.slice(0,3).map(c=>c.e).join(' ')).join(' / ');if(s)k='Sentences Arsha already learned (review and reuse them): '+s+'. '+k}return k.slice(0,900)}
 function askedTxt(){const q=[];(hist||[]).forEach(m=>{if(m.r==='c')(String(m.t).match(/[^.!?]*\?/g)||[]).forEach(s=>q.push(s.trim().slice(0,90)))});return q.slice(-20).join(' | ').slice(0,900)}
 function avoidTxt(){const w=Object.values(jget('vbook',{})).sort((a,b)=>(b.u||0)-(a.u||0)).slice(0,40).map(x=>x.en).join('; ');const t=jget('trecent',[]).slice(-12).map(x=>x.replace(/^[A-Z0-9]+:/,'')).join('; ');return ((w?'already taught: '+w+'. ':'')+(t?'recent topics: '+t+'.':'')).slice(0,700)}
 function randomFrom(groups,pre){
