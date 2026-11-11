@@ -424,6 +424,106 @@ details.ng .cnt{background:var(--gc);color:var(--on)}
 #hc .hl{font-size:13px;color:var(--mu);text-align:right;direction:rtl}
 #hc .ht{direction:ltr;text-align:left;font-weight:700;unicode-bidi:plaintext}
 #rfbody [dir="ltr"],#rfbody .pl-en{text-align:left}
+/* ===== advanced tab · IELTS 7 ===== */
+body.advtab{--btn:#3A6EA5;--btn2:#2F5F94;--btn-tx:#F5F9FE;--gp:linear-gradient(135deg,var(--btn),var(--btn2));--bg:#E3EDF8;--sf:#F5F9FE;--ln:#C2D4E8;--ac:#3A6EA5;--ac2:#5C92C7;--tx:#1E2B3A;--mu:#566A82;--glow:radial-gradient(900px 480px at 100% -8%,rgba(255,255,255,.75),transparent 62%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body.advtab{--btn:#2F5F94;--btn2:#295585;--btn-tx:#EAF2FB;--gp:linear-gradient(135deg,var(--btn),var(--btn2));--bg:#101A26;--sf:#1A2735;--ln:#2B3E52;--ac:#8DB8E8;--ac2:#6A9BD1;--on:#0E1D2E;--tx:#E3EDF8;--mu:#9FB4CC;--glow:none}}
+:root[data-theme="dark"] body.advtab{--btn:#2F5F94;--btn2:#295585;--btn-tx:#EAF2FB;--gp:linear-gradient(135deg,var(--btn),var(--btn2));--bg:#101A26;--sf:#1A2735;--ln:#2B3E52;--ac:#8DB8E8;--ac2:#6A9BD1;--on:#0E1D2E;--tx:#E3EDF8;--mu:#9FB4CC;--glow:none}
+#tabs{display:none;flex:none;margin:2px auto 8px;padding:4px;width:calc(100% - 28px);max-width:540px;background:var(--sf);border:1px solid var(--ln);border-radius:999px;position:relative;box-shadow:var(--sh)}
+body.hastabs:not(.inchat) #tabs{display:flex}
+#tabs button{flex:1;border:0;background:transparent;border-radius:999px;padding:8px 6px;font-weight:700;font-size:14px;cursor:pointer;color:var(--mu);position:relative;z-index:1;white-space:nowrap;transition:color .25s}
+#tabs button[aria-selected="true"]{color:var(--on)}
+#tabs .sl{position:absolute;top:4px;bottom:4px;inset-inline-start:4px;width:calc(50% - 4px);border-radius:999px;background:linear-gradient(145deg,var(--ac),color-mix(in srgb,var(--ac) 80%,#000));transition:transform .3s cubic-bezier(.4,.1,.2,1);z-index:0;pointer-events:none}
+body.advtab #tabs .sl{transform:translateX(-100%)}
+#tabhint{margin:0 18px 6px;font-size:13px;flex:none}
+body.advtab #tabhint,body.inchat #tabhint{display:none}
+body.advtab:not(.inchat) #start{display:none!important}
+#adv{display:none;flex:1;min-height:0;overflow-y:auto;width:100%;max-width:580px;margin:0 auto;padding:4px 14px calc(22px + env(safe-area-inset-bottom,0px));direction:rtl;text-align:right}
+body.advtab:not(.inchat) #adv{display:block}
+@keyframes avInL{from{transform:translateX(-38px);opacity:0}to{transform:none;opacity:1}}
+@keyframes avInR{from{transform:translateX(38px);opacity:0}to{transform:none;opacity:1}}
+.avinL{animation:avInL .3s ease both}.avinR{animation:avInR .3s ease both}
+@media (prefers-reduced-motion:reduce){.avinL,.avinR{animation:none}#tabs .sl{transition:none}}
+#homeb{width:36px;height:36px;padding:0;justify-content:center;font-size:19px;line-height:1;border-radius:11px}
+#av{position:fixed;inset:0;z-index:16;background:var(--glow),var(--bg);overflow-y:auto;padding:calc(10px + env(safe-area-inset-top,0px)) 14px calc(22px + env(safe-area-inset-bottom,0px))}
+#avbody{direction:rtl;text-align:right;max-width:620px;margin:0 auto}
+#av .hhead{max-width:620px;margin:0 auto 10px}
+.avh{background:linear-gradient(145deg,var(--ac),color-mix(in srgb,var(--ac) 78%,#000));color:var(--on);border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+.avh b{display:block;font-size:19px}
+.avh .sub{opacity:.93;font-size:14px;margin-top:4px}
+.avbar{height:8px;border-radius:6px;background:rgba(255,255,255,.3);margin-top:10px;overflow:hidden}
+.avbar i{display:block;height:100%;background:#fff;border-radius:6px}
+.avc{background:var(--sf);border:1px solid var(--ln);border-radius:18px;padding:14px;margin-bottom:12px;box-shadow:var(--sh)}
+.avc.warn{background:var(--wb);border-color:color-mix(in srgb,var(--wn) 45%,var(--ln))}
+.avc.ok2{background:color-mix(in srgb,var(--ac) 14%,var(--sf));border-color:var(--ac)}
+.avc.er{border-inline-start:5px solid var(--wn)}
+.avc>b{display:block;margin-bottom:4px}
+.avsh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0}
+.avb{margin:4px 0}
+.avk{display:grid;grid-template-columns:78px 1fr 74px;gap:8px;align-items:center;margin:8px 0;direction:ltr}
+.avk .n{font-weight:700;font-size:14px}
+.avk .tr{position:relative;height:10px;border-radius:6px;background:var(--bg);border:1px solid var(--ln)}
+.avk .tr i{position:absolute;top:0;bottom:0;left:0;border-radius:6px;background:linear-gradient(90deg,var(--ac2),var(--ac))}
+.avk .tr u{position:absolute;top:-4px;bottom:-4px;width:3px;background:#E0902C;border-radius:2px;text-decoration:none}
+.avk .v{font-size:13.5px;color:var(--mu)}
+.avgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 12px}
+.avg{display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:12px 6px;cursor:pointer;box-shadow:var(--sh);color:var(--tx)}
+.avg i{font-style:normal;font-size:22px}
+.avg span{font-size:13.5px;font-weight:700}
+.avd{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:8px 12px;margin-bottom:10px}
+.avd summary{cursor:pointer;font-weight:700;color:var(--ac)}
+.avd>.enb:first-of-type{margin-top:6px}
+.enb{direction:ltr;text-align:left;unicode-bidi:plaintext;margin:2px 0}
+.enb.bad{color:var(--red);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--red) 55%,transparent)}
+.enb.good{color:var(--grn);font-weight:700}
+.enb.wprompt{font-size:16.5px;font-weight:700;line-height:1.55}
+.enb.hd{font-weight:700;margin-top:6px}
+.enb.sub{color:var(--mu);padding-inline-start:12px}
+.enb.rewrite{line-height:1.75;text-align:justify;background:color-mix(in srgb,var(--ac) 9%,var(--sf));border-radius:12px;padding:10px 12px}
+.enb.ev{color:var(--mu);font-size:14px}
+.enb.avrt{font-size:19px;font-weight:700;margin:4px 0 8px}
+.enb.avtr{line-height:1.7}
+.enb.avtr mark{background:color-mix(in srgb,var(--wn) 35%,transparent);color:inherit;border-radius:4px;padding:0 2px}
+.enb.gw{font-weight:700}
+.avp{direction:ltr;text-align:justify;text-justify:inter-word;line-height:1.75;font-size:16.5px;border-radius:14px;padding:10px 12px;margin:8px 0;border:1px solid color-mix(in srgb,var(--ln) 70%,transparent)}
+.avp0{background:color-mix(in srgb,var(--sf) 72%,#9CCB7B)}
+.avp1{background:color-mix(in srgb,var(--sf) 72%,#F2C27A)}
+.avp2{background:color-mix(in srgb,var(--sf) 72%,#8FBDE8)}
+.avp3{background:color-mix(in srgb,var(--sf) 72%,#E7A6CB)}
+.avpl{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;background:var(--ac);color:var(--on);font-size:12px;margin-inline-end:8px;vertical-align:1px}
+.avgl{padding:6px 0;border-bottom:1px dashed var(--ln)}
+.avgl .fa{margin-top:2px}
+.avta{width:100%;min-height:260px;border:1px solid var(--ln);border-radius:14px;background:var(--sf);padding:12px;font:16px/1.6 system-ui,"Segoe UI",Arial,sans-serif;direction:ltr;text-align:left;resize:vertical;color:var(--tx);margin-top:8px}
+.avt{font-variant-numeric:tabular-nums;font-weight:700;direction:ltr;font-size:18px}
+.avt.late,.avbig.late{color:var(--red)}
+.avwc{direction:ltr;font-weight:700;color:var(--mu)}
+.avwc.ok2{color:var(--grn)}
+.avbig{font-size:34px;font-weight:700;direction:ltr;text-align:center;font-variant-numeric:tabular-nums;margin:6px 0}
+.avrec{display:flex;align-items:center;justify-content:center;gap:10px}
+.avrec i{width:14px;height:14px;border-radius:50%;background:#D6453D;animation:avpulse 1.1s ease-in-out infinite}
+@keyframes avpulse{50%{opacity:.25;transform:scale(.8)}}
+.avmet{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px}
+.avmet>div{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+.avmet span{font-size:12.5px;color:var(--mu)}
+.avmet b{font-size:15px}
+.avleg{display:flex;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--mu);margin-top:4px;direction:ltr}
+.avleg i{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:-1px}
+.avproj>div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--ln)}
+.avwords{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.avwords span{background:var(--bg);border:1px solid var(--ln);border-radius:999px;padding:2px 10px;font-size:13px}
+.avup{padding:6px 0;border-bottom:1px dashed var(--ln)}
+.avul{margin:6px 0;padding-inline-start:20px;direction:ltr;text-align:left}
+.avtbl{border-collapse:collapse;width:100%;font-size:13.5px;margin:6px 0}
+.avtbl th,.avtbl td{border:1px solid var(--ln);padding:4px 8px;text-align:center}
+.avtbl th{background:color-mix(in srgb,var(--ac) 12%,var(--sf))}
+.avtbl tbody th{text-align:left}
+.avtitle{font-weight:700;margin:8px 0 4px;text-align:left;direction:ltr}
+.hscroll{overflow-x:auto}
+.avhist{display:flex;justify-content:space-between;width:100%;background:var(--bg);border:1px solid var(--ln);border-radius:12px;padding:8px 12px;margin-top:6px;cursor:pointer;color:var(--tx)}
+#av .iebtn,#av .big{width:100%}
+#av .row2 .chip,#av .row2 .big{width:auto}
+#av .qrow{direction:rtl}
+#av .qrow.good{border-inline-start:5px solid var(--grn)}
+#av .qrow.bad{border-inline-start:5px solid var(--red)}
 </style>
 </head>
 <body>
@@ -699,7 +799,7 @@ function onChunk(e){
   if(rc.t<0.4){rc.noise=Math.max(rc.noise,rms);return}
   const thr=Math.min(0.08,Math.max(0.02,rc.noise*3));
   if(rms>thr){rc.voiced+=dt;rc.quiet=0;if(rc.voiced>0.25)rc.spoke=true}else rc.quiet+=dt;
-  const auto=hands||DRILL||RPX;
+  const auto=(hands||DRILL||RPX)&&!(RPX&&RPX.long);
   if(auto&&rc.spoke&&rc.quiet>(DRILL||RPX?1.5:2.4))finish();
   else if(auto&&!rc.spoke&&rc.t>14)giveUp();
 }
@@ -990,7 +1090,7 @@ function addSecs(x){
 }
 function goalReached(){
   const f=el('fix snd'),b=document.createElement('b');b.textContent='🎉 هدف گفتگوی امروز کامل شد! برای ادامهٔ برنامه (کار بعدی) دکمه را بزن.';f.appendChild(b);
-  const x=document.createElement('button');x.className='big';x.textContent='▶ مرحلهٔ بعد';x.style.width='100%';x.style.marginTop='8px';x.onclick=()=>{stopVoice();if(rc)giveUp();openRefp()};f.appendChild(x);
+  const x=document.createElement('button');x.className='big';x.textContent='▶ مرحلهٔ بعد';x.style.width='100%';x.style.marginTop='8px';x.onclick=()=>{stopVoice();if(rc)giveUp();if(ADVIE)advGoHome();else openRefp()};f.appendChild(x);
 }
 function weekBars(){
   const dl=jget('dayLog',{});let o='',t=0;
@@ -1069,7 +1169,7 @@ function addVocab(list){
   list=(list||[]).map(v=>v&&v.ex?{en:v.ex,fa:(v.ex_fa||'')+' ('+v.en+' = '+(v.fa||'')+')'}:v);
   const vb=jget('vbook',{});let ch=false;
   (list||[]).forEach(v=>{
-    const k=String(v.en||'').toLowerCase().trim();if(!k||k.length>40)return;
+    const k=String(v.en||'').toLowerCase().trim();if(!k||k.length>160)return;
     if(!vb[k]){vb[k]={en:String(v.en).trim(),fa:String(v.fa||''),box:0,next:ago(0),added:ago(0),u:Date.now()};ch=true}
     else if(!vb[k].fa&&v.fa){vb[k].fa=String(v.fa);vb[k].u=Date.now();ch=true}
   });
@@ -1096,6 +1196,7 @@ function nextCard(){
   const n=document.createElement('div');n.className='ok';n.textContent='باقی‌مانده در این نوبت: '+rq.length;box.appendChild(n);
 }
 function grade(w,ok){
+  try{advTick('rev')}catch(e){}
   const vb=jget('vbook',{}),x=vb[w.en.toLowerCase().trim()];
   if(x){x.box=ok?Math.min(5,(x.box||0)+1):0;x.next=ago(-INT[x.box]);x.seen=(x.seen||0)+1;x.u=Date.now();jset('vbook',vb);scheduleSync()}
   rq.shift();if(!ok&&!w.again){w.again=true;rq.push(w)}
@@ -1218,8 +1319,8 @@ async function syncNow(){
   try{
     const lastPush=jget('lastPush',0),tomb=jget('tomb',[]);
     const out=chats().filter(c=>(c.updated||0)>lastPush).concat(tomb);
-    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),dayLog:jget('dayLog',{}),tcount:jget('tcount',{}),dstat:recentStat(),vbook:changedVocab(lastPush),streak:jget('streak',null),day:jget('day',null),prefs:{diff,lvl:lv.value,u:jget('prefsU',0)},weak:{list:jget('weak',[]),u:jget('weakU',0)},refp:{u:jget('refpU',0),d:RPO(),lm:jget('lisMin',{})}}},true);
-    try{mergeRefp(j.refp)}catch(x){}
+    const j=await call({sync:{since:jget('lastSync',0),chats:out,notes:notes.slice(-20),daysDone:jget('daysDone',{}),dayLog:jget('dayLog',{}),tcount:jget('tcount',{}),dstat:recentStat(),vbook:changedVocab(lastPush),streak:jget('streak',null),day:jget('day',null),prefs:{diff,lvl:lv.value,u:jget('prefsU',0)},weak:{list:jget('weak',[]),u:jget('weakU',0)},refp:{u:jget('refpU',0),d:RPO(),lm:jget('lisMin',{})},adv:advPack()}},true);
+    try{mergeRefp(j.refp)}catch(x){}try{advMerge(j.adv)}catch(x){}
     const a=chats();
     (j.chats||[]).forEach(r=>{
       const i=a.findIndex(x=>x.id===r.id);
@@ -1227,7 +1328,7 @@ async function syncNow(){
       if(i<0)a.push(r);else if((r.updated||0)>(a[i].updated||0))a[i]=r;
     });
     putChats(a);
-    jset('lastPush',t0);jset('tomb',[]);jset('lastSync',j.now||t0);
+    jset('lastPush',t0);jset('advLastPush',t0);jset('tomb',[]);jset('lastSync',j.now||t0);
     notes=Array.from(new Set(notes.concat(j.notes||[]))).slice(-20);jset('notes',notes);
     if(j.daysDone)jset('daysDone',Object.assign({},jget('daysDone',{}),j.daysDone));
     if(j.dstat){const m=jget('dstat',{});Object.keys(j.dstat).forEach(dt=>{m[dt]=m[dt]||{};Object.keys(j.dstat[dt]).forEach(dv=>{const r=j.dstat[dt][dv];if(!m[dt][dv]||(r.u||0)>(m[dt][dv].u||0))m[dt][dv]=r})});jset('dstat',m)}
@@ -1510,6 +1611,7 @@ function openTopics(title,groups,pre,cb){
 function openNew(){openTopics('موضوع گفتگو',TOP,'',tp=>startNew(tp))}
 async function startNew(tp){
   if(busy)return;
+  ADVIE=false;
   if(!api&&!setApi())return;
   ie=null;stopVoice();if(rc)giveUp();
   if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
@@ -1556,6 +1658,7 @@ $('#iesh').addEventListener('click',e=>{
 
 async function startIelts(mode,tp){
   if(busy)return;
+  ADVIE=ADVIE_NEXT;ADVIE_NEXT=false;
   if(!api&&!setApi())return;
   stopVoice();if(rc)giveUp();
   if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(''));
@@ -1563,7 +1666,7 @@ async function startIelts(mode,tp){
   $('#start').hidden=true;log.hidden=false;$('#dock').hidden=false;$('#reset').hidden=false;
   if(!micWarmed){micWarmed=true;warmMic()}
   const part=mode==='p2'?2:mode==='p3'?3:1;
-  ie={mode,part,n:0,topic:tp?tp.l:'',card:null,answers:[],fixes:[],sounds:[],done:false};
+  ie={mode,part,n:0,topic:tp?tp.l:'',card:null,answers:[],fixes:[],sounds:[],done:false,t0:Date.now()};
   cur=makeChat();hist=[];log.textContent='';
   cur.title='🎓 '+({p1:'Part 1',p2:'Part 2',p3:'Part 3',full:'Mock test'}[mode])+(tp?' · '+tp.l:'');cur.named=true;
   if(tp)bumpTopic((mode==='p2'?'P2:':mode==='p3'?'P3:':'P1:')+tp.l);
@@ -1622,7 +1725,7 @@ async function ieFinish(){
   busy=true;mic.disabled=true;say('در حال ارزیابی… چند ثانیه صبر کن');
   try{
     const j=await call({level:lv.value,assess:true,parts:x.mode==='full'?'1-3':String(x.part),data});
-    if(cur)cur.assess=j.assess;showAssess(j.assess);saveChat();scheduleSync();
+    if(cur)cur.assess=j.assess;showAssess(j.assess);try{advAfterAssess(x,j.assess)}catch(e){}saveChat();scheduleSync();
     say('کارنامه آماده است.');
   }catch(e){say(errMsg(e))}
   busy=false;mic.disabled=false;
@@ -1654,7 +1757,7 @@ function speakLine(t,v,rate,pitch){
   });
 }
 function lisMsg(t){const b=$('#lbody');b.textContent='';const d=document.createElement('div');d.className='rline';d.textContent=t;b.appendChild(d)}
-function lisClose(){if(typeof PLANMODE!=="undefined"&&PLANMODE){setTimeout(openRefp,50)}if(L)L.playing=false;if(window.speechSynthesis)speechSynthesis.cancel();$('#lis').hidden=true}
+function lisClose(){if(typeof PLANMODE!=="undefined"&&PLANMODE&&!ADVLIS){setTimeout(openRefp,50)}try{if(ADVLIS)advLisClose()}catch(e){}if(L)L.playing=false;if(window.speechSynthesis)speechSynthesis.cancel();$('#lis').hidden=true}
 async function startListening(sec){
   stopVoice();if(rc)giveUp();
   $('#ltitle').textContent='Listening — Section '+sec;$('#lis').hidden=false;lisMsg('در حال ساختن تمرین… (چند ثانیه)');
@@ -1689,7 +1792,7 @@ async function playLis(){
   if(L.played&&!L.done)return;
   stopVoice();L.playing=true;L.played=true;updLis();
   const sp=[];L.ex.script.forEach(x=>{if(!sp.includes(x.sp))sp.push(x.sp)});
-  const vs=twoVoices(),same=vs[0]===vs[1];
+  const vs=ADVLIS?advVoices():twoVoices(),same=vs[0]===vs[1];
   for(const line of L.ex.script){
     if(!L||!L.playing)break;
     const i=sp.indexOf(line.sp);
@@ -1710,7 +1813,7 @@ function gradeLis(){
   L.done=true;L.playing=false;if(window.speechSynthesis)speechSynthesis.cancel();
   const q=L.ex.questions;let sc=0;
   const rows=q.map((x,i)=>{const u=L.ans[i]||'';const ok=x.type==='mcq'?String(u).toUpperCase()===String(x.answer).toUpperCase():okGap(u,x);if(ok)sc++;return{x,u,ok}});
-  logListening(sc,q.length);try{planInc("lis")}catch(e){}
+  logListening(sc,q.length);try{if(!ADVLIS)planInc("lis")}catch(e){}try{advAfterLis(sc,q.length)}catch(e){}
   const box=$('#lbody');box.textContent='';
   const mk=(c,t,p)=>{const d=document.createElement('div');d.className=c;if(t)d.textContent=t;(p||box).appendChild(d);return d};
   const h=mk('rline','نتیجه: '+sc+' از '+q.length+' ('+Math.round(sc/q.length*100)+'٪)');h.style.fontWeight='700';h.style.color=sc/q.length>=0.6?'var(--grn)':'var(--red)';
@@ -2105,11 +2208,11 @@ function rpRun(q,title,done){
   };
   next();
 }
-$('#rfb').onclick=openRefp;$('#rfx').onclick=()=>{RPX=null;if(rc)giveUp();$('#rf').hidden=true};
+$('#rfb').onclick=openRefp;$('#rfx').onclick=()=>{RPX=null;if(rc)giveUp();$('#rf').hidden=true;try{if(ADVFEED){ADVFEED=false;advLvRestore();advRefresh()}}catch(e){}};
 (function(){const t=$('#ieb');if(t&&t.parentNode&&$('#rfb')&&$('#rfb').parentNode!==t.parentNode)t.parentNode.insertBefore($('#rfb'),t)})();
 
 $('#plan').onclick=openRefp;
-if(LOGGED&&typeof RCUR!=='undefined'){const a=jget('planOpen','');if(a!==ago(0)){jset('planOpen',ago(0));setTimeout(openRefp,700)}}
+if(LOGGED&&typeof RCUR!=='undefined'){const a=jget('planOpen','');if(a!==ago(0)&&advTabNow()!=='adv'){jset('planOpen',ago(0));setTimeout(openRefp,700)}}
 /* ===== Daily listening feed + data meter + male voice ===== */
 const FEEDK=['a short news report','a short story','an interview (two speakers, A is the host, B is the guest)','a phone conversation between two people (A and B)','a mini lecture','a travel diary','an explainer podcast ("how things work")','an advice podcast','a true-style history story','a daily-life monologue','a podcast chat between two friends (A and B)'];
 const feedHist=()=>jget('feedHist',[]);
@@ -2214,7 +2317,7 @@ async function openFeed(){
   FD={q:[],next:null,on:false,show:lv.value==='A2'||lv.value==='B1',rate:0};
   feedLoad();
 }
-function feedBack(b){rBtn('← برگشت به برنامه','ghost sm',()=>{feedStop();FD=null;PLANMODE=true;rpHome()},b)}
+function feedBack(b){rBtn('← برگشت به برنامه','ghost sm',()=>{feedStop();FD=null;if(ADVFEED){ADVFEED=false;$('#rf').hidden=true;advLvRestore();advRefresh();return}PLANMODE=true;rpHome()},b)}
 async function feedLoad(){
   const b=rpd();b.textContent='';
   feedBack(b);
@@ -2245,7 +2348,7 @@ function feedShow(){
 function feedAfter(fin){
   const e=FD.e,b=rpd();b.textContent='';FD.show=true;
   feedBack(b);
-  rE('div','rline','✅ امروز تا اینجا '+Math.round(lisToday())+' دقیقه گوش دادی. هدف امروز: '+PLAN[roadMonth()].lis+' دقیقه.',b);
+  rE('div','rline','✅ امروز تا اینجا '+Math.round(lisToday())+' دقیقه گوش دادی. هدف امروز: '+(ADVFEED?advPodMin():PLAN[roadMonth()].lis)+' دقیقه.',b);
   const sc={n:0,t:e.questions.length};
   e.questions.forEach((q,i)=>{
     const r=rE('div','qrow',null,b),t=rE('div','',(i+1)+'. '+q.q,r);t.dir='ltr';
@@ -2317,6 +2420,828 @@ function voiceRow(p){
   ['#log','#rfbody','#hist','#rbody','#lbody'].forEach(s=>{const x=document.querySelector(s);if(x)mo.observe(x,{childList:true,subtree:true})});
   run();
 })();
+/* ================= تب پیشرفته · IELTS 7 (added) ================= */
+let ADVLIS=null,ADVLV=null,ADVFEED=false,ADVIE=false,ADVIE_NEXT=false,AVS=null,AVTOK=0;
+function advTabNow(){try{return localStorage.getItem(K('tab'))||'base'}catch(e){return 'base'}}
+const advR5=x=>Math.min(9,Math.max(0,Math.round(x*2)/2));
+const advBs=b=>b==null?'—':Number(b).toFixed(1);
+const advEl=(tag,cls,txt,p)=>rE(tag,cls,txt,p);
+const advEn=(txt,p,cls)=>{const d=rE('div','enb'+(cls?' '+cls:''),txt,p);d.dir='ltr';return d};
+
+/* ---------- bidi: keep Latin words / numbers in logical order inside Persian text ---------- */
+const ADV_LAT=/[A-Za-z0-9](?:[A-Za-z0-9 ,.:;'’\/+%≈&\-]*[A-Za-z0-9%'])?/g;
+function advIsoStr(s){
+  if(!/[؀-ۿ]/.test(s)||!/[A-Za-z0-9]/.test(s)||s.indexOf('⁦')>=0)return s;
+  return s.replace(ADV_LAT,m=>'⁦'+m+'⁩');
+}
+function advIsoNode(n){
+  if(n.nodeType===3){
+    const p=n.parentNode;if(!p||!p.closest||p.closest('[dir="ltr"],textarea,input,svg,script,style'))return;
+    const v=n.nodeValue,w=advIsoStr(v);if(w!==v)n.nodeValue=w;
+  }else if(n.nodeType===1){
+    if(n.closest('[dir="ltr"],textarea,input,svg,script,style'))return;
+    const tw=document.createTreeWalker(n,NodeFilter.SHOW_TEXT),a=[];let x;while((x=tw.nextNode()))a.push(x);
+    a.forEach(advIsoNode);
+  }
+}
+function advIsoWatch(){
+  const o=new MutationObserver(ms=>{ms.forEach(m=>m.addedNodes.forEach(advIsoNode))});
+  ['adv','av'].forEach(id=>{const n=document.getElementById(id);if(n)o.observe(n,{childList:true,subtree:true})});
+}
+
+/* ---------- data ---------- */
+const ADV_DEF={u:0,type:'ac',budget:0,start:'',tgt:{L:7,R:7,W:6.5,S:6.5}};
+const advS=()=>{const s=jget('advS',null)||{};return Object.assign({},ADV_DEF,s,{tgt:Object.assign({},ADV_DEF.tgt,s.tgt||{})})};
+function advSave(p){const s=Object.assign(advS(),p);s.u=Date.now();jset('advS',s);scheduleSync();return s}
+const advL=()=>jget('advL',{});
+function advAdd(e){const L=advL(),id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);Object.assign(e,{id,d:ago(0),t:Date.now(),u:Date.now()});L[id]=e;jset('advL',L);scheduleSync();return e}
+const advEnt=k=>Object.values(advL()).filter(e=>e.k===k&&e.b!=null&&!e.typed).sort((a,b)=>a.t-b.t);
+const advTodayN=(k,f)=>Object.values(advL()).filter(e=>e.d===ago(0)&&e.k===k&&(!f||f(e))).length;
+const advM=()=>jget('advM',{});
+function advAddMin(k,m){m=Math.round(m);if(!(m>0))return;const a=advM(),d=ago(0),r=a[d]||(a[d]={});r[k]=(r[k]||0)+m;jset('advM',a);scheduleSync()}
+function advStudy(d){const r=advM()[d]||{};let s=0;Object.keys(r).forEach(k=>{s+=r[k]||0});return s+(jget('lisMin',{})[d]||0)+Math.round((jget('dayLog',{})[d]||0)/60)}
+function advTick(k){if(k!=='rev')return;const d=ago(0),r=jget('advRev',{});jset('advRev',{d,n:(r.d===d?r.n:0)+1})}
+const advRevToday=()=>{const r=jget('advRev',{});return r.d===ago(0)?r.n:0};
+
+/* ---------- band estimates ---------- */
+const ADV_CLV={A2:4,B1:5,B2:6,C1:7};
+const advPct2b=(pct,dl)=>advR5(Math.max(2,(ADV_CLV[dl]||6)+(pct-0.62)*5.5));
+function advEst(k,upTo){let a=advEnt(k);if(upTo)a=a.filter(e=>e.d<=upTo);if(!a.length)return null;const last=a.slice(-5);let s=0,w=0;last.forEach((e,i)=>{const q=Math.pow(0.75,last.length-1-i);s+=e.b*q;w+=q});return advR5(s/w)}
+const advOverall=upTo=>{const v=['L','R','W','S'].map(k=>advEst(k,upTo)).filter(x=>x!=null);return v.length?advR5(v.reduce((a,b)=>a+b,0)/v.length):null};
+const advTgtOverall=()=>{const t=advS().tgt;return advR5((t.L+t.R+t.W+t.S)/4)};
+function advLevelFor(k){const e=advEst(k);if(e==null)return 'B2';const t=e+0.5;return t<4.5?'A2':t<5.5?'B1':t<6.75?'B2':'C1'}
+function advDayNo(){const s=advS();if(!s.start)return 0;return Math.max(1,Math.floor((new Date(ago(0))-new Date(s.start))/864e5)+1)}
+function advBudget(){const s=advS();if(s.budget>0)return s.budget;const d=advDayNo();return d<=14?60:d<=45?75:d<=90?90:d<=135?105:120}
+const advPodMin=()=>Math.max(10,Math.min(30,Math.round(advBudget()*0.17/5)*5));
+function advBaseDone(){const o={};Object.values(advL()).forEach(e=>{if(e.base)o[e.k]=e});return o}
+function advLvSet(l){if(ADVLV===null)ADVLV=lv.value;lv.value=l}
+function advLvRestore(){if(ADVLV!==null){lv.value=ADVLV;ADVLV=null}}
+const advTypeName=()=>advS().type==='gt'?'General Training':'Academic';
+
+/* ---------- small UI helpers ---------- */
+function avOpen(title){avStop();const o=$('#av');o.hidden=false;$('#avt').textContent=title||'';const b=$('#avbody');b.textContent='';o.scrollTop=0;return b}
+function avStop(){AVTOK++;if(AVS&&AVS.stop){try{AVS.stop()}catch(e){}}AVS=null;try{if(rc&&RPX&&RPX.long)giveUp()}catch(e){}}
+function avClose(){avStop();$('#av').hidden=true;advRefresh()}
+function advTimer(node,secs,down){
+  const t0=Date.now();let id=0;
+  const fmt=s=>{s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+  const upd=()=>{const e=(Date.now()-t0)/1000,v=down?secs-e:e;node.textContent=(down&&v<0?'+':'')+fmt(Math.abs(v));node.classList.toggle('late',!!down&&v<0)};
+  upd();id=setInterval(upd,1000);
+  return {stop(){clearInterval(id)},el:()=>(Date.now()-t0)/1000};
+}
+const SVGNS='http://www.w3.org/2000/svg';
+function advSvg(tag,at,p){const n=document.createElementNS(SVGNS,tag);Object.keys(at||{}).forEach(k=>n.setAttribute(k,at[k]));if(p)p.appendChild(n);return n}
+function advNice(x){const p=Math.pow(10,Math.floor(Math.log10(x||1))),f=x/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p}
+const ADV_COL=['#3A6EA5','#E0902C','#3FA66B','#B45FA8'];
+function advChart(p,sp){
+  const W=320,H=180,Lm=36,Rm=8,Tm=10,Bm=30,svg=advSvg('svg',{viewBox:'0 0 '+W+' '+H,width:'100%',role:'img'},p);svg.style.direction='ltr';svg.style.maxHeight='230px';
+  const all=[].concat.apply([],sp.series.map(s=>s.values)).filter(v=>v!=null);
+  let min=sp.ymin!=null?sp.ymin:Math.min(0,Math.min.apply(null,all)),max=sp.ymax!=null?sp.ymax:Math.max.apply(null,all);
+  if(max<=min)max=min+1;
+  const st=advNice((max-min)/4);if(sp.ymax==null)max=Math.ceil(max/st)*st;if(sp.ymin==null&&min<0)min=Math.floor(min/st)*st;
+  const y=v=>Tm+(H-Tm-Bm)*(1-(v-min)/(max-min));
+  for(let v=min;v<=max+1e-9;v+=st){
+    advSvg('line',{x1:Lm,x2:W-Rm,y1:y(v),y2:y(v),stroke:'currentColor','stroke-opacity':'.15'},svg);
+    const t=advSvg('text',{x:Lm-4,y:y(v)+3,'text-anchor':'end','font-size':'9',fill:'currentColor','fill-opacity':'.7'},svg);t.textContent=String(Math.round(v*100)/100);
+  }
+  if(sp.hline!=null){advSvg('line',{x1:Lm,x2:W-Rm,y1:y(sp.hline),y2:y(sp.hline),stroke:'#E0902C','stroke-dasharray':'5 4','stroke-width':'1.5'},svg)}
+  const n=sp.labels.length,gw=(W-Lm-Rm)/n,ns=sp.series.length;
+  sp.labels.forEach((l,i)=>{const t=advSvg('text',{x:Lm+gw*(i+.5),y:H-Bm+13,'text-anchor':'middle','font-size':'9',fill:'currentColor','fill-opacity':'.8'},svg);t.textContent=String(l).slice(0,10)});
+  sp.series.forEach((s,k)=>{
+    const col=s.color||ADV_COL[k%4];
+    if(sp.kind==='line'){
+      const pts=s.values.map((v,i)=>v==null?null:[Lm+gw*(i+.5),y(v)]).filter(Boolean);
+      if(pts.length>1)advSvg('polyline',{points:pts.map(q=>q.join(',')).join(' '),fill:'none',stroke:col,'stroke-width':'2.2','stroke-linejoin':'round'},svg);
+      pts.forEach(q=>advSvg('circle',{cx:q[0],cy:q[1],r:'3.2',fill:col},svg));
+    }else{
+      const bw=Math.min(26,gw*.8/ns);
+      s.values.forEach((v,i)=>{if(v==null)return;const x=Lm+gw*(i+.5)-bw*ns/2+bw*k,y0=y(Math.max(min,0)),y1=y(v);advSvg('rect',{x:x,y:Math.min(y0,y1),width:bw-1,height:Math.max(1,Math.abs(y0-y1)),fill:col,rx:'2'},svg)});
+    }
+  });
+  if(sp.series.length>1||sp.legend){
+    const lg=rE('div','avleg',null,p);sp.series.forEach((s,k)=>{const i=rE('span',null,null,lg);const d=rE('i',null,null,i);d.style.background=s.color||ADV_COL[k%4];i.appendChild(document.createTextNode(' '+s.name))});
+  }
+  return svg;
+}
+
+/* ---------- tabs + swipe ---------- */
+function advInit(){
+  if(PROF==='kid')return;
+  const B=document.body;B.classList.add('hastabs');
+  const tabs=rE('nav',null,null);tabs.id='tabs';tabs.setAttribute('role','tablist');rE('i','sl',null,tabs);
+  [['base','🟢 پایه'],['adv','🔵 پیشرفته · IELTS 7']].forEach(([k,t])=>{
+    const x=rE('button',null,t,tabs);x.dataset.t=k;x.setAttribute('role','tab');x.onclick=()=>advSetTab(k,true);
+    x.onkeydown=e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();advSetTab(k==='base'?'adv':'base',true);const s=tabs.querySelector('[aria-selected="true"]');if(s)s.focus()}};
+  });
+  document.querySelector('header.top').after(tabs);
+  const adv=rE('section',null,null);adv.id='adv';adv.setAttribute('aria-label','IELTS 7');rE('div',null,null,adv).id='advb';
+  $('#start').after(adv);
+  const av=rE('div',null,null);av.id='av';av.hidden=true;
+  const hh=rE('div','hhead',null,av);rE('b',null,'',hh).id='avt';
+  const x=rE('button','ghost','✕',hh);x.id='avx';x.setAttribute('aria-label','Close');x.onclick=avClose;
+  rE('div',null,null,av).id='avbody';B.appendChild(av);
+  const hb=rE('button','chip','🏠');hb.id='homeb';hb.hidden=true;hb.setAttribute('aria-label','صفحهٔ اصلی');hb.title='صفحهٔ اصلی';hb.onclick=advGoHome;$('#reset').before(hb);
+  const st=$('#start'),sync=()=>{B.classList.toggle('inchat',st.hidden);hb.hidden=!st.hidden};
+  new MutationObserver(sync).observe(st,{attributes:true,attributeFilter:['hidden']});sync();
+  advIsoWatch();
+  advSwipe();
+  advSetTab(advTabNow()==='adv'?'adv':'base',false);
+  advHint();
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)advRefresh()});
+  const rx=$('#rx'),o0=rx.onclick;rx.onclick=()=>{if(o0)o0();setTimeout(advRefresh,60)};
+}
+function advSetTab(t,anim){
+  if(PROF==='kid')return;
+  const on=t==='adv',B=document.body;
+  B.classList.toggle('advtab',on);
+  document.querySelectorAll('#tabs button').forEach(x=>x.setAttribute('aria-selected',String(x.dataset.t===t)));
+  try{localStorage.setItem(K('tab'),t);if(anim)localStorage.setItem(K('tabHint'),'x')}catch(e){}
+  const h=$('#tabhint');if(h&&anim)h.remove();
+  if(on)advHome();else advLvRestore();
+  if(anim){const p=on?$('#adv'):$('#start');p.classList.remove('avinL','avinR');void p.offsetWidth;p.classList.add(on?'avinL':'avinR')}
+}
+function advHint(){
+  let n=0;try{if(localStorage.getItem(K('tabHint')))return;n=+localStorage.getItem(K('tabHintN'))||0;localStorage.setItem(K('tabHintN'),String(n+1))}catch(e){}
+  if(n>=3)return;
+  const h=rE('div','ok','💡 برای رفتن به «پیشرفته · IELTS 7» صفحه را به سمت راست بکش، یا روی تب بزن.');h.id='tabhint';$('#tabs').after(h);
+}
+function advSwipe(){
+  let x0=0,y0=0,on=false,dx=0,lock=0;
+  const IDS=['av','rf','lis','hist','rev','rep','login','acc','iesh','newc','modal'];
+  const blocked=e=>{
+    if(document.body.classList.contains('inchat'))return true;
+    if(IDS.some(i=>{const n=document.getElementById(i);return n&&!n.hidden}))return true;
+    const t=e.target;return !!(t&&t.closest&&t.closest('input,textarea,select,.hscroll'));
+  };
+  const pane=()=>document.body.classList.contains('advtab')?$('#adv'):$('#start');
+  const reset=()=>{[$('#adv'),$('#start')].forEach(p=>{if(p){p.style.transform='';p.style.opacity=''}})};
+  document.addEventListener('touchstart',e=>{if(e.touches.length!==1||blocked(e)){on=false;return}const t=e.touches[0];x0=t.clientX;y0=t.clientY;on=true;dx=0;lock=0},{passive:true});
+  document.addEventListener('touchmove',e=>{
+    if(!on)return;const t=e.touches[0];dx=t.clientX-x0;const dy=t.clientY-y0;
+    if(!lock){if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.4)lock=1;else if(Math.abs(dy)>12){lock=-1;on=false;return}}
+    if(lock===1){const adv=document.body.classList.contains('advtab'),ok=(!adv&&dx>0)||(adv&&dx<0),p=pane();
+      p.style.transform=ok?'translateX('+Math.round(dx*.45)+'px)':'';p.style.opacity=ok?String(1-Math.min(.35,Math.abs(dx)/500)):''}
+  },{passive:true});
+  const end=()=>{if(!on)return;on=false;reset();
+    if(lock===1&&Math.abs(dx)>70){const adv=document.body.classList.contains('advtab');if(!adv&&dx>0)advSetTab('adv',true);else if(adv&&dx<0)advSetTab('base',true)}};
+  document.addEventListener('touchend',end,{passive:true});
+  document.addEventListener('touchcancel',()=>{on=false;reset()},{passive:true});
+}
+function advGoHome(){
+  if(busy){say('یک لحظه صبر کن؛ هنوز در حال پردازش است.');return}
+  stopVoice();if(rc)giveUp();try{saveChat()}catch(e){}
+  ie=null;cur=null;hist=[];ADVIE=false;
+  log.hidden=true;$('#dock').hidden=true;$('#reset').hidden=true;$('#ctitle').hidden=true;
+  $('#start').hidden=false;try{updStart()}catch(e){}
+  if(advTabNow()==='adv')advHome();
+}
+function advRefresh(){
+  if(PROF==='kid'||!document.body.classList.contains('advtab')||document.body.classList.contains('inchat'))return;
+  if(['av','rf','lis','rev','hist','rep'].some(i=>{const n=document.getElementById(i);return n&&!n.hidden}))return;
+  advHome();
+}
+
+function advDateFa(iso){try{return new Date(iso+'T12:00:00').toLocaleDateString('fa-IR',{year:'numeric',month:'long',day:'numeric'})}catch(e){return iso}}
+
+/* ---------- daily plan ---------- */
+const ADV_ROT=['L','R','W2','S','W1','LR','MOCK'];
+const ADV_ROT_FA={L:'تمرکز Listening',R:'تمرکز Reading',W2:'تمرکز Writing Task 2',S:'تمرکز Speaking (Part 2 و 3)',W1:'Writing Task 1 + Listening',LR:'Listening + Reading',MOCK:'مینی‌آزمون: Listening + Reading + Speaking'};
+function advSteps(){
+  const day=advDayNo(),B=advBudget(),pod=advPodMin(),rot=ADV_ROT[(day-1)%7],base=advBaseDone();
+  const tc={L:advTodayN('L'),R:advTodayN('R'),W2:advTodayN('W',e=>e.sub==='t2'),W1:advTodayN('W',e=>e.sub!=='t2'),S2:advTodayN('S',e=>e.sub==='p2'),S3:advTodayN('S',e=>e.sub!=='p2')};
+  const due=dueWords().length,lt=advTodayLis();
+  const lvl=k=>advLevelFor(k);
+  const of=(kind,n,mt)=>{
+    const done=(tc[kind]||0)>=n,wk=advWeakest(),isW=wk&&(wk===kind[0]);
+    const star=isW?' · نقطهٔ ضعف فعلی تو':'';
+    switch(kind){
+      case 'REV':return {kind,ic:'🔁',t:'مرور جمله‌ها و واژه‌ها',su:due?due+' مورد سررسید':'مورد سررسیدشده نداری',min:8,done:!due||advRevToday()>=8,go:()=>openRev()};
+      case 'POD':return {kind,ic:'🎧',t:'پادکست روزانه',su:Math.round(lt)+' از '+pod+' دقیقه',pct:lt/pod,min:pod,done:lt>=pod,go:advPod};
+      case 'L':{const sec=mt?3:1+((day+n)%4);return {kind,ic:'📝',t:'Listening آیلتس',en:'Section '+sec,su:'سطح '+(mt?'B2':lvl('L'))+star,min:12,done,go:()=>advStartLis(sec,!!mt)}}
+      case 'R':return {kind,ic:'📖',t:'Reading آیلتس',en:'1 passage + questions',su:'سطح '+(mt?'B2':lvl('R'))+' · زمان‌سنج ۲۰ دقیقه'+star,min:20,done,go:()=>advReadStart({base:!!mt})};
+      case 'W2':return {kind,ic:'✍️',t:'Writing Task 2',en:'Essay · 250 words',su:'مقاله با نمره و بازخورد'+star,min:40,done,go:()=>advWStart('t2',{base:!!mt})};
+      case 'W1':{const g=advS().type==='gt';return {kind,ic:'✍️',t:g?'Writing Task 1 (نامه)':'Writing Task 1 (جدول/نمودار)',en:g?'Letter · 150 words':'Describe data · 150 words',su:'۲۰ دقیقه'+star,min:20,done,go:()=>advWStart(g?'t1g':'t1a',{})}}
+      case 'S2':return {kind,ic:'🎙',t:'Speaking Part 2',en:'Long turn · cue card',su:'یک دقیقه آماده‌سازی، تا دو دقیقه صحبت'+star,min:12,done,go:()=>advP2Start({base:!!mt})};
+      case 'S3':return {kind,ic:'💬',t:'Speaking Part 3',en:'Discussion · 4 questions',su:'گفتگو با مربی و نمرهٔ تخمینی',min:15,done,go:()=>advSpeakChat('p3')};
+    }
+  };
+  if(!(base.L&&base.R&&base.W&&base.S)){
+    const k=(c,kind,t,en,min,go)=>({kind:c,ic:kind,t,en,su:base[c]?'نتیجه: '+(base[c].b!=null?advBs(base[c].b):'ثبت شد'):'بخش سنجش',min,done:!!base[c],go});
+    return {mode:'base',T:[
+      k('L','📝','Listening (سنجش)','Section 3 · exam level',12,()=>advStartLis(3,true)),
+      k('R','📖','Reading (سنجش)','1 passage · exam level',20,()=>advReadStart({base:true})),
+      k('W','✍️','Writing (سنجش)','Task 2 · short is OK',30,()=>advWStart('t2',{base:true})),
+      k('S','🎙','Speaking Part 2 (سنجش)','cue card',10,()=>advP2Start({base:true}))]};
+  }
+  const month=day>1&&(day-1)%30===0;
+  const plan=[['REV',1],['POD',1]];
+  if(month){plan.push(['L',1,1],['R',1,1],['W2',1,1],['S2',1,1])}
+  else switch(rot){
+    case 'L':plan.push(['L',1]);if(B>=90)plan.push(['L',2]);break;
+    case 'R':plan.push(['R',1]);if(B>=105)plan.push(['R',2]);break;
+    case 'W2':plan.push(['W2',1]);break;
+    case 'S':plan.push(['S2',1],['S3',1]);break;
+    case 'W1':plan.push(['W1',1],['L',1]);break;
+    case 'LR':plan.push(['L',1],['R',1]);break;
+    default:plan.push(['L',1,1],['R',1,1],['S2',1,1]);
+  }
+  const T=plan.map(p=>of(p[0],p[1],p[2]));
+  let used=T.reduce((a,x)=>a+x.min,0);const wk=advWeakest();
+  if(!month&&wk&&B-used>=12){
+    const have=k=>plan.filter(p=>p[0]===k).length;
+    const ex=wk==='L'?['L',have('L')+1]:wk==='R'&&B-used>=20?['R',have('R')+1]:wk==='W'&&B-used>=20?['W1',have('W1')+1]:wk==='S'?['S2',have('S2')+1]:null;
+    if(ex){const s=of(ex[0],ex[1]);s.extra=true;s.su='تمرین اضافه برای نقطهٔ ضعفت';T.push(s)}
+  }
+  return {mode:month?'month':'day',T,rot,month};
+}
+function advWeakest(){
+  const t=advS().tgt;let best=null,g=0.5;
+  ['L','R','W','S'].forEach(k=>{const e=advEst(k);if(e==null)return;const d=t[k]-e;if(d>g){g=d;best=k}});
+  return best;
+}
+function advTodayLis(){return lisToday()}
+function advPrevMissed(){
+  const day=advDayNo();if(day<3)return null;
+  const prev=ADV_ROT[(day-2)%7],y=ago(1),has=(k,f)=>Object.values(advL()).some(e=>e.d===y&&e.k===k&&(!f||f(e)));
+  const map={L:['L',()=>has('L'),'Listening',()=>advStartLis(1+(day%4),false)],R:['R',()=>has('R'),'Reading',()=>advReadStart({})],W2:['W',()=>has('W',e=>e.sub==='t2'),'Writing Task 2',()=>advWStart('t2',{})],S:['S',()=>has('S'),'Speaking Part 2',()=>advP2Start({})],W1:['W',()=>has('W'),'Writing Task 1',()=>advWStart(advS().type==='gt'?'t1g':'t1a',{})]};
+  const m=map[prev];if(!m||m[1]())return null;
+  return {t:m[2],go:m[3]};
+}
+
+/* ---------- home ---------- */
+function advHome(){
+  const adv=$('#adv'),b=$('#advb');if(!adv||!b)return;
+  const y=adv.scrollTop;b.textContent='';
+  const s=advS(),day=advDayNo();
+  if(!s.start){advIntro(b);return}
+  const h=rE('div','avh',null,b);
+  rE('b',null,'🎯 IELTS 7 · روز '+Math.min(day,180)+' از 180',h);
+  rE('div','sub','امروز '+advBudget()+' دقیقه'+(s.budget?'':' (با افزایش تدریجی)')+' · آزمون '+advTypeName(),h);
+  rE('i',null,null,rE('div','avbar',null,h)).style.width=Math.min(100,day/180*100)+'%';
+  advTracker(b);
+  const P=advSteps(),T=P.T,nd=T.filter(x=>x.done).length;
+  const c=rE('div',null,null,b);
+  const hd=rE('div','avsh',null,c);
+  rE('b',null,P.mode==='base'?'🧪 آزمون سنجش روز اول':P.mode==='month'?'🧪 آزمون ماهانه (سنجش دوباره)':'📋 برنامهٔ امروز',hd);
+  rE('span',null,nd+' از '+T.length+' · '+T.reduce((a,x)=>a+x.min,0)+' دقیقه',hd);
+  if(P.mode==='base')rE('div','ok','این ۴ بخش نقطهٔ شروع تو را می‌سنجد (می‌توانی در یک یا دو روز انجام بدهی). بعد از آن برنامهٔ روزانه، بر اساس نقطه‌ضعف‌هایت ساخته می‌شود.',c);
+  else if(P.mode==='day')rE('div','ok','تمرکز امروز: '+ADV_ROT_FA[P.rot]+'. چرخهٔ هفتگی: Listening، Reading، Writing، Speaking، Writing 1، ترکیبی، مینی‌آزمون.',c);
+  let first=true;
+  T.forEach((x,i)=>{
+    const r=rE('div','pls'+(x.done?' done':'')+(!x.done&&first?' next':''),null,c);if(!x.done)first=false;
+    rE('span','no',x.done?'✓':String(i+1),r);
+    const tx=rE('div','tx',null,r);rE('b',null,x.ic+' '+x.t,tx);if(x.en)advEn(x.en,tx,'en');rE('div','su',x.su+' · '+x.min+' دقیقه',tx);
+    if(x.pct!=null&&!x.done)rE('i',null,null,rE('div','plbar plsm',null,tx)).style.width=Math.min(100,x.pct*100)+'%';
+    rBtn(x.done?'↻':'شروع',x.done?'chip':'chip pri',x.go,r);
+  });
+  if(nd===T.length&&P.mode!=='base'){
+    const d=rE('div','avc ok2',null,c);rE('b',null,'✅ برنامهٔ امروز کامل شد',d);
+    rE('div',null,'فردا: '+ADV_ROT_FA[ADV_ROT[day%7]]+'. اگر هنوز انرژی داری از دکمه‌های پایین تمرین آزاد بزن.',d);
+  }
+  const miss=P.mode==='day'?advPrevMissed():null;
+  if(miss){const d=rE('div','avc',null,b);rE('div',null,'↩️ دیروز «'+miss.t+'» را انجام ندادی. اگر وقت داری امروز جبرانش کن.',d);rBtn('جبران می‌کنم','chip',miss.go,d).style.marginTop='6px'}
+  const g=rE('div','avgrid',null,b);
+  [['✍️','Writing',advWriting],['📖','Reading',advReading],['🎧','Listening',advListening],['🎙','Speaking',advSpeaking],['📈','پیشرفت',advProgress],['⚙️','تنظیمات',advSettings]].forEach(([i,n,f])=>{const x=rE('button','avg',null,g);rE('i',null,i,x);rE('span',null,n,x);x.onclick=f});
+  if(day>=2&&(day-1)%30<3){
+    const d=rE('div','avc warn',null,b);rE('b',null,'🧑‍🏫 چک انسانی ماهانه',d);
+    rE('div',null,'نمرهٔ این اپ تخمین هوش مصنوعی است (حدود ±۱ band). این هفته یک متن Writing و یک ضبط Speaking خودت را به یک معلم آیلتس یا دوست مسلط نشان بده و نمره‌اش را با نمرهٔ اپ مقایسه کن؛ برای سنجش واقعی، یک آزمون رسمی یا شبیه‌ساز رایگان (مثلاً British Council یا IELTS Prep) هم کمک می‌کند.',d);
+  }
+  adv.scrollTop=y;
+}
+function advIntro(b){
+  const h=rE('div','avh',null,b);rE('b',null,'🎯 IELTS 7 در ۶ ماه',h);
+  rE('div','sub','مسیر جدا و موازی با تب «پایه». هر روز تمرین واقعی چهار مهارت — Listening، Reading، Writing، Speaking — با نمره و بازخورد.',h);
+  const c=rE('div','avc',null,b);rE('b',null,'اپ چه کار می‌کند؟',c);
+  ['روز اول: آزمون سنجش (۴ بخش) تا نقطهٔ شروع و نقطه‌ضعف‌هایت معلوم شود.',
+   'هر روز یک برنامهٔ چرخشی: مرور، پادکست، یک بلوک اصلی (Listening، Reading، Writing یا Speaking) و تمرین اضافه برای ضعیف‌ترین مهارت.',
+   'Writing با نمرهٔ چهار معیار، غلط‌ها با توضیح فارسی، و نسخهٔ band 7 متن خودت.',
+   'Reading با زمان‌سنج و نوع سؤال‌های واقعی آیلتس؛ Speaking Part 2 با ضبط، سرعت حرف زدن و مکث‌پرکن‌ها.',
+   'نمودار نمره‌ها و پیش‌بینی صادقانهٔ نمرهٔ روز ۱۸۰ بر اساس زمانی که واقعاً تمرین کرده‌ای.'].forEach(t=>rE('div','avb','• '+t,c));
+  const w=rE('div','avc warn',null,b);rE('b',null,'صادقانه بدان',w);
+  rE('div',null,'رسیدن از A2 به نمرهٔ ۷ در ۱۸۰ روز معمولاً حدود ۳ ساعت تمرین باکیفیت در روز می‌خواهد (برآورد از ساعت‌های آموزشی کمبریج). با ۱ تا ۲ ساعت در روز، هدف واقع‌بینانه‌تر ۶ تا ۶٫۵ است. نمرهٔ اپ تخمین است؛ ماهی یک بار از معلم یا آزمون رسمی هم بازخورد بگیر.',w);
+  rE('div','ok','نوع آزمونی که می‌خواهی بدهی:',b);
+  const g=rE('div','row2',null,b);const cur=advS().type;
+  [['ac','Academic'],['gt','General Training']].forEach(([v,t])=>rBtn(t,'chip'+(cur===v?' pri':''),()=>{advSave({type:v});advHome()},g));
+  rBtn('🚀 شروع برنامه (از امروز)','big',()=>{advSave({start:ago(0)});advHome();$('#adv').scrollTop=0},b).style.marginTop='12px';
+}
+function advTracker(p){
+  const c=rE('div','avc',null,p),s=advS(),o=advOverall();
+  const hd=rE('div','avsh',null,c);rE('b',null,'📊 نمرهٔ تخمینی تو',hd);
+  const ov=rE('span',null,'Overall '+advBs(o)+' → '+advBs(advTgtOverall()),hd);ov.dir='ltr';
+  [['L','Listening'],['R','Reading'],['W','Writing'],['S','Speaking']].forEach(([k,n])=>{
+    const e=advEst(k),t=s.tgt[k],r=rE('div','avk',null,c);
+    rE('span','n',n,r);const tr=rE('div','tr',null,r);rE('i',null,null,tr).style.width=(e==null?0:e/9*100)+'%';rE('u',null,null,tr).style.left=(t/9*100)+'%';
+    rE('span','v',advBs(e)+' / '+advBs(t),r);
+  });
+  rE('div','ok',o==null?'هنوز نمره‌ای ثبت نشده؛ با آزمون سنجش شروع کن.':'تخمین هوش مصنوعی؛ حدود ±۱ band خطا دارد. هرچه آزمون بیشتر بدهی دقیق‌تر می‌شود. خط نارنجی هدف توست.',c);
+}
+
+/* ---------- settings ---------- */
+function advSettings(){
+  const b=avOpen('⚙️ تنظیمات پیشرفته'),s=advS();
+  const seg=(title,opts,cur,fn)=>{rE('div','ok',title,b);const g=rE('div','row2',null,b);g.style.flexWrap='wrap';opts.forEach(([v,t])=>rBtn(t,'chip'+(String(cur)===String(v)?' pri':''),()=>{fn(v);advSettings()},g))};
+  seg('نوع آزمون',[['ac','Academic'],['gt','General Training']],s.type,v=>advSave({type:v}));
+  seg('زمان تمرین روزانه (دقیقه)',[[0,'خودکار: ۶۰ → ۱۲۰'],[45,'۴۵'],[60,'۶۰'],[90,'۹۰'],[120,'۱۲۰'],[180,'۱۸۰']],s.budget,v=>advSave({budget:+v}));
+  rE('div','ok','«خودکار» با گذشت روزها از ۶۰ به ۷۵، ۹۰، ۱۰۵ و ۱۲۰ دقیقه می‌رسد.',b);
+  const tg=rE('div','avc',null,b);rE('b',null,'هدف نمره‌ها',tg);
+  [['L','Listening'],['R','Reading'],['W','Writing'],['S','Speaking']].forEach(([k,n])=>{
+    const r=rE('div','avsh',null,tg);rE('span',null,n,r).dir='ltr';const m=rE('span',null,null,r);m.style.cssText='display:flex;gap:8px;align-items:center';
+    const set=d=>{const t=Object.assign({},advS().tgt);t[k]=Math.min(9,Math.max(5,t[k]+d));advSave({tgt:t});advSettings()};
+    rBtn('−','chip',()=>set(-0.5),m);const v=rE('b',null,advBs(s.tgt[k]),m);v.dir='ltr';rBtn('+','chip',()=>set(0.5),m);
+  });
+  const d=rE('div','avc',null,b);rE('b',null,'شروع برنامه',d);
+  rE('div','ok','شروع از '+advDateFa(s.start)+' · امروز روز '+advDayNo()+' است.',d);
+  rBtn('شروع دوبارهٔ شمارش روزها از امروز','chip',async()=>{if(await advConfirm('شمارش از امروز شروع شود؟','نمره‌ها و نوشته‌هایت می‌ماند؛ فقط شمارهٔ روز و چرخهٔ برنامه دوباره از ۱ شروع می‌شود.','بله')){advSave({start:ago(0)});avClose()}},d);
+  rBtn('← برگشت','chip bk',avClose,b).style.marginTop='10px';
+}
+
+/* ---------- progress ---------- */
+const ADV_CATS=Object.assign({punctuation:'نشانه‌گذاری',cohesion:'ربط جمله‌ها'},CATS);
+const ADV_B2H=[[2,0],[3,60],[4,200],[5,375],[6,550],[7,750],[8,950],[9,1150]];
+function advB2H(b){for(let i=1;i<ADV_B2H.length;i++){if(b<=ADV_B2H[i][0]){const a=ADV_B2H[i-1],c=ADV_B2H[i];return a[1]+(c[1]-a[1])*(b-a[0])/(c[0]-a[0])}}return 1150}
+function advH2B(h){for(let i=1;i<ADV_B2H.length;i++){if(h<=ADV_B2H[i][1]){const a=ADV_B2H[i-1],c=ADV_B2H[i];return a[0]+(c[0]-a[0])*(h-a[1])/(c[1]-a[1])}}return 9}
+function advAvgMin(){const s=advS();if(!s.start)return 0;const n=Math.min(14,advDayNo()),t=[];for(let i=0;i<n;i++)t.push(advStudy(ago(i)));return t.reduce((a,b)=>a+b,0)/Math.max(1,n)}
+function advProgress(){
+  const b=avOpen('📈 پیشرفت و پیش‌بینی'),s=advS(),day=advDayNo();
+  const o=advOverall();
+  const c=rE('div','avc',null,b),hd=rE('div','avsh',null,c);rE('b',null,'نمرهٔ تخمینی کل',hd);
+  rE('span',null,advBs(o)+' → '+advBs(advTgtOverall()),hd).dir='ltr';
+  [['L','Listening'],['R','Reading'],['W','Writing'],['S','Speaking']].forEach(([k,n])=>{
+    const e=advEst(k),old=advEst(k,ago(14)),r=rE('div','avsh',null,c);rE('span',null,n,r).dir='ltr';
+    const arrow=e!=null&&old!=null?(e>old?'  ↑':e<old?'  ↓':'  →'):'';
+    rE('span',null,advBs(e)+arrow+' · هدف '+advBs(s.tgt[k])+' · '+advEnt(k).length+' ثبت',r);
+  });
+  // weekly chart
+  const wl=[],wv=[];
+  if(s.start){const w=Math.max(1,Math.ceil(day/7));for(let i=0;i<w;i++){const end=new Date(new Date(s.start).getTime()+(i*7+6)*864e5).toISOString().slice(0,10);const v=advOverall(end);wl.push('w'+(i+1));wv.push(v)}}
+  const has=wv.filter(x=>x!=null).length;
+  const cc=rE('div','avc',null,b);rE('b',null,'روند نمره (هفتگی)',cc);
+  if(has>=2)advChart(cc,{kind:'line',labels:wl,series:[{name:'Overall',values:wv}],ymin:2,ymax:9,hline:advTgtOverall()});
+  else rE('div','ok','بعد از ثبت نمره در دو هفتهٔ مختلف، نمودار روند اینجا کشیده می‌شود.',cc);
+  // minutes
+  const ml=[],mv=[];for(let i=13;i>=0;i--){const d=ago(i);ml.push(d.slice(5));mv.push(advStudy(d))}
+  const mc=rE('div','avc',null,b);rE('b',null,'دقیقه‌های تمرین (۱۴ روز اخیر)',mc);
+  advChart(mc,{kind:'bar',labels:ml,series:[{name:'دقیقه',values:mv}],ymin:0,hline:advBudget()});
+  const avg=advAvgMin();rE('div','ok','میانگین ۱۴ روز اخیر: '+Math.round(avg)+' دقیقه در روز؛ هدف امروز: '+advBudget()+' دقیقه (خط نارنجی). این عدد شامل پادکست و گفتگوی تب پایه هم هست.',mc);
+  // projection
+  const pc=rE('div','avc',null,b);rE('b',null,'🔮 پیش‌بینی صادقانه',pc);
+  if(o==null||!s.start){rE('div','ok','بعد از آزمون سنجش، پیش‌بینی نمرهٔ روز ۱۸۰ اینجا نمایش داده می‌شود.',pc)}
+  else{
+    const left=Math.max(0,180-day),h0=advB2H(o),need=Math.max(0,advB2H(7)-h0);
+    rE('div',null,'اگر از اینجا تا روز ۱۸۰ ('+left+' روز دیگر) هر روز این‌قدر تمرین کنی، نمرهٔ کل تقریباً این می‌شود:',pc);
+    const t=rE('div','avproj',null,pc);
+    [[Math.round(avg)||advBudget(),'ریتم فعلی'],[60,'۶۰ دقیقه'],[90,'۹۰ دقیقه'],[120,'۱۲۰ دقیقه'],[180,'۱۸۰ دقیقه']].forEach(([m,l])=>{
+      const r=rE('div',null,null,t);rE('span',null,l+(l==='ریتم فعلی'?' ('+m+')':''),r);const v=advR5(advH2B(h0+left*m/60));rE('b',null,'≈ '+advBs(v),r).dir='ltr';
+    });
+    rE('div','ok','برای رسیدن به ۷ از نقطهٔ فعلی حدود '+Math.round(need)+' ساعت تمرین دیگر لازم است'+(left?' (یعنی حدود '+(need/left).toFixed(1)+' ساعت در روز تا روز ۱۸۰)':'')+'. این برآورد از ساعت‌های آموزشی کمبریج ساخته شده و فقط یک راهنمای تقریبی است (±۰٫۵ تا ۱ band).',pc);
+  }
+  // common errors
+  const cat={};Object.values(jget('advW',{})).concat(Object.values(jget('advSp',{}))).forEach(r=>(r.fb&&r.fb.errors||[]).forEach(e=>{cat[e.cat]=(cat[e.cat]||0)+1}));
+  const ks=Object.keys(cat).sort((a,b)=>cat[b]-cat[a]).slice(0,5);
+  if(ks.length){const ec=rE('div','avc',null,b);rE('b',null,'رایج‌ترین خطاهای تو (Writing و Speaking)',ec);ks.forEach(k=>rE('div','avb','• '+(ADV_CATS[k]||k)+': '+cat[k]+' بار',ec))}
+  // history
+  const hs=Object.values(advL()).sort((a,b)=>b.t-a.t).slice(0,15);
+  if(hs.length){const hc=rE('div','avc',null,b);rE('b',null,'آخرین نتیجه‌ها',hc);
+    const nm={L:'Listening',R:'Reading',W:'Writing',S:'Speaking'};
+    hs.forEach(e=>{const r=rE('div','avsh',null,hc);rE('span',null,e.d.slice(5)+' · '+nm[e.k]+(e.sub?' ('+e.sub+')':'')+(e.base?' · سنجش':''),r).dir='ltr';rE('b',null,e.b!=null?advBs(e.b):(e.typed?'تایپی':'—'),r).dir='ltr'})}
+  rBtn('← برگشت','chip bk',avClose,b).style.marginTop='10px';
+}
+
+/* ---------- hooks used by patched base code ---------- */
+function advStartLis(sec,base){
+  const dl=base?'B2':advLevelFor('L');
+  ADVLIS={base:!!base,dl,t0:Date.now(),sec};advLvSet(dl);
+  $('#av').hidden=true;startListening(sec);
+}
+function advAfterLis(sc,n){
+  if(!ADVLIS)return;const a=ADVLIS;
+  const min=Math.max(3,Math.min(25,Math.round((Date.now()-a.t0)/60000))),sec=(typeof L!=='undefined'&&L&&L.sec)||a.sec;
+  const bnd=advPct2b(sc/Math.max(1,n),a.dl);
+  const e={k:'L',sub:'s'+sec,b:bnd,dl:a.dl,raw:[sc,n],min};if(a.base)e.base=1;
+  advAdd(e);advAddMin('L',min);a.t0=Date.now();a.base=false;
+  setTimeout(()=>{try{
+    const box=$('#lbody'),f=box.firstChild;
+    const d=rE('div','rline','📊 تخمین band این تمرین: '+advBs(bnd)+' (سطح متن: '+a.dl+'). نمرهٔ کلی تو از چند تمرین میانگین‌گیری می‌شود.');d.dir='rtl';box.insertBefore(d,f?f.nextSibling:null);
+    const r=box.querySelector('.row2');if(r)rBtn('← برگشت به برنامه','chip bk',lisClose,r);
+  }catch(x){}},0);
+}
+function advLisClose(){ADVLIS=null;advLvRestore();setTimeout(advRefresh,60)}
+function advVoices(){
+  const v=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(x=>/^en/i.test(x.lang));
+  if(!v.length)return twoVoices();
+  const langs=['en-GB','en-AU','en-US','en-IN','en-CA'].filter(l=>v.some(x=>x.lang.replace('_','-')===l));
+  if(!langs.length)return twoVoices();
+  const pick=langs[Math.floor(Math.random()*langs.length)],pool=v.filter(x=>x.lang.replace('_','-')===pick);
+  const m=pool.find(x=>MALEV.test(x.name))||pool[0],f=pool.find(x=>FEMV.test(x.name)&&x!==m)||pool.find(x=>x!==m)||m;
+  return [m,f];
+}
+function advAfterAssess(x,a){
+  if(!a||a.overall==null)return;
+  const min=Math.max(2,Math.min(40,Math.round((Date.now()-(x.t0||Date.now()))/60000)));
+  advAdd({k:'S',sub:x.mode,b:advR5(Number(a.overall)),min,src:ADVIE?'adv':'base',raw:{fc:a.fc&&a.fc.band,lr:a.lr&&a.lr.band,gra:a.gra&&a.gra.band,pr:a.pr&&a.pr.band}});advAddMin('S',min);
+  if(ADVIE){const d=el('fix snd'),bt=document.createElement('button');bt.className='big bk';bt.textContent='← بازگشت به تب پیشرفته';bt.style.width='100%';bt.onclick=advGoHome;d.appendChild(bt)}
+}
+function advPack(){
+  if(PROF==='kid')return null;
+  const lp=jget('advLastPush',0),L=advL(),ch={};Object.keys(L).forEach(id=>{if((L[id].u||0)>lp)ch[id]=L[id]});
+  const m=advM(),mm={};for(let i=4;i>=0;i--){const d=ago(i);if(m[d])mm[d]=m[d]}
+  return {cfg:jget('advS',null),log:ch,mins:mm};
+}
+function advMerge(a){
+  if(!a||PROF==='kid')return;let chg=false;
+  const mine=jget('advS',null);
+  if(a.cfg&&(a.cfg.u||0)>((mine&&mine.u)||0)){jset('advS',a.cfg);chg=true}
+  const L=advL();Object.keys(a.log||{}).forEach(id=>{if(!L[id]||(a.log[id].u||0)>(L[id].u||0)){L[id]=a.log[id];chg=true}});
+  if(chg)jset('advL',L);
+  const m=advM();Object.keys(a.mins||{}).forEach(d=>{m[d]=m[d]||{};Object.keys(a.mins[d]||{}).forEach(k=>{if((a.mins[d][k]||0)>(m[d][k]||0)){m[d][k]=a.mins[d][k];chg=true}})});
+  jset('advM',m);
+  if(chg)advRefresh();
+}
+function advSpeakChat(mode){
+  $('#av').hidden=true;ADVIE_NEXT=true;
+  if(mode==='full')startIelts('full',randomFrom(P1GS,'P1:'));
+  else if(mode==='p1')startIelts('p1',randomFrom(P1GS,'P1:'));
+  else startIelts('p3',randomFrom(P3GS,'P3:'));
+}
+function advPod(){ADVFEED=true;advLvSet(advLevelFor('L'));$('#av').hidden=true;openFeed()}
+/* ---------- Writing coach ---------- */
+const ADV_WT={t2:{n:'Task 2',min:250,mins:40,fa:'مقاله (Task 2)'},t1a:{n:'Task 1 · Academic',min:150,mins:20,fa:'توصیف جدول/نمودار (Task 1)'},t1g:{n:'Task 1 · General',min:150,mins:20,fa:'نامه (Task 1)'}};
+const advWords=t=>(String(t||'').match(/[A-Za-z0-9']+/g)||[]).length;
+const advConfirm=(t,x,ok)=>openModal(t,x,false,'',ok||'بله').then(v=>v===true);
+const advWRec=()=>jget('advW',{});
+const ADV_TPL={
+  t2:['Introduction: paraphrase the question + say your opinion','  "It is often argued that ... . I completely agree / I partly agree with this view."','Body 1: topic sentence → explanation → example','  "Firstly, ... This is because ... For example, ..."','Body 2: second reason (or the other side)','  "Secondly, ... / On the other hand, ... / However, ..."','Conclusion: summarise + repeat your opinion','  "In conclusion, ... Overall, I believe that ..."'],
+  t1a:['Introduction: say what the chart/table shows (paraphrase)','  "The chart illustrates ... between ... and ..."','Overview: 2 main features, no numbers','  "Overall, ... was the highest, while ... was the lowest."','Details 1: compare the biggest numbers','  "... rose from X% to Y%, whereas ..."','Details 2: the rest, trends and changes'],
+  t1g:['Salutation: Dear Sir or Madam, (formal) / Dear Anna, (informal)','Reason: "I am writing to ... / I am writing about ..."','Point 1 → Point 2 → Point 3 (one short paragraph for each bullet)','Closing request: "I would be grateful if you could ..." / "Let me know ..."','Sign-off: Yours faithfully, (Dear Sir or Madam) / Yours sincerely, (named person) / Best wishes, (informal)']
+};
+function advWriting(){
+  const b=avOpen('✍️ Writing'),s=advS(),g=s.type==='gt';
+  rE('div','ok','متن می‌نویسی؛ اپ مثل یک ممتحن سخت‌گیر با چهار معیار رسمی نمره می‌دهد، غلط‌ها را با توضیح فارسی نشان می‌دهد و نسخهٔ band 7 همان متن را می‌سازد. خطاها خودکار به دفترچهٔ مرور می‌روند.',b);
+  const d=jget('advWd',null);
+  if(d&&d.text&&advWords(d.text)>=5&&Date.now()-(d.t||0)<2*864e5){
+    const c=rE('div','avc',null,b);rE('b',null,'📝 نوشتهٔ نیمه‌کاره‌ات',c);rE('div','ok',ADV_WT[d.task].fa+' · '+advWords(d.text)+' کلمه',c);
+    const r=rE('div','row2',null,c);rBtn('ادامه','chip pri',()=>advWScreen(d.task,d.p,Object.assign({},d.o,{prefill:d.text})),r);rBtn('حذف','chip',()=>{jset('advWd',null);advWriting()},r);
+  }
+  [['t2','✍️ Task 2 — مقالهٔ ۲۵۰ کلمه‌ای','opinion، discussion، problem-solution و … · ۴۰ دقیقه'],
+   [g?'t1g':'t1a',g?'✉️ Task 1 — نامه':'📊 Task 1 — توصیف جدول یا نمودار','حداقل ۱۵۰ کلمه · ۲۰ دقیقه']].forEach(([k,t,su])=>{
+    const x=rE('button','iebtn',null,b);rE('b',null,t,x);rE('span',null,su,x);x.onclick=()=>advWStart(k,{});
+  });
+  const hs=Object.values(advWRec()).sort((a,b)=>b.t-a.t).slice(0,12);
+  if(hs.length){const c=rE('div','avc',null,b);rE('b',null,'نوشته‌های قبلی',c);
+    hs.forEach(r=>{const row=rE('button','avhist',null,c);rE('span',null,r.d.slice(5)+' · '+ADV_WT[r.task].n+' · '+r.words+' کلمه',row).dir='ltr';rE('b',null,advBs(r.fb.overall),row).dir='ltr';row.onclick=()=>advWFeedback(r)})}
+  rBtn('← برگشت','chip bk',avClose,b).style.marginTop='10px';
+}
+async function advWStart(task,o){
+  o=o||{};const b=avOpen('✍️ '+ADV_WT[task].n),tok=AVTOK;
+  rE('div','ok','در حال ساختن سؤال… (چند ثانیه)',b);
+  try{
+    const av=jget('advWTopics',[]);
+    const j=await call({level:'B2',wprompt:{task,itype:advS().type,avoid:av.slice(-10)}});
+    if(tok!==AVTOK)return;
+    const p=j.wprompt;av.push(String(p.prompt).slice(0,50));jset('advWTopics',av.slice(-30));
+    advWScreen(task,p,o);
+  }catch(e){
+    if(tok!==AVTOK)return;b.textContent='';rE('div','fix',errMsg(e),b);
+    rBtn('تلاش دوباره','big',()=>advWStart(task,o),b);rBtn('← برگشت','chip bk',advWriting,b).style.marginTop='8px';
+  }
+}
+function advWData(p,box){
+  const t=rE('div','avtitle',p.title+(p.unit?'  ('+p.unit+')':''),box);t.dir='ltr';
+  if(p.kind==='table'){
+    const w=rE('div','hscroll',null,box),tb=rE('table','avtbl',null,w);tb.dir='ltr';
+    const hr=rE('tr',null,null,rE('thead',null,null,tb));rE('th',null,'',hr);p.labels.forEach(l=>rE('th',null,l,hr));
+    const bd=rE('tbody',null,null,tb);p.series.forEach(s=>{const r=rE('tr',null,null,bd);rE('th',null,s.name,r);s.values.forEach(v=>rE('td',null,String(v),r))});
+  }else advChart(rE('div',null,null,box),{kind:p.kind,labels:p.labels,series:p.series,ymin:0,legend:true});
+}
+function advChartText(p){
+  if(!p||!p.labels)return '';
+  return (p.title||'')+' ('+(p.unit||'')+') — '+p.labels.map((l,i)=>l+': '+p.series.map(s=>s.name+'='+s.values[i]).join(', ')).join('; ');
+}
+function advWScreen(task,p,o){
+  o=o||{};const b=avOpen('✍️ '+ADV_WT[task].n),T=ADV_WT[task],tok=AVTOK;
+  const bar=rE('div','avsh',null,b);
+  rBtn('✕ خروج','chip',async()=>{if(!ta.value.trim()||await advConfirm('از نوشتن خارج شوی؟','متن به‌صورت پیش‌نویس می‌ماند و بعداً می‌توانی ادامه بدهی.','خروج')){advWSaveDraft();advWriting()}},bar);
+  const tm=rE('b','avt',null,bar);const wc=rE('span','avwc','0 / '+T.min,bar);wc.dir='ltr';
+  const timer=advTimer(tm,T.mins*60,true);AVS={stop:()=>{timer.stop();clearTimeout(dt)}};
+  const pc=rE('div','avc',null,b);rE('div','ok','سؤال آزمون',pc);
+  advEn(p.prompt,pc,'wprompt');
+  if(task==='t1g'){const u=rE('ul','avul',null,pc);u.dir='ltr';p.points.forEach(x=>rE('li',null,x,u));advEn('Write at least 150 words. You do NOT need to write any addresses.',pc);advEn('Begin your letter as follows: '+p.salutation,pc)}
+  else if(task==='t1a'){advWData(p,pc);advEn('Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.',pc)}
+  else advEn('Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.',pc);
+  const hp=rE('details','avd',null,b);rE('summary',null,'🇮🇷 ترجمه و راهنما (اگر لازم شد)',hp);
+  rE('div',null,p.fa||'',hp);if(p.key_fa)rE('div','ok',p.key_fa,hp);
+  (p.ideas_fa||[]).forEach(x=>rE('div','avb','💡 '+x,hp));
+  if(p.words&&p.words.length){const w=rE('div','avwords',null,hp);p.words.forEach(x=>{const s=rE('span',null,x.en+' = '+x.fa,w);s.dir='ltr'})}
+  const tp=rE('details','avd',null,b);rE('summary',null,'🧩 قالب پیشنهادی',tp);
+  (ADV_TPL[task]).forEach(x=>advEn(x,tp,x.charAt(0)===' '?'sub':'hd'));
+  const ta=rE('textarea','avta',null,b);ta.placeholder='Write your answer here…';ta.spellcheck=false;ta.setAttribute('autocapitalize','sentences');ta.setAttribute('autocorrect','off');ta.dir='ltr';
+  if(o.prefill)ta.value=o.prefill;
+  let dt=0;const t0=Date.now();
+  const upd=()=>{const n=advWords(ta.value);wc.textContent=n+' / '+T.min;wc.classList.toggle('ok2',n>=T.min)};upd();
+  function advWSaveDraft(){if(ta.value.trim())jset('advWd',{task,p,o:{base:o.base,prevBand:o.prevBand},text:ta.value,t:Date.now()})}
+  ta.oninput=()=>{upd();clearTimeout(dt);dt=setTimeout(advWSaveDraft,1500)};
+  const send=rBtn('✅ ارسال برای نمره‌دهی','big',async()=>{
+    const n=advWords(ta.value);
+    if(n<15){await advConfirm('متن خیلی کوتاه است','حداقل چند جمله بنویس؛ بعد ارسال کن.','باشه');return}
+    if(!o.base&&n<T.min&&!await advConfirm('کمتر از '+T.min+' کلمه نوشته‌ای','در آزمون واقعی برای کم‌بودن کلمه‌ها نمره کم می‌شود. با همین متن ارسال شود؟','ارسال'))return;
+    timer.stop();advWSend(task,p,o,ta.value.trim(),Math.max(30,Math.round(timer.el()+(o.prefill?60:0))));
+  },b);send.style.width='100%';send.style.marginTop='10px';
+  rE('div','ok','نمره بر اساس چهار معیار رسمی و محافظه‌کارانه داده می‌شود؛ تخمین هوش مصنوعی است و حدود ±۱ band خطا دارد.',b);
+}
+async function advWSend(task,p,o,text,secs){
+  const b=avOpen('✍️ نمره‌دهی'),tok=AVTOK;
+  rE('div','ok','در حال نمره‌دادن به متن تو… (حدود ۱۰ تا ۳۰ ثانیه)',b);
+  try{
+    const j=await call({level:'B2',wscore:{task,itype:advS().type,prompt:p.prompt+(task==='t1g'?'\n'+p.points.map(x=>'- '+x).join('\n'):''),data:advChartText(p),text,secs,base:!!o.base}});
+    if(tok!==AVTOK)return;
+    const fb=j.wscore,min=Math.max(1,Math.round(secs/60));
+    const e={k:'W',sub:task,b:fb.overall,raw:{ta:fb.ta.band,cc:fb.cc.band,lr:fb.lr.band,gra:fb.gra.band,w:fb.words},min};if(o.base)e.base=1;
+    advAdd(e);advAddMin('W',min);
+    const rec={id:e.id,t:e.t,d:e.d,task,p,text,words:fb.words,secs,fb,base:!!o.base,prevBand:o.prevBand};
+    const all=advWRec();all[rec.id]=rec;Object.keys(all).sort((a,b)=>all[b].t-all[a].t).slice(30).forEach(k=>delete all[k]);jset('advW',all);
+    jset('advWd',null);
+    try{addVocab(fb.errors.slice(0,6).map(x=>({en:x.better,fa:x.tr||x.fa||''})))}catch(x){}
+    advWFeedback(rec,true);
+  }catch(e){
+    if(tok!==AVTOK)return;b.textContent='';rE('div','fix',errMsg(e),b);
+    rE('div','ok','متن تو ذخیره است و از دست نمی‌رود.',b);
+    rBtn('تلاش دوباره برای نمره‌دهی','big',()=>advWSend(task,p,o,text,secs),b);
+    rBtn('← برگشت به نوشتن','chip bk',()=>advWScreen(task,p,Object.assign({},o,{prefill:text})),b).style.marginTop='8px';
+  }
+}
+function advWFeedback(rec,fresh){
+  const b=avOpen('✍️ نتیجهٔ Writing'),fb=rec.fb;
+  const h=rE('div','avh',null,b);rE('b',null,'Overall band: '+advBs(fb.overall),h).dir='ltr';
+  rE('div','sub',rec.words+' کلمه · '+Math.max(1,Math.round(rec.secs/60))+' دقیقه · '+ADV_WT[rec.task].n+(rec.base?' · آزمون سنجش':'')+(rec.prevBand!=null?' · نسخهٔ قبلی: '+advBs(rec.prevBand):''),h);
+  const names=rec.task==='t2'?['Task Response','Coherence & Cohesion','Lexical Resource','Grammatical Range & Accuracy']:['Task Achievement','Coherence & Cohesion','Lexical Resource','Grammatical Range & Accuracy'];
+  const c=rE('div','avc',null,b);
+  ['ta','cc','lr','gra'].forEach((k,i)=>{const r=rE('div','avsh',null,c);rE('span',null,names[i],r).dir='ltr';rE('b',null,advBs(fb[k].band),r).dir='ltr';if(fb[k].fa)rE('div','ok',fb[k].fa,c)});
+  if(fb.strengths_fa&&fb.strengths_fa.length){const s=rE('div','avc',null,b);rE('b',null,'✅ نقاط قوت',s);fb.strengths_fa.forEach(x=>rE('div','avb','• '+x,s))}
+  if(fb.structure_fa){const s=rE('div','avc',null,b);rE('b',null,'🧱 ساختار متن',s);rE('div',null,fb.structure_fa,s)}
+  if(fb.errors.length){
+    const eh=rE('div','avsh',null,b);rE('b',null,'🔧 مهم‌ترین غلط‌ها',eh);
+    fb.errors.forEach(e=>{
+      const c=rE('div','avc er',null,b);advEn('✗ '+e.said,c,'bad');
+      const g=advEn('✓ '+e.better,c,'good');rBtn('🔊','ear',()=>speak(e.better),g);
+      rE('div','fa',(ADV_CATS[e.cat]?'['+ADV_CATS[e.cat]+'] ':'')+e.fa,c);
+    });
+    if(fresh)rE('div','ok','✓ '+Math.min(6,fb.errors.length)+' جملهٔ اصلاح‌شده به دفترچهٔ مرور اضافه شد (با معنی فارسی تا از حافظه بگویی).',b);
+  }
+  if(fb.upgrades.length){const u=rE('div','avc',null,b);rE('b',null,'⬆️ ارتقای واژه‌ها و عبارت‌ها',u);
+    fb.upgrades.forEach(x=>{const r=rE('div','avup',null,u);advEn(x.from+'  →  '+x.to,r);if(x.fa)rE('div','fa',x.fa,r)})}
+  if(fb.rewrite){const d=rE('details','avd',null,b);rE('summary',null,'⭐ همین متن با کیفیت حدود band 7',d);const t=advEn(fb.rewrite,d,'rewrite');rBtn('🔊 گوش بده','chip',()=>speak(fb.rewrite),d).style.marginTop='6px'}
+  if(fb.next_fa&&fb.next_fa.length){const s=rE('div','avc',null,b);rE('b',null,'🎯 برای نوشتن بعدی',s);fb.next_fa.forEach(x=>rE('div','avb','• '+x,s))}
+  rE('div','ok','نمره تخمین هوش مصنوعی است؛ برای اطمینان، ماهی یک بار متن‌هایت را به یک معلم آیلتس هم نشان بده.',b);
+  const r=rE('div','row2',null,b);r.style.flexWrap='wrap';
+  rBtn('🔁 نسخهٔ دوم همین متن (اصلاح و نمرهٔ دوباره)','chip pri',()=>advWScreen(rec.task,rec.p,{prefill:rec.text,prevBand:fb.overall,base:false}),r);
+  rBtn('✍️ سؤال جدید','chip',()=>advWStart(rec.task,{}),r);
+  rBtn('← برگشت','chip bk',advWriting,b).style.marginTop='10px';
+}
+/* ---------- Reading trainer ---------- */
+const ADV_QN={tfng:'True / False / Not Given',mcq:'چندگزینه‌ای',gap:'تکمیل جمله',para:'پیدا کردن پاراگراف'};
+const ADV_LVS=['A2','B1','B2','C1'];
+function advReading(){
+  const b=avOpen('📖 Reading');
+  rE('div','ok','یک متن با سؤال‌های واقعی آیلتس (True/False/Not Given، چندگزینه‌ای، تکمیل جمله، پیدا کردن پاراگراف) و زمان‌سنج ۲۰ دقیقه. بعد از پایان، دلیل هر پاسخ با جملهٔ مرجع از خود متن نشان داده می‌شود.',b);
+  const cur=advLevelFor('R'),i=ADV_LVS.indexOf(cur),est=advEst('R');
+  [[cur,'📖 تمرین هم‌سطح تو ('+cur+')','کمی بالاتر از سطح فعلی تا یاد بگیری'],
+   [est!=null&&est>=6?'C1':'B2','🎓 شبیه آزمون واقعی ('+(est!=null&&est>=6?'C1':'B2')+')','برای سنجش دقیق‌تر نمره'],
+   [ADV_LVS[Math.max(0,i-1)],'🌱 یک پله آسان‌تر ('+ADV_LVS[Math.max(0,i-1)]+')','وقتی متن سخت بود']].forEach(([l,t,su])=>{
+    const x=rE('button','iebtn',null,b);rE('b',null,t,x);rE('span',null,su,x);x.onclick=()=>advReadStart({level:l});
+  });
+  const hs=advEnt('R').slice(-8).reverse();
+  if(hs.length){const c=rE('div','avc',null,b);rE('b',null,'نتیجه‌های قبلی',c);
+    hs.forEach(e=>{const r=rE('div','avsh',null,c);rE('span',null,e.d.slice(5)+' · '+(e.dl||'')+' · '+(e.raw?e.raw[0]+'/'+e.raw[1]:''),r).dir='ltr';rE('b',null,advBs(e.b),r).dir='ltr'})}
+  rBtn('← برگشت','chip bk',avClose,b).style.marginTop='10px';
+}
+async function advReadStart(o){
+  o=o||{};const lvl=o.base?'B2':(o.level||advLevelFor('R')),n={A2:8,B1:9,B2:10,C1:12}[lvl]||10;
+  const b=avOpen('📖 Reading'),tok=AVTOK;rE('div','ok','در حال ساختن متن و سؤال‌ها… (۱۰ تا ۳۰ ثانیه)',b);
+  try{
+    const av=jget('advRTopics',[]),t=randomFrom(P3GS.concat(GEN.filter(g=>g.k==='gen')),'RD:');bumpTopic('RD:'+t.l);
+    const j=await call({level:lvl,read:{level:lvl,itype:advS().type,n,topic:t.l,avoid:av.slice(-10)}});
+    if(tok!==AVTOK)return;
+    const r=j.reading;av.push(String(r.title).slice(0,50));jset('advRTopics',av.slice(-30));
+    advReadScreen(r,o);
+  }catch(e){
+    if(tok!==AVTOK)return;b.textContent='';rE('div','fix',errMsg(e),b);
+    rBtn('تلاش دوباره','big',()=>advReadStart(o),b);rBtn('← برگشت','chip bk',advReading,b).style.marginTop='8px';
+  }
+}
+function advReadScreen(r,o){
+  const b=avOpen('📖 Reading'),ans={};
+  const bar=rE('div','avsh',null,b);
+  rBtn('✕ خروج','chip',async()=>{if(await advConfirm('از تمرین خارج شوی؟','پاسخ‌هایت ثبت نمی‌شود.','خروج'))advReading()},bar);
+  const tm=rE('b','avt',null,bar),timer=advTimer(tm,20*60,true);AVS={stop:()=>timer.stop()};
+  rE('div','ok','سطح متن: '+r.level+' · '+advTypeName()+' · '+r.questions.length+' سؤال'+(o.base?' · آزمون سنجش':''),b);
+  const pc=rE('div',null,null,b);advEn(r.title,pc,'avrt');
+  r.paras.forEach((p,i)=>{const d=rE('div','avp avp'+(i%4),null,pc);d.dir='ltr';rE('b','avpl',p.l,d);rE('span',null,p.t,d)});
+  if(r.gloss&&r.gloss.length){const g=rE('details','avd',null,b);rE('summary',null,'📘 واژه‌های کمکی (اختیاری؛ در آزمون واقعی نیست)',g);
+    r.gloss.forEach(x=>{const row=rE('div','avgl',null,g);advEn(x.en,row,'gw');rE('span','fa',x.fa,row)})}
+  rE('div','avsh',null,b).appendChild(rE('b',null,'❓ سؤال‌ها'));
+  const letters=r.paras.map(p=>p.l);
+  const opt=(row,i,label,val)=>{const x=rE('button','qopt',label,row);x.dir='ltr';x.onclick=()=>{ans[i]=val;row.querySelectorAll('.qopt').forEach(y=>y.classList.toggle('sel',y===x))};return x};
+  r.questions.forEach((q,i)=>{
+    const row=rE('div','qrow',null,b),t=rE('div',null,(i+1)+'. '+q.q,row);t.dir='ltr';
+    if(q.type==='tfng')['TRUE','FALSE','NOT GIVEN'].forEach(v=>opt(row,i,v,v));
+    else if(q.type==='mcq')q.options.forEach((x,k)=>opt(row,i,'ABCD'[k]+'. '+x,'ABCD'[k]));
+    else if(q.type==='para'){const g=rE('div','row2',null,row);g.style.justifyContent='flex-start';letters.forEach(l=>{const x=rE('button','qopt',l,g);x.style.width='auto';x.style.minWidth='44px';x.style.textAlign='center';x.dir='ltr';x.onclick=()=>{ans[i]=l;g.querySelectorAll('.qopt').forEach(y=>y.classList.toggle('sel',y===x))}})}
+    else{const inp=rE('input',null,null,row);inp.placeholder='ONE to THREE words from the text';inp.autocomplete='off';inp.dir='ltr';inp.oninput=()=>{ans[i]=inp.value}}
+  });
+  const send=rBtn('✅ پایان و بررسی پاسخ‌ها','big',async()=>{
+    const un=r.questions.filter((q,i)=>!String(ans[i]||'').trim()).length;
+    if(un&&!await advConfirm(un+' سؤال بدون پاسخ مانده','با همین حالت بررسی شود؟','بررسی'))return;
+    timer.stop();advReadResult(r,o,r.questions.map((q,i)=>{const u=String(ans[i]||'').trim();const good=q.type==='gap'?okGap(u,q):u.toUpperCase()===String(q.answer).toUpperCase();return {q,u,good}}),timer.el());
+  },b);send.style.width='100%';send.style.marginTop='10px';
+}
+function advReadResult(r,o,rows,secs){
+  const b=avOpen('📖 نتیجهٔ Reading'),n=rows.length,ok=rows.filter(x=>x.good).length,bnd=advPct2b(ok/n,r.level),min=Math.max(2,Math.round(secs/60));
+  const e={k:'R',sub:'r',b:bnd,dl:r.level,raw:[ok,n],min};if(o.base)e.base=1;
+  advAdd(e);advAddMin('R',min);
+  const h=rE('div','avh',null,b);rE('b',null,ok+' از '+n+' درست · band ≈ '+advBs(bnd),h);
+  rE('div','sub','سطح متن '+r.level+' · '+Math.floor(secs/60)+':'+String(Math.round(secs%60)).padStart(2,'0')+' دقیقه'+(secs>1200?' (بیشتر از ۲۰ دقیقهٔ آزمون)':'')+(o.base?' · آزمون سنجش':''),h);
+  const by={};rows.forEach(x=>{const k=x.q.type,s=by[k]||(by[k]=[0,0]);s[1]++;if(x.good)s[0]++});
+  const c=rE('div','avc',null,b);rE('b',null,'نوع سؤال‌ها',c);
+  Object.keys(by).forEach(k=>{const rr=rE('div','avsh',null,c);rE('span',null,ADV_QN[k],rr);rE('b',null,by[k][0]+'/'+by[k][1],rr).dir='ltr'});
+  const weak=Object.keys(by).filter(k=>by[k][1]>=2&&by[k][0]/by[k][1]<0.5);
+  if(weak.length)rE('div','ok','نقطه‌ضعف این تمرین: '+weak.map(k=>ADV_QN[k]).join('، ')+'. برای تمرین بیشتر روی همین نوع، دلیل جواب‌های درست را دقیق بخوان.',c);
+  rE('div','avsh',null,b).appendChild(rE('b',null,'🔍 بررسی سؤال به سؤال'));
+  rows.forEach((x,i)=>{
+    const d=rE('div','qrow '+(x.good?'good':'bad'),null,b);
+    const t=rE('div',null,(i+1)+'. '+x.q.q,d);t.dir='ltr';
+    const a=rE('div',null,(x.good?'✓ ':'✗ ')+(x.u||'—')+(x.good?'':'   →   '+x.q.answer),d);a.dir='ltr';a.style.fontWeight='700';a.style.color=x.good?'var(--grn)':'var(--red)';
+    const body=x.good?rE('details','avd',null,d):d;if(x.good)rE('summary',null,'دلیل و جملهٔ مرجع',body);
+    if(x.q.ev){const ev=advEn('“'+x.q.ev+'”',body,'ev');rBtn('🔊','ear',()=>speak(x.q.ev),ev)}
+    if(x.q.fa)rE('div','fa',x.q.fa,body);
+  });
+  if(r.gloss&&r.gloss.length){
+    try{addVocab(r.gloss.map(g=>({en:g.en,fa:g.fa,ex:g.ex,ex_fa:g.ex_fa})))}catch(x){}
+    const g=rE('div','avc',null,b);rE('b',null,'📘 واژه‌های این متن (در جمله، به دفترچهٔ مرور اضافه شد)',g);
+    r.gloss.forEach(x=>{const row=rE('div','avgl',null,g);advEn(x.ex,row,'gw');rE('span','fa',x.ex_fa+'  ('+x.en+' = '+x.fa+')',row)});
+  }
+  rE('div','ok','نمره تخمین است؛ چون تعداد سؤال‌ها کم است حدود ±۱ band خطا دارد و با تمرین‌های بیشتر دقیق‌تر می‌شود.',b);
+  const rr=rE('div','row2',null,b);rr.style.flexWrap='wrap';
+  rBtn('📖 متن بعدی','chip pri',()=>advReadStart({}),rr);
+  rBtn('← برگشت','chip bk',advReading,rr);
+}
+/* ---------- Listening / Speaking menus + Part 2 drill ---------- */
+function advListening(){
+  const b=avOpen('🎧 Listening');
+  rE('div','ok','تمرین Listening آیلتس: متن فقط یک‌بار پخش می‌شود (مثل آزمون) با لهجه‌های مختلف انگلیسی؛ بعد پاسخ‌ها با جملهٔ مرجع بررسی می‌شود. سطح بر اساس نمرهٔ تخمینی خودت انتخاب می‌شود ('+advLevelFor('L')+').',b);
+  [[1,'Section 1','مکالمهٔ روزمره، تکمیل فرم'],[2,'Section 2','سخنرانی کوتاه در موقعیت اجتماعی'],[3,'Section 3','گفتگوی دانشجویی دربارهٔ یک تکلیف'],[4,'Section 4','مینی‌سخنرانی علمی، تکمیل یادداشت']].forEach(([k,t,su])=>{
+    const x=rE('button','iebtn',null,b);rE('b',null,t,x);rE('span',null,su,x);x.onclick=()=>advStartLis(k,false);
+  });
+  const p=rE('button','iebtn',null,b);rE('b',null,'🎧 پادکست روزانه',p);rE('span',null,'شنیدن طولانی و راحت با متن و ترجمه؛ زمانش در برنامهٔ امروز حساب می‌شود',p);p.onclick=advPod;
+  const hs=advEnt('L').slice(-8).reverse();
+  if(hs.length){const c=rE('div','avc',null,b);rE('b',null,'نتیجه‌های قبلی',c);
+    hs.forEach(e=>{const r=rE('div','avsh',null,c);rE('span',null,e.d.slice(5)+' · '+(e.sub||'')+' · '+(e.dl||'')+' · '+(e.raw?e.raw[0]+'/'+e.raw[1]:''),r).dir='ltr';rE('b',null,advBs(e.b),r).dir='ltr'})}
+  rBtn('← برگشت','chip bk',avClose,b).style.marginTop='10px';
+}
+function advSpeaking(){
+  const b=avOpen('🎙 Speaking');
+  rE('div','ok','برای Speaking هم نمره و بازخورد داری. Part 2 با تحلیل کامل (سرعت حرف زدن، مکث‌پرکن‌ها، نسخهٔ ارتقایافتهٔ پاسخ خودت) در همین تب انجام می‌شود؛ Part 1 و 3 و آزمون کامل با مربی در چت است.',b);
+  [['🎤 Part 2 — کارت موضوع و تحلیل کامل','۱ دقیقه آماده‌سازی، تا ۲ دقیقه صحبت، بعد نمره، غلط‌ها و نسخهٔ band 6 و 7 پاسخ تو',()=>advP2Start({})],
+   ['💬 Part 1 — مصاحبه','۴ سؤال کوتاه شخصی با مربی',()=>advSpeakChat('p1')],
+   ['🗣 Part 3 — بحث','۴ سؤال نظر و دلیل با مربی',()=>advSpeakChat('p3')],
+   ['🎓 آزمون کامل Speaking','Part 1 تا 3 و کارنامه با نمرهٔ تخمینی',()=>advSpeakChat('full')]].forEach(([t,su,f])=>{
+    const x=rE('button','iebtn',null,b);rE('b',null,t,x);rE('span',null,su,x);x.onclick=f;
+  });
+  const hs=advEnt('S').slice(-8).reverse();
+  if(hs.length){const c=rE('div','avc',null,b);rE('b',null,'نتیجه‌های قبلی',c);
+    hs.forEach(e=>{const r=rE('div','avsh',null,c);rE('span',null,e.d.slice(5)+' · '+(e.sub||''),r).dir='ltr';rE('b',null,advBs(e.b),r).dir='ltr'})}
+  rBtn('← برگشت','chip bk',avClose,b).style.marginTop='10px';
+}
+
+const ADV_FILL=/\b(um+|uh+|er+m?|erm|ah+|hmm+|mm+|you know|i mean)\b/gi;
+const advFill=t=>(String(t||'').match(ADV_FILL)||[]).length;
+const advMS=s=>Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0');
+const advSpRec=()=>jget('advSp',{});
+async function advP2Start(o){
+  o=o||{};const b=avOpen('🎙 Speaking Part 2'),tok=AVTOK;
+  rE('div','ok','در حال آماده‌کردن کارت موضوع…',b);
+  try{
+    const t=randomFrom(P2GS,'P2:');bumpTopic('P2:'+t.l);
+    const j=await call({level:'B2',card:true,theme:t.l});
+    if(tok!==AVTOK)return;
+    advP2Card(j.card,o,1,null);
+  }catch(e){
+    if(tok!==AVTOK)return;b.textContent='';rE('div','fix',errMsg(e),b);
+    rBtn('تلاش دوباره','big',()=>advP2Start(o),b);rBtn('← برگشت','chip bk',advSpeaking,b).style.marginTop='8px';
+  }
+}
+function advP2Card(card,o,att,prev){
+  const b=avOpen('🎙 Part 2 · تلاش '+att),tok=AVTOK;
+  const c=rE('div','avc',null,b);rE('div','ok','کارت موضوع',c);
+  const t=advEn(card.topic,c,'wprompt');rBtn('🔊','ear',()=>speak(card.topic+'. '+card.points.join('. ')),t);
+  card.points.forEach(x=>advEn('• '+x,c));
+  rE('div','ok','یک دقیقه فکر کن و یادداشت بنویس؛ بعد ۱ تا ۲ دقیقه بدون وقفه حرف بزن و به هر چهار نکته برس.',b);
+  const notes=rE('textarea','avta',null,b);notes.placeholder='Your notes (key words only)…';notes.style.minHeight='84px';notes.spellcheck=false;notes.dir='ltr';
+  const ctl=rE('div',null,null,b);ctl.style.marginTop='10px';
+  const home=()=>{ctl.textContent='';
+    const row=rE('div','row2',null,ctl);row.style.flexWrap='wrap';
+    rBtn('⏱ ۱ دقیقه آماده‌سازی','chip pri',prep,row);rBtn('🎙 شروع مستقیم','chip',rec,row);
+    rBtn('✍️ به‌جای ضبط، تایپ می‌کنم','chip',()=>advP2Typed(card,o,att,prev),ctl).style.marginTop='8px';
+    rBtn('← برگشت','chip bk',advSpeaking,ctl).style.marginTop='8px';
+  };
+  const prep=()=>{
+    ctl.textContent='';const tm=rE('div','avbig',null,ctl),timer=advTimer(tm,60,true);
+    const stop=()=>{timer.stop();clearInterval(iv)};AVS={stop};
+    const iv=setInterval(()=>{if(timer.el()>=60){stop();rec()}},500);
+    rE('div','ok','آماده‌سازی… یادداشت‌هایت را بنویس.',ctl);
+    rBtn('⏩ همین حالا شروع می‌کنم','chip pri',()=>{stop();rec()},ctl);
+  };
+  const rec=()=>{
+    ctl.textContent='';AVS=null;
+    const dot=rE('div','avrec',null,ctl);rE('i',null,null,dot);const tm=rE('span','avbig','0:00',dot);
+    rE('div','ok','حداقل یک دقیقه صحبت کن؛ مکث کوتاه اشکال ندارد. وقتی تمام شد «پایان» را بزن (بعد از ۲ دقیقه خودکار تمام می‌شود).',ctl);
+    let timer=null;
+    const stopB=rBtn('⏹ پایان صحبت','big',()=>{if(rc)finish()},ctl);stopB.style.width='100%';
+    RPX={long:true,cb:d=>{
+      if(timer)timer.stop();if(tok!==AVTOK)return;
+      if(!d){ctl.textContent='';rE('div','fix','صدایی نشنیدم یا خیلی کوتاه بود. دوباره امتحان کن یا پاسخ را تایپ کن.',ctl);home();return}
+      advP2Analyze(card,o,att,prev,d,Math.max(5,Math.min(130,timer?timer.el():60)));
+    }};
+    startRec(125).then(()=>{if(tok!==AVTOK||!rc)return;timer=advTimer(tm,0,false);AVS={stop:()=>{if(timer)timer.stop()}}}).catch(()=>{RPX=null;if(tok!==AVTOK)return;ctl.textContent='';rE('div','fix','اجازهٔ میکروفون داده نشده یا میکروفون پیدا نشد؛ می‌توانی پاسخ را تایپ کنی.',ctl);home()});
+  };
+  home();
+}
+function advP2Typed(card,o,att,prev){
+  const b=avOpen('🎙 Part 2 · تایپی'),tok=AVTOK;
+  const c=rE('div','avc',null,b);advEn(card.topic,c,'wprompt');card.points.forEach(x=>advEn('• '+x,c));
+  rE('div','ok','پاسخ را مثل وقتی که حرف می‌زنی بنویس (حدود ۱۵۰ کلمه). چون صدا نیست، روانی و تلفظ سنجیده نمی‌شود و این نتیجه در نمودار نمره‌ها حساب نمی‌شود.',b);
+  const ta=rE('textarea','avta',null,b);ta.dir='ltr';ta.spellcheck=false;ta.placeholder='Type your answer…';
+  const wc=rE('div','ok','0 کلمه',b);ta.oninput=()=>{wc.textContent=advWords(ta.value)+' کلمه'};
+  const s=rBtn('✅ ارسال برای تحلیل','big',()=>{if(advWords(ta.value)<20){advConfirm('پاسخ خیلی کوتاه است','حداقل چند جمله بنویس.','باشه');return}advP2Analyze(card,o,att,prev,null,0,ta.value.trim())},b);s.style.width='100%';
+  rBtn('← برگشت','chip bk',()=>advP2Card(card,o,att,prev),b).style.marginTop='8px';
+}
+async function advP2Analyze(card,o,att,prev,d,secs,text){
+  const b=avOpen('🎙 تحلیل پاسخ'),tok=AVTOK;rE('div','ok',d?'در حال گوش دادن و تحلیل پاسخ تو… (۱۵ تا ۴۵ ثانیه)':'در حال تحلیل پاسخ تو… (۱۰ تا ۳۰ ثانیه)',b);
+  try{
+    const p={level:'B2',speak2:{card:card.topic+' — '+card.points.join('; '),secs}};
+    if(d){p.audio=d.data;p.mime=d.mime}else p.speak2.text=text;
+    const j=await call(p);if(tok!==AVTOK)return;
+    const fb=j.speak2,words=advWords(fb.heard),min=Math.max(3,Math.round((d?secs:150)/60)+3);
+    const rec={id:'',t:Date.now(),d:ago(0),card,secs,words,wpm:d&&secs>=10?Math.round(words/(secs/60)):0,fill:d?advFill(fb.heard):0,typed:!d,fb,att,base:!!o.base};
+    const e={k:'S',sub:'p2',b:fb.overall,raw:{fc:fb.fc.band,lr:fb.lr.band,gra:fb.gra.band,pr:fb.pr.band,w:words,wpm:rec.wpm,f:rec.fill},min};
+    if(!d)e.typed=1;if(o.base)e.base=1;advAdd(e);rec.id=e.id;advAddMin('S',min);
+    const all=advSpRec();all[rec.id]=rec;Object.keys(all).sort((a,c)=>all[c].t-all[a].t).slice(20).forEach(k=>delete all[k]);jset('advSp',all);
+    try{addVocab(fb.errors.slice(0,5).map(x=>({en:x.better,fa:x.tr||x.fa||''})).concat(fb.phrases.map(x=>({en:x.en,fa:x.fa}))))}catch(x){}
+    advP2Result(rec,card,o,prev);
+  }catch(e){
+    if(tok!==AVTOK)return;b.textContent='';rE('div','fix',errMsg(e),b);
+    if(d)rE('div','ok','ضبط تو هنوز در حافظه است؛ دوباره تلاش کن.',b);
+    rBtn('تلاش دوباره','big',()=>advP2Analyze(card,o,att,prev,d,secs,text),b);
+    rBtn('← برگشت','chip bk',()=>advP2Card(card,o,att,prev),b).style.marginTop='8px';
+  }
+}
+function advP2Result(rec,card,o,prev){
+  const b=avOpen('🎙 نتیجهٔ Part 2'),fb=rec.fb;
+  const h=rE('div','avh',null,b);rE('b',null,'Speaking band ≈ '+advBs(fb.overall),h).dir='ltr';
+  rE('div','sub','تلاش '+rec.att+(rec.typed?' · پاسخ تایپی (روانی و تلفظ بررسی نشده)':'')+(o.base?' · آزمون سنجش':''),h);
+  if(!rec.typed){
+    const m=rE('div','avmet',null,b);
+    const wpmTxt=rec.wpm<90?'آهسته':rec.wpm<110?'کمی آهسته':rec.wpm<=170?'خوب':'تند';
+    [['⏱','مدت',advMS(rec.secs)+(rec.secs<60?' (کوتاه)':'')],['🗣','کلمه',String(rec.words)],['⚡','سرعت',rec.wpm>0?rec.wpm+' wpm · '+wpmTxt:'— (مدت کم است)'],['🔇','مکث‌پرکن',rec.fill+' بار']].forEach(([i,n,v])=>{const x=rE('div',null,null,m);rE('span',null,i+' '+n,x);rE('b',null,v,x)});
+    rE('div','ok','سرعت مناسب گفتار آیلتس حدود ۱۱۰ تا ۱۶۰ کلمه در دقیقه است. مدت مناسب Part 2: ۱ تا ۲ دقیقه.',b);
+  }
+  if(prev){
+    const c=rE('div','avc',null,b);rE('b',null,'مقایسه با تلاش قبلی',c);
+    const row=(n,a,z)=>{const r=rE('div','avsh',null,c);rE('span',null,n,r);const v=rE('b',null,a+'  →  '+z,r);v.dir='ltr'};
+    row('Band',advBs(prev.fb.overall),advBs(fb.overall));if(!rec.typed&&!prev.typed){row('WPM',prev.wpm,rec.wpm);row('کلمه',prev.words,rec.words);row('مکث‌پرکن',prev.fill,rec.fill)}
+  }
+  const c=rE('div','avc',null,b);
+  [['fc','Fluency & Coherence'],['lr','Lexical Resource'],['gra','Grammar'],['pr','Pronunciation']].forEach(([k,n])=>{
+    if(k==='pr'&&rec.typed)return;const r=rE('div','avsh',null,c);rE('span',null,n,r).dir='ltr';rE('b',null,advBs(fb[k].band),r).dir='ltr';if(fb[k].fa)rE('div','ok',fb[k].fa,c);
+  });
+  if(!rec.typed)rE('div','ok','تلفظ از روی صدا تخمین زده شده و دقتش از بقیهٔ معیارها کمتر است.',c);
+  const tc=rE('div','avc',null,b);rE('b',null,'📝 آنچه گفتی (متن پیاده‌شده)',tc);
+  const tr=advEn('',tc,'avtr');
+  String(fb.heard).split(new RegExp(ADV_FILL.source,'gi')).forEach((part,i)=>{if(i%2){const m=rE('mark',null,part,tr);m.title='مکث‌پرکن'}else tr.appendChild(document.createTextNode(part))});
+  rE('div','ok','عبارت‌های نشانه‌گذاری‌شده مکث‌پرکن هستند. متن پیاده‌شده تقریبی است.',tc);
+  if(fb.missed_fa)rE('div','ok','نکته‌های کارت که نگفتی: '+fb.missed_fa,b);
+  if(fb.structure_fa){const s=rE('div','avc',null,b);rE('b',null,'🧱 ساختار و روانی',s);rE('div',null,fb.structure_fa,s)}
+  if(fb.errors.length){
+    rE('div','avsh',null,b).appendChild(rE('b',null,'🔧 مهم‌ترین غلط‌ها'));
+    fb.errors.forEach(e=>{const c=rE('div','avc er',null,b);advEn('✗ '+e.said,c,'bad');const g=advEn('✓ '+e.better,c,'good');rBtn('🔊','ear',()=>speak(e.better),g);rE('div','fa',(ADV_CATS[e.cat]?'['+ADV_CATS[e.cat]+'] ':'')+e.fa,c)});
+    rE('div','ok','✓ جمله‌های اصلاح‌شده و عبارت‌های کلیدی به دفترچهٔ مرور اضافه شد.',b);
+  }
+  if(fb.upgrades.length){const u=rE('div','avc',null,b);rE('b',null,'⬆️ ارتقای واژه‌ها',u);fb.upgrades.forEach(x=>{const r=rE('div','avup',null,u);advEn(x.from+'  →  '+x.to,r);if(x.fa)rE('div','fa',x.fa,r)})}
+  if(fb.b6||fb.b7){
+    const u=rE('div','avc',null,b);rE('b',null,'🚀 ارتقای پاسخ من',u);rE('div','ok','همان ایده‌های خودت، با کیفیت بالاتر. اول گوش بده، بعد بلند تکرار کن (shadowing).',u);
+    const seg=rE('div','row2',null,u),box=rE('div',null,null,u);let cur=fb.b7?'b7':'b6';
+    const show=()=>{box.textContent='';const t=advEn(fb[cur],box,'rewrite');rBtn('🔊 گوش بده','chip',()=>speak(fb[cur]),box).style.marginTop='6px'};
+    const bt={};[['b6','Band 6'],['b7','Band 7']].forEach(([k,n])=>{if(!fb[k])return;bt[k]=rBtn(n,'chip'+(k===cur?' pri':''),()=>{cur=k;Object.keys(bt).forEach(x=>bt[x].classList.toggle('pri',x===k));show()},seg)});
+    show();
+    if(fb.phrases.length){const p=rE('div','avwords',null,u);fb.phrases.forEach(x=>{const s=rE('span',null,x.en+' = '+x.fa,p);s.dir='ltr'})}
+  }
+  if(fb.next_fa&&fb.next_fa.length){const s=rE('div','avc',null,b);rE('b',null,'🎯 برای تلاش بعدی',s);fb.next_fa.forEach(x=>rE('div','avb','• '+x,s))}
+  rE('div','ok','نمره تخمین هوش مصنوعی است؛ ماهی یک بار پاسخ ضبط‌شده‌ات را به یک معلم آیلتس هم نشان بده.',b);
+  const r=rE('div','row2',null,b);r.style.flexWrap='wrap';
+  rBtn('🎙 دوباره همین کارت (تلاش '+(rec.att+1)+')','chip pri',()=>advP2Card(card,{},rec.att+1,rec),r);
+  rBtn('🆕 کارت جدید','chip',()=>advP2Start({}),r);
+  rBtn('← برگشت','chip bk',advSpeaking,b).style.marginTop='10px';
+}
+advInit();
 </script>
 </body>
 </html>
