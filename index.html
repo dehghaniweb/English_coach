@@ -1749,15 +1749,27 @@ function twoVoices(){
   const v=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(x=>/^en/i.test(x.lang));
   const a=pickVoice()||null,b=v.find(x=>a&&x.name!==a.name&&FEMV.test(x.name))||v.find(x=>a&&x.name!==a.name)||a;return [a,b];
 }
+/* speakLine resolves with 'ok' when the line was spoken to the end, otherwise with the reason it stopped
+   ('canceled', 'interrupted', 'synthesis-failed', 'lost'…). Callers that ignore the value work as before. */
+let SPK=null;
 function speakLine(t,v,rate,pitch){
   return new Promise(res=>{
-    if(!window.speechSynthesis){res();return}
+    if(!window.speechSynthesis){res('none');return}
     const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=rate;u.pitch=pitch||1;if(v)u.voice=v;
-    u.onend=u.onerror=()=>res();speechSynthesis.speak(u);
+    const fin=r=>{if(SPK&&SPK.u===u)SPK=null;res(r)};
+    u.onend=()=>fin('ok');u.onerror=e=>fin((e&&e.error)||'error');
+    SPK={u,fin};speechSynthesis.speak(u);
   });
 }
+/* the phone may drop the line that was being spoken while the browser was minimised: when the page is visible
+   again and nothing is being spoken any more, release the waiting line instead of hanging forever */
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState!=='visible'||!SPK)return;
+  const s=SPK;
+  setTimeout(()=>{if(SPK===s&&window.speechSynthesis&&!speechSynthesis.speaking&&!speechSynthesis.pending)s.fin('lost')},600);
+});
 function lisMsg(t){const b=$('#lbody');b.textContent='';const d=document.createElement('div');d.className='rline';d.textContent=t;b.appendChild(d)}
-function lisClose(){if(typeof PLANMODE!=="undefined"&&PLANMODE&&!ADVLIS){setTimeout(openRefp,50)}try{if(ADVLIS)advLisClose()}catch(e){}if(L)L.playing=false;if(window.speechSynthesis)speechSynthesis.cancel();$('#lis').hidden=true}
+function lisClose(){if(typeof PLANMODE!=="undefined"&&PLANMODE&&!ADVLIS){setTimeout(openRefp,50)}try{if(ADVLIS)advLisClose()}catch(e){}if(L){L.playing=false;L.cut=false}if(window.speechSynthesis)speechSynthesis.cancel();kaOff();$('#lis').hidden=true}
 async function startListening(sec){
   stopVoice();if(rc)giveUp();
   $('#ltitle').textContent='Listening — Section '+sec;$('#lis').hidden=false;lisMsg('در حال ساختن تمرین… (چند ثانیه)');
@@ -1784,22 +1796,33 @@ function renderLis(){
 }
 function updLis(){
   const p=$('#lplay');if(!p||!L)return;
-  p.disabled=L.playing||(L.played&&!L.done);
-  p.textContent=L.playing?'در حال پخش…':(L.played?(L.done?'▶ پخش دوباره':'پخش شد'):'▶ پخش');
+  p.disabled=L.playing||(L.played&&!L.done&&!L.cut);
+  p.textContent=L.playing?'در حال پخش…':(L.cut?'▶ ادامه از همان‌جا (پخش قطع شد)':(L.played?(L.done?'▶ پخش دوباره':'پخش شد'):'▶ پخش'));
+}
+function lisPause(){   /* pause button of the phone's media notification */
+  if(!L||!L.playing)return;
+  L.playing=false;L.cut=true;L.at=L.cur||0;
+  try{speechSynthesis.cancel()}catch(e){}
+  updLis();
 }
 async function playLis(){
   if(!L||L.playing)return;
-  if(L.played&&!L.done)return;
-  stopVoice();L.playing=true;L.played=true;updLis();
-  const sp=[];L.ex.script.forEach(x=>{if(!sp.includes(x.sp))sp.push(x.sp)});
+  if(L.played&&!L.done&&!L.cut)return;
+  const my=L,from=my.cut&&!my.done?(my.at||0):0;   /* after a cut the exercise goes on from the same line */
+  stopVoice();my.cut=false;my.playing=true;my.played=true;updLis();
+  const kt=kaOn('Listening — Section '+my.sec,lisPause);   /* keeps playing when the browser is minimised */
+  const sp=[];my.ex.script.forEach(x=>{if(!sp.includes(x.sp))sp.push(x.sp)});
   const vs=ADVLIS?advVoices():twoVoices(),same=vs[0]===vs[1];
-  for(const line of L.ex.script){
-    if(!L||!L.playing)break;
-    const i=sp.indexOf(line.sp);
-    await speakLine(line.t,vs[i===0?0:1],L.rate,sp.length>1&&same?(i===0?0.9:1.25):1);
+  for(let li=from;li<my.ex.script.length;li++){
+    if(L!==my||!my.playing)break;
+    const line=my.ex.script[li],i=sp.indexOf(line.sp);
+    my.cur=li;
+    const r=await speakLine(line.t,vs[i===0?0:1],my.rate,sp.length>1&&same?(i===0?0.9:1.25):1);
+    if(L!==my||!my.playing)break;
+    if(r!=='ok'&&r!=='none'){my.cut=true;my.at=li;break}   /* the phone stopped the speech: the single play is not lost */
     await new Promise(r=>setTimeout(r,350));
   }
-  if(L)L.playing=false;updLis();
+  my.playing=false;if(L===my)updLis();kaOff(kt);
 }
 const normA=x=>String(x||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\b(a|an|the)\b/g,' ').replace(/\s+/g,' ').trim();
 const okGap=(u,q)=>{const n=normA(u);return !!n&&[q.answer].concat(q.alts||[]).some(a=>normA(a)===n)};
@@ -1810,7 +1833,7 @@ function logListening(sc,t){
 }
 function gradeLis(){
   if(!L||L.done)return;
-  L.done=true;L.playing=false;if(window.speechSynthesis)speechSynthesis.cancel();
+  L.done=true;L.playing=false;L.cut=false;if(window.speechSynthesis)speechSynthesis.cancel();kaOff();
   const q=L.ex.questions;let sc=0;
   const rows=q.map((x,i)=>{const u=L.ans[i]||'';const ok=x.type==='mcq'?String(u).toUpperCase()===String(x.answer).toUpperCase():okGap(u,x);if(ok)sc++;return{x,u,ok}});
   logListening(sc,q.length);try{if(!ADVLIS)planInc("lis")}catch(e){}try{advAfterLis(sc,q.length)}catch(e){}
@@ -2231,22 +2254,40 @@ async function feedFetch(){
 function feedRate(){return FD&&FD.rate||(lv.value==='A2'?.8:lv.value==='B1'?.92:lv.value==='C1'?1.15:1)}
 function feedSplit(t){return String(t).match(/[^.!?]+[.!?]*\s*/g)||[t]}
 function feedStop(){if(FD){FD.on=false;FD.playing=false;try{if(FD.au)FD.au.pause()}catch(e){}}try{speechSynthesis.cancel()}catch(e){}feedKeepOff()}
-/* ---- keep playing when the user leaves the page ---- */
-const SIL='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=';
-let KA=null;
-function feedKeepOn(title){
+/* ---- keep playing when the browser is minimised or the screen is locked ----
+   A real, looping audio (10 s) plus a media notification make the browser treat the page as "playing media":
+   it is not frozen or throttled, and the phone shows a notification with a pause button.
+   The tone is 20 Hz at about -50 dBFS: far below what speakers or ears can use, but not digital silence
+   (browsers ignore silent audio, and an empty/zero-length file never plays at all). */
+let KA=null,KAURL=null,KAon=false,KAn=0,KAstop=null;
+function kaTone(){
+  const R=8000,N=R*10,u8=new Uint8Array(N*2),dv=new DataView(u8.buffer);
+  for(let i=0;i<N;i++)dv.setInt16(i*2,Math.round(100*Math.sin(2*Math.PI*20*i/R)),true);
+  return wavFromPcm(u8,R);
+}
+function kaOn(title,onStop){
+  KAstop=onStop||null;KAon=true;
   try{
-    if(!KA){KA=new Audio(SIL);KA.loop=true}
-    KA.play().catch(()=>{});
+    if(!KA){if(!KAURL)KAURL=URL.createObjectURL(kaTone());KA=new Audio(KAURL);KA.loop=true}
+    const p=KA.play();if(p&&p.catch)p.catch(()=>{});
     if('mediaSession' in navigator){
-      navigator.mediaSession.metadata=new MediaMetadata({title:title||'Daily Podcast',artist:'English tutor'});
-      navigator.mediaSession.playbackState='playing';
-      navigator.mediaSession.setActionHandler('pause',()=>feedStop());
-      navigator.mediaSession.setActionHandler('stop',()=>feedStop());
+      const ms=navigator.mediaSession,sh=(a,f)=>{try{ms.setActionHandler(a,f)}catch(e){}};
+      ms.metadata=new MediaMetadata({title:title||'English tutor',artist:'English tutor'});
+      ms.playbackState='playing';
+      const st=()=>{const f=KAstop;kaOff();try{if(f)f()}catch(e){}};
+      sh('pause',st);sh('stop',st);
     }
   }catch(e){}
+  return ++KAn;
 }
-function feedKeepOff(){try{if(KA)KA.pause();if('mediaSession' in navigator)navigator.mediaSession.playbackState='none'}catch(e){}}
+function kaOff(n){
+  if(n!==undefined&&n!==KAn)return;   /* a stale call from an older playback must not stop a newer one */
+  KAon=false;KAstop=null;
+  try{if(KA){KA.pause();KA.removeAttribute('src');KA.load();KA=null}}catch(e){}
+  try{if('mediaSession' in navigator){const ms=navigator.mediaSession;ms.playbackState='none';['pause','stop'].forEach(a=>{try{ms.setActionHandler(a,null)}catch(e){}})}}catch(e){}
+}
+function feedKeepOn(title){kaOn(title||'Daily Podcast',feedStop)}
+function feedKeepOff(){kaOff()}
 const feedMode=()=>jget('feedMode','dev');
 function feedChunks(e){
   const out=[];
