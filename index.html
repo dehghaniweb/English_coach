@@ -2073,6 +2073,7 @@ function rpHome(){
   const dt=rE('details','ng',null,b);rE('summary','','⋯ ابزارهای بیشتر و تنظیمات',dt);
   const go=(f)=>()=>{PLANMODE=false;$('#rf').hidden=true;f()};
   const tl=rE('div','plmore',null,dt);
+  if(!kid)rBtn('🔄 شروع دوبارهٔ شمارش روزها از امروز','chip',async()=>{if(await advConfirm('شمارش از امروز شروع شود؟','درس‌ها، نمره‌ها و دفتر مرورت می‌ماند؛ فقط شمارهٔ روز و ماه برنامه (و سطح آن ماه) دوباره از ۱ شروع می‌شود. اگر می‌خواهی روز ۱ فردا باشد، فردا صبح این دکمه را بزن.','بله')){jset('road',{d:ago(0)});jset('lvMonth',-1);try{openRefp()}catch(e){rpHome()}}},tl);
   rBtn('💬 گفتگوی آزاد','chip',go(()=>startNew(randomTopic())),tl);
   rBtn('🕘 گفتگوهای قبلی','chip',go(()=>$('#hb').click()),tl);
   rBtn('📘 مرور کلمه‌ها','chip',go(()=>$('#revb').click()),tl);
