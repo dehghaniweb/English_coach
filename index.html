@@ -2073,6 +2073,7 @@ function rpHome(){
   const dt=rE('details','ng',null,b);rE('summary','','⋯ ابزارهای بیشتر و تنظیمات',dt);
   const go=(f)=>()=>{PLANMODE=false;$('#rf').hidden=true;f()};
   const tl=rE('div','plmore',null,dt);
+  if(!kid)rBtn('🧠 روش میشل توماس (روزانه)','chip',mtHome,tl);
   if(!kid)rBtn('🔄 شروع دوبارهٔ شمارش روزها از امروز','chip',async()=>{if(await advConfirm('شمارش از امروز شروع شود؟','درس‌ها، نمره‌ها و دفتر مرورت می‌ماند؛ فقط شمارهٔ روز و ماه برنامه (و سطح آن ماه) دوباره از ۱ شروع می‌شود. اگر می‌خواهی روز ۱ فردا باشد، فردا صبح این دکمه را بزن.','بله')){jset('road',{d:ago(0)});jset('lvMonth',-1);try{openRefp()}catch(e){rpHome()}}},tl);
   rBtn('💬 گفتگوی آزاد','chip',go(()=>startNew(randomTopic())),tl);
   rBtn('🕘 گفتگوهای قبلی','chip',go(()=>$('#hb').click()),tl);
@@ -2727,6 +2728,7 @@ function advHome(){
   rE('i',null,null,rE('div','avbar',null,h)).style.width=Math.min(100,day/180*100)+'%';
   if(ret)advWelcome(b,P,ret);
   advTestCard(b,P);
+  mtCard(b);
   advTracker(b);
   const c=rE('div',null,null,b);
   const hd=rE('div','avsh',null,c);
@@ -3299,7 +3301,7 @@ function actDays(){
   const dayOf=ms=>{try{return new Date(ms).toLocaleDateString('en-CA')}catch(e){return ''}};
   const pos=o=>Object.keys(o||{}).forEach(k=>{const v=o[k];if(typeof v==='number'?v>0:!!v&&Object.keys(v).some(x=>v[x]>0))add(k)});
   Object.values(advL()).forEach(e=>add(e.d));
-  pos(advM());pos(jget('lisMin',{}));pos(jget('dayLog',{}));pos(jget('planDone',{}));
+  pos(advM());pos(jget('mt',{}));pos(jget('lisMin',{}));pos(jget('dayLog',{}));pos(jget('planDone',{}));
   Object.keys(jget('daysDone',{})).forEach(add);
   const ds=jget('dstat',{});Object.keys(ds).forEach(d=>{const r=ds[d]||{};if(Object.keys(r).some(v=>(r[v]||{}).n>0))add(d)});
   try{chats().forEach(c=>{if(c&&c.updated&&c.hist&&c.hist.length)add(dayOf(c.updated))})}catch(e){}
@@ -3376,6 +3378,209 @@ function retCardBase(b,r){
   rE('b',null,'👋 خوش برگشتی!',c);
   rE('div',null,r.miss+' روز نبودی؛ اشکالی ندارد. از روز شروع تا دیروز '+r.n+' روز گذشته و تو '+r.act+' روز از آن‌ها تمرین کرده‌ای. شمارهٔ روز فقط تقویم است و نمرهٔ تو نیست.',c);
   const d=rE('div','avb','امروز فقط دو کار اول لیست را انجام بده؛ مهم این است که دوباره شروع کنی.',c);d.style.marginTop='6px';
+}
+/* ===== v3.4: روش میشل توماس — a daily "immersion" block (Ali only, not Arsha) =====
+   story (grammar+words through a story) · diary / "yesterday" essay · talk to the walls · documentary talk (5 min)
+   · news · shadowing · always-on listening.   Front-end only: it reuses the existing backend calls (feed, speak2). */
+const MT_G=[
+ {en:'the past simple (I went, she saw, we played)',fa:'گذشتهٔ ساده'},
+ {en:'the present perfect (I have seen, she has lived)',fa:'حال کامل'},
+ {en:'will and going to for the future',fa:'آینده (will / going to)'},
+ {en:'can, could, should and must',fa:'فعل‌های کمکی can / could / should / must'},
+ {en:'the first conditional (if it rains, I will stay)',fa:'شرطی نوع اول'},
+ {en:'the second conditional (if I had more time, I would learn)',fa:'شرطی نوع دوم'},
+ {en:'used to and the past continuous',fa:'used to و گذشتهٔ استمراری'}];
+const mtG=()=>MT_G[dayIdx()%MT_G.length];
+const MT_WALL=['Describe the room you are in: what can you see, what is on the table, what colour are the walls?','Tell the wall about your morning: what did you do from waking up until now?','Plan tomorrow out loud: what will you do, who will you meet, what do you need to buy?','Talk about your best friend: how did you meet, what do you do together?','Describe your street and your neighbours as if you were showing a visitor around.','Explain how to make your favourite food, step by step.','Talk about a problem you had this week and what you did about it.'];
+const MT_DOC=['What is the documentary about, and why did you choose it?','What are the three most interesting things you learned?','Who or what surprised you most? Describe a scene you remember.','Did it change how you think about something? Why?','Would you recommend it? To whom, and why?'];
+const mtAll=()=>jget('mt',{});
+const mtToday=()=>mtAll()[ago(0)]||{};
+function mtMark(k,v){const a=mtAll(),d=ago(0),r=a[d]||{};r[k]=v===undefined?1:v;a[d]=r;Object.keys(a).sort().slice(0,-60).forEach(x=>delete a[x]);jset('mt',a)}
+const MT_ITEMS=[['story','📖','داستانِ امروز (گرامر و لغت)'],['diary','✍️','دفتر روزمرگی / انشای «دیروز»'],['wall','🗣','حرف‌زدن با در و دیوار'],['news','📰','اخبار'],['shadow','🔁','شدوینگ'],['doc','🎬','مستند و ۵ دقیقه صحبت'],['lis','👂','شنیدن در طول روز']];
+const mtLisMin=()=>{const x=jget('lisMin',{})[ago(0)];return (typeof x==='number'?x:0)+(mtToday().lis||0)};
+const mtDone=k=>k==='lis'?mtLisMin()>=30:!!mtToday()[k];
+const mtCount=()=>MT_ITEMS.filter(x=>mtDone(x[0])).length;
+
+/* small card for the advanced home */
+function mtCard(b){
+  if(PROF==='kid')return;
+  const c=rE('div','avc',null,b);
+  rE('b',null,'🧠 روش میشل توماس · امروز '+mtCount()+' از '+MT_ITEMS.length,c);
+  rE('div',null,'داستان، نوشتن، حرف‌زدن، اخبار، شدوینگ و شنیدن؛ همهٔ آن‌ها در یک صفحه.',c);
+  rBtn('باز کردن','chip',mtHome,c).style.marginTop='8px';
+}
+
+function mtHome(){
+  const b=avOpen('🧠 روش میشل توماس');
+  rE('div','ok','اصل کار: هر روز در معرض زبان باش؛ گرامر و لغت را از دل داستان یاد بگیر؛ هر روز بنویس و هر روز بلند حرف بزن. هر کار را که انجام بدهی، تیک می‌خورد. همهٔ ۷ کار لازم نیست؛ امروز حداقل ۳ تا را انجام بده.',b);
+  const g=mtG(),gc=rE('div','avc ok2',null,b);
+  rE('b',null,'گرامرِ این روزها: '+g.fa,gc);
+  rE('div',null,'داستانِ امروز همین ساختار را بارها تکرار می‌کند تا بدون حفظ‌کردن قاعده، در ذهنت بنشیند.',gc);
+  const go={story:()=>mtEp('story'),diary:mtDiary,wall:mtWall,news:()=>mtEp('news'),shadow:mtShadow,doc:mtDoc,lis:mtLis};
+  const sub={story:'یک داستان کوتاه گوش بده، بعد لغت‌ها را ببین',diary:'بنویس و تصحیح بگیر',wall:'۳ دقیقه، بدون ترس از غلط',news:'یک خبر کوتاه گوش بده',shadow:'همزمان با گوینده تکرار کن',doc:'مستند ببین، بعد ۵ دقیقه دربارهٔ آن حرف بزن',lis:'هدف: ۳۰ دقیقه (امروز: '+mtLisMin()+' دقیقه)'};
+  MT_ITEMS.forEach(([k,ic,t])=>{
+    const x=rE('button','iebtn'+(mtDone(k)?' done':''),null,b);rE('b',null,(mtDone(k)?'✓ ':'')+ic+' '+t,x);rE('span',null,sub[k],x);x.onclick=go[k];
+  });
+  rBtn('← برگشت','chip bk',avClose,b).style.marginTop='10px';
+}
+
+/* ---------- story / news: fetch once a day per kind, then listen ---------- */
+async function mtFetch(kind,force){
+  const c=jget('mtEp',{}),key=kind+':'+ago(0);
+  if(!force&&c[key])return c[key];
+  const topic=feedPick().topic,g=mtG();
+  const k=kind==='story'?('a short story that uses '+g.en.split(' (')[0]+' again and again in simple sentences').slice(0,118):'a short news report';
+  const j=await call({level:lv.value,feed:{kind:k,topic,avoid:feedHist().slice(-25).map(x=>x.title)}});
+  const e=j.episode;
+  const h=feedHist();h.push({title:e.title,d:ago(0)});jset('feedHist',h.slice(-60));
+  try{addVocab(e.vocab)}catch(x){}
+  const n={};Object.keys(c).filter(x=>x.slice(-10)===ago(0)).forEach(x=>n[x]=c[x]);n[key]=e;jset('mtEp',n);
+  return e;
+}
+async function mtEp(kind,force){
+  const b=avOpen(kind==='story'?'📖 داستان':'📰 اخبار'),tok=AVTOK;
+  rE('div','ok','در حال آماده‌کردن '+(kind==='story'?'داستان':'خبر')+'… (۱۰ تا ۳۰ ثانیه)',b);
+  let e;
+  try{e=await mtFetch(kind,force)}catch(x){
+    if(tok!==AVTOK)return;b.textContent='';rE('div','fix',errMsg(x),b);
+    rBtn('تلاش دوباره','big',()=>mtEp(kind,force),b);rBtn('← برگشت','chip bk',mtHome,b).style.marginTop='8px';return;
+  }
+  if(tok!==AVTOK)return;
+  b.textContent='';
+  const c=rE('div','avc',null,b);rE('b',null,e.title,c).dir='ltr';
+  if(e.title_fa)rE('div','fa',e.title_fa,c);
+  if(kind==='story')rE('div','ok','گرامر امروز: '+mtG().fa+'. اول بدون متن گوش بده؛ بعد با متن.',c);
+  let on=false,stopped=false;
+  const play=rBtn('▶ پخش','big',null,b);
+  const txt=rE('div','avc',null,b);txt.hidden=true;
+  e.script.forEach(x=>{const d=rE('div','enb',x.t,txt);d.dir='ltr';d.style.margin='6px 0'});
+  rBtn('📄 نمایش / پنهان‌کردن متن','chip',()=>{txt.hidden=!txt.hidden},b).style.marginTop='8px';
+  if(e.summary_fa){const s=rE('div','ok','خلاصه: '+e.summary_fa,b);s.hidden=true;rBtn('💡 خلاصه به فارسی','chip',()=>{s.hidden=!s.hidden},b).style.marginTop='8px';b.appendChild(s)}
+  if(e.vocab&&e.vocab.length){const v=rE('div','avc',null,b);rE('b',null,'📘 لغت‌ها (به دفترچهٔ مرور اضافه شد)',v);
+    e.vocab.forEach(w=>{const d=rE('div',null,null,v);d.style.margin='8px 0';const a=rE('b',null,w.ex||w.en,d);a.dir='ltr';a.style.display='block';a.style.textAlign='left';rE('div','fa',(w.ex_fa?w.ex_fa+'  ':'')+'('+w.en+' = '+w.fa+')',d);d.onclick=()=>speak(w.ex||w.en)})}
+  const stop=()=>{stopped=true;on=false;try{speechSynthesis.cancel()}catch(x){}kaOff()};AVS={stop};
+  play.onclick=async()=>{
+    if(on){stop();play.textContent='▶ پخش';return}
+    stopped=false;on=true;play.textContent='⏸ توقف';const kt=kaOn(e.title,stop);
+    const v=pickVoice();let ok=true;
+    for(const x of e.script){if(stopped||tok!==AVTOK)break;const r=await speakLine(x.t,v,feedRate0(),1);if(r!=='ok'&&r!=='none'){ok=false;break}await new Promise(r=>setTimeout(r,250))}
+    const fin=!stopped&&ok&&tok===AVTOK;on=false;kaOff(kt);
+    if(tok!==AVTOK)return;
+    play.textContent='▶ پخش دوباره';
+    if(fin){mtMark(kind);rE('div','ok','✅ ثبت شد.',b)}
+  };
+  rBtn('🔄 یک '+(kind==='story'?'داستان':'خبر')+' دیگر','chip',()=>{stop();mtEp(kind,true)},b).style.marginTop='8px';
+  rBtn('✅ گوش دادم (ثبت دستی)','chip',()=>{mtMark(kind);mtHome()},b).style.marginTop='8px';
+  rBtn('← برگشت','chip bk',()=>{stop();mtHome()},b).style.marginTop='8px';
+}
+const feedRate0=()=>lv.value==='A2'?.8:lv.value==='B1'?.92:1;
+
+/* ---------- diary: today, or the "what did you do yesterday" essay (past simple) ---------- */
+function mtDiary(){
+  const b=avOpen('✍️ دفتر روزمرگی');
+  rE('div','ok','هر روز چند جمله بنویس. یک روز «امروز» و یک روز «دیروز» (برای زمان گذشته). غلط داشتن مهم نیست؛ تصحیح می‌گیری.',b);
+  const mk=(id,title,card,hint)=>{
+    const x=rE('button','iebtn',null,b);rE('b',null,title,x);rE('span',null,hint,x);x.onclick=()=>mtDiaryW(id,title,card)};
+  mk('y','📅 دیروز چه کار کردی؟ (زمان گذشته)','DIARY, past simple: Write about what you did yesterday, from morning to night. Use past tense verbs (I woke up, I went, I ate…).','حدود ۸ تا ۱۵ جمله با فعل‌های گذشته');
+  mk('t','📝 امروز چه کار کردی / چه حسی داری؟','DIARY: Write about your day today: what you did, who you met, how you feel and what you will do next.','چند جمله دربارهٔ امروز');
+  const old=jget('mtDiary',{}),ks=Object.keys(old).sort().reverse().slice(0,5);
+  if(ks.length){const c=rE('div','avc',null,b);rE('b',null,'نوشته‌های قبلی',c);ks.forEach(k=>{const d=rE('div','enb',k+' · '+old[k].slice(0,90)+(old[k].length>90?'…':''),c);d.dir='ltr';d.style.margin='6px 0'})}
+  rBtn('← برگشت','chip bk',mtHome,b).style.marginTop='10px';
+}
+function mtDiaryW(id,title,card){
+  const b=avOpen(title),tok=AVTOK;
+  const c=rE('div','avc',null,b);advEn(card.replace(/^DIARY[^:]*: /,''),c);
+  const ta=rE('textarea','avta',null,b);ta.dir='ltr';ta.spellcheck=false;ta.placeholder='Type here…';ta.style.minHeight='160px';
+  const wc=rE('div','ok','0 کلمه',b);ta.oninput=()=>{wc.textContent=advWords(ta.value)+' کلمه'};
+  const s=rBtn('✅ ارسال برای تصحیح','big',async()=>{
+    if(advWords(ta.value)<20){advConfirm('نوشته کوتاه است','حداقل حدود ۲۰ کلمه (چند جمله) بنویس.','باشه');return}
+    const txt=ta.value.trim();s.disabled=true;wc.textContent='در حال تصحیح… (۱۰ تا ۳۰ ثانیه)';
+    try{
+      const j=await call({level:lv.value,speak2:{card,text:txt,secs:60}});if(tok!==AVTOK)return;
+      const d=jget('mtDiary',{});d[ago(0)+(id==='y'?' (دیروز)':'')]=txt;Object.keys(d).sort().slice(0,-30).forEach(k=>delete d[k]);jset('mtDiary',d);
+      mtMark('diary');mtMark(id==='y'?'diaryY':'diaryT');
+      try{addVocab((j.speak2.errors||[]).slice(0,5).map(x=>({en:x.better,fa:x.tr||x.fa||''})))}catch(x){}
+      mtDiaryR(j.speak2,txt,id);
+    }catch(e){if(tok!==AVTOK)return;s.disabled=false;wc.textContent='';rE('div','fix',errMsg(e),b)}
+  },b);s.style.marginTop='10px';
+  rBtn('← برگشت','chip bk',mtDiary,b).style.marginTop='8px';
+}
+function mtDiaryR(f,txt,id){
+  const b=avOpen('✍️ تصحیح');
+  rE('div','ok','✅ ثبت شد. غلط‌ها را یک‌بار بلند بخوان.',b);
+  if(f.errors&&f.errors.length){const c=rE('div','avc',null,b);rE('b',null,'غلط‌ها و شکل درست',c);
+    f.errors.forEach(x=>{const d=rE('div',null,null,c);d.style.margin='10px 0';const a=rE('div','enb',x.said,d);a.dir='ltr';a.style.textDecoration='line-through';const g=rE('div','enb',x.better,d);g.dir='ltr';g.style.fontWeight='700';if(x.fa)rE('div','fa',x.fa,d);d.onclick=()=>speak(x.better)})}
+  else rE('div','ok','غلط مهمی پیدا نشد. آفرین!',b);
+  if(f.upgrades&&f.upgrades.length){const c=rE('div','avc',null,b);rE('b',null,'جمله‌های قوی‌تر',c);
+    f.upgrades.forEach(x=>{const d=rE('div','enb',x.from+'  →  '+x.to,c);d.dir='ltr';d.style.margin='6px 0';if(x.fa)rE('div','fa',x.fa,c)})}
+  if(f.b7){const c=rE('div','avc ok2',null,b);rE('b',null,'نسخهٔ بهتر نوشتهٔ تو',c);const d=rE('div','enb',f.b7,c);d.dir='ltr';rBtn('🔊 بخوان','chip',()=>speak(f.b7),c).style.marginTop='6px'}
+  if(f.next_fa&&f.next_fa.length){const c=rE('div','avc',null,b);rE('b',null,'قدم بعدی',c);f.next_fa.forEach(x=>rE('div',null,'• '+x,c))}
+  rBtn('✍️ یک نوشتهٔ دیگر','chip',mtDiary,b).style.marginTop='8px';
+  rBtn('← منوی میشل توماس','chip bk',mtHome,b).style.marginTop='8px';
+}
+
+/* ---------- talk to the walls / documentary: a timer + prompts (no recording needed) ---------- */
+function mtTalk(title,key,secs,prompts,intro){
+  const b=avOpen(title);
+  rE('div','ok',intro,b);
+  const c=rE('div','avc',null,b);rE('b',null,'سرنخ‌ها (فقط برای شروع)',c);
+  prompts.forEach(p=>{const d=rE('div','enb','• '+p,c);d.dir='ltr';d.style.margin='6px 0'});
+  const tm=rE('div','avbig',null,b);tm.textContent=advMS(secs);tm.dir='ltr';
+  let timer=null,done=false;
+  const stop=()=>{if(timer){timer.stop();timer=null}kaOff()};AVS={stop};
+  const go=rBtn('▶ شروع','big',()=>{
+    if(timer){const e=timer.el();stop();go.textContent='▶ دوباره';if(e>=secs*0.8&&!done){done=true;mtMark(key);rE('div','ok','✅ ثبت شد. آفرین!',b)}else rE('div','ok','ثبت برای امروز: حداقل '+advMS(Math.round(secs*0.8))+' حرف بزن.',b);return}
+    timer=advTimer(tm,secs,true);go.textContent='⏹ تمام';kaOn(title,stop);
+    const iv=setInterval(()=>{if(!timer){clearInterval(iv);return}if(timer.el()>=secs){clearInterval(iv);go.onclick()}},500);
+  },b);
+  rBtn('← برگشت','chip bk',()=>{stop();mtHome()},b).style.marginTop='8px';
+}
+function mtWall(){
+  const p=MT_WALL[dayIdx()%MT_WALL.length];
+  mtTalk('🗣 حرف‌زدن با در و دیوار','wall',180,[p],'این‌جا کسی قضاوتت نمی‌کند. بلند و بدون توقف انگلیسی حرف بزن؛ اگر لغتی را بلد نیستی، با جملهٔ ساده توضیحش بده. تایمر ۳ دقیقه است.');
+}
+function mtDoc(){
+  const b=avOpen('🎬 مستند و ۵ دقیقه صحبت');
+  rE('div','ok','مستندی که دوست داری (ترجیحاً انگلیسی با زیرنویس انگلیسی) ببین؛ بعد ۵ دقیقه دربارهٔ آن حرف بزن.',b);
+  [['⏱ ۵ دقیقه صحبت با تایمر','فقط تایمر و سرنخ؛ بعد از ۴ دقیقه ثبت می‌شود',()=>mtTalk('🎬 ۵ دقیقه دربارهٔ مستند','doc',300,MT_DOC,'مستند را ببین؛ بعد ۵ دقیقه بدون توقف دربارهٔ آن حرف بزن. سرنخ‌ها فقط برای شروع‌اند.')],
+   ['🎙 با ضبط و تحلیل (مثل Part 2)','ضبط صدا، نمره و غلط‌ها',()=>{mtMark('doc');advP2Card({topic:'Talk about a documentary you watched or like',points:MT_DOC.slice(0,4),theme:'documentary'},{},1,null)}]].forEach(([t,su,f])=>{
+    const x=rE('button','iebtn',null,b);rE('b',null,t,x);rE('span',null,su,x);x.onclick=f});
+  rBtn('← برگشت','chip bk',mtHome,b).style.marginTop='10px';
+}
+
+/* ---------- shadowing: line by line over today's story or news ---------- */
+async function mtShadow(){
+  const b=avOpen('🔁 شدوینگ'),tok=AVTOK,c0=jget('mtEp',{});
+  const e0=c0['story:'+ago(0)]||c0['news:'+ago(0)];
+  rE('div','ok',e0?'در حال آماده‌کردن…':'یک داستان کوتاه برای شدوینگ آماده می‌شود… (۱۰ تا ۳۰ ثانیه)',b);
+  let e=e0;
+  try{if(!e)e=await mtFetch('story')}catch(x){if(tok!==AVTOK)return;b.textContent='';rE('div','fix',errMsg(x),b);rBtn('تلاش دوباره','big',mtShadow,b);rBtn('← برگشت','chip bk',mtHome,b).style.marginTop='8px';return}
+  if(tok!==AVTOK)return;
+  b.textContent='';
+  const lines=e.script.map(x=>x.t).filter(t=>t.length>3).slice(0,12);let i=0,seen=0;
+  rE('div','ok','شدوینگ یعنی هم‌زمان با گوینده و با همان آهنگ حرف زدن. ۱) خط را آهسته گوش بده ۲) دوباره پخش کن و با او هم‌زمان بگو ۳) بدون پخش، خودت بگو. بعد «بعدی».',b);
+  const card=rE('div','avc',null,b),en=rE('div','enb',null,card);en.dir='ltr';en.style.fontSize='1.1em';
+  const pos=rE('div','sub',null,b);
+  const show=()=>{en.textContent=lines[i];pos.textContent='خط '+(i+1)+' از '+lines.length};show();
+  const say=(r)=>{try{speechSynthesis.cancel()}catch(x){}speakLine(lines[i],pickVoice(),r,1)};
+  const row=rE('div','row2',null,b);row.style.flexWrap='wrap';
+  rBtn('🐢 آهسته','chip',()=>say(.7),row);rBtn('🔊 عادی','chip pri',()=>say(feedRate0()),row);
+  const nx=rBtn('بعدی ▶','big',()=>{
+    seen++;if(i+1>=lines.length){mtMark('shadow');try{speechSynthesis.cancel()}catch(x){};b.textContent='';rE('div','ok','✅ شدوینگ امروز ثبت شد. آفرین!',b);rBtn('← منوی میشل توماس','chip bk',mtHome,b);return}
+    i++;show();if(seen>=6)mtMark('shadow');
+  },b);nx.style.marginTop='10px';
+  rBtn('← برگشت','chip bk',()=>{try{speechSynthesis.cancel()}catch(x){}mtHome()},b).style.marginTop='8px';
+}
+
+/* ---------- always-on listening: open the podcast, or add minutes you listened outside the app ---------- */
+function mtLis(){
+  const b=avOpen('👂 شنیدن در طول روز');
+  rE('div','ok','در زبان‌آموزی «در معرض زبان بودن» مهم‌ترین چیز است: در مسیر، آشپزی، پیاده‌روی و قبل از خواب انگلیسی گوش بده (پادکست، اخبار ساده، مستند). هدف امروز: ۳۰ دقیقه.',b);
+  const c=rE('div','avc',null,b);rE('b',null,'امروز: '+mtLisMin()+' از ۳۰ دقیقه',c);
+  const row=rE('div','row2',null,c);row.style.flexWrap='wrap';
+  [10,20,30].forEach(n=>rBtn('+'+n+' دقیقه',  'chip',()=>{mtMark('lis',(mtToday().lis||0)+n);mtLis()},row));
+  rBtn('🎧 پادکست روزانهٔ برنامه','chip pri',()=>{avClose();try{openFeed()}catch(x){}},b).style.marginTop='8px';
+  rBtn('← برگشت','chip bk',mtHome,b).style.marginTop='10px';
 }
 advInit();
 </script>
